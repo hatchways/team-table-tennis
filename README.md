@@ -40,3 +40,8 @@ This is a little description about your project.
 2. Dashboard. Here is a description about what a user can expect to see
 
 ![Dashboard](demo/images/dashboard.png)
+
+
+Members:
+
+- Hamid Charkhian
