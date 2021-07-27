@@ -40,11 +40,11 @@ export default function Register(): JSX.Element {
   };
 
   return (
-    <Grid container component="main" justify="flex-end" className={classes.root}>
+    <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Container maxWidth="xs">
-        <img src={BG_img} style={{ height: '100%', objectFit: 'fill' }} />
-      </Container>
+      <Grid item xs={12} sm={8} md={6} elevation={0} component={Paper}>
+        <img src={BG_img} style={{ height: '100%' }} />
+      </Grid>
       <Grid item xs={12} sm={8} md={6} elevation={0} component={Paper} square>
         <Box className={classes.authWrapper}>
           <Box marginTop="auto" width="100%" maxWidth={450} p={3} alignSelf="center">
