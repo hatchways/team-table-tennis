@@ -15,6 +15,15 @@ const useStyles = makeStyles(() => ({
     minHeight: '100vh',
     paddingTop: 23,
   },
+  SignUpFormContainer: {
+    marginTop: 'auto',
+    width: '100%',
+  },
+  authHeader: {
+    margin: 'auto auto 0 auto',
+    borderTop: '1px solid #ececec',
+    width: '100%',
+  },
   welcome: {
     fontSize: 26,
     paddingBottom: 20,

@@ -47,7 +47,7 @@ export default function Register(): JSX.Element {
       </Grid>
       <Grid item xs={12} sm={8} md={6} elevation={0} component={Paper} square>
         <Box className={classes.authWrapper}>
-          <Box marginTop="auto" width="100%" maxWidth={450} p={3} alignSelf="center">
+          <Box className={classes.SignUpFormContainer} maxWidth={450} p={3} alignSelf="center">
             <Grid container>
               <Grid item xs>
                 <Typography className={classes.welcome} component="h1" variant="h5">
@@ -57,7 +57,7 @@ export default function Register(): JSX.Element {
             </Grid>
             <SignUpForm handleSubmit={handleSubmit} />
           </Box>
-          <Box margin="auto auto 0 auto" borderTop="1px solid #ececec" width="100%">
+          <Box className={classes.authHeader}>
             <AuthHeader linkTo="/login" asideText="Already have an account?" btnText="Login" />
           </Box>
           <Box p={1} alignSelf="center" />
