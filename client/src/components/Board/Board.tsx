@@ -60,7 +60,7 @@ const Board = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Grid container direction="row">
+      <Grid container direction="row" justify="center">
         {state.columns.map((column: any) => (
           <Column
             Column={column}
