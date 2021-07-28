@@ -12,23 +12,50 @@ const Board = () => {
     if (destination.droppableId === source.droppableId && destination.index === source.index) {
       return;
     }
-    const column = state.columns[Number(source.droppableId)];
-    const newTaskIds = Array.from(column.Tasks);
-    newTaskIds.splice(source.index, 1);
-    newTaskIds.splice(destination.index, 0, Number(draggableId));
-    const newColumn: any = {
-      ...column,
-      Tasks: newTaskIds,
-    };
-    const newColumns = state.columns;
-    newColumns[Number(source.droppableId)] = newColumn;
+    const start = state.columns[Number(source.droppableId)];
+    const finish = state.columns[Number(destination.droppableId)];
+    const startTasks = Array.from(start.Tasks);
+    startTasks.splice(source.index, 1);
+    if (start === finish) {
+      startTasks.splice(destination.index, 0, Number(draggableId));
+      const newColumn: any = {
+        ...start,
+        Tasks: startTasks,
+      };
+      const newColumns = state.columns;
+      newColumns[Number(source.droppableId)] = newColumn;
 
-    const newState = {
-      ...state,
-      columns: [...newColumns],
-    };
-    setState(newState);
+      const newState = {
+        ...state,
+        columns: [...newColumns],
+      };
+      setState(newState);
+    } else {
+      console.log('other column');
+      // Move to another column
+      const finishTasks = Array.from(finish.Tasks);
+      finishTasks.splice(destination.index, 0, Number(draggableId));
+      const destinationColumn: any = {
+        ...finish,
+        Tasks: finishTasks,
+      };
+      const sourceColumn: any = {
+        ...start,
+        Tasks: startTasks,
+      };
+
+      const newColumns = state.columns;
+      newColumns[Number(destination.droppableId)] = destinationColumn;
+      newColumns[Number(source.droppableId)] = sourceColumn;
+
+      const newState = {
+        ...state,
+        columns: [...newColumns],
+      };
+      setState(newState);
+    }
   };
+
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       {state.columns.map((column: any) => (
