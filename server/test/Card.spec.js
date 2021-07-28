@@ -2,22 +2,18 @@ const expect = require("chai").expect;
 const mongoose = require("mongoose");
 const Card = require("../models/Card");
 
-mongoose.connect('mongodb://localhost:27017/mydb', {useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false})
-
 describe('Tests for Card Model', () => {
 
   var db;
 
   before(() => {
     db = mongoose.connection;
-    db.dropCollection('cards')
   })
 
   it('creates, and saves, a card', async () => {
     const card = new Card({ title: 'Card A', description: "A Description"});
     expect(card).to.have.property('title').that.is.equal('Card A');
     expect(card).to.have.property('description').that.is.equal("A Description");
-    
     await card.save();
   })
 

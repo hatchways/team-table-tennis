@@ -32,6 +32,23 @@ exports.createBoard = asyncHandler(async (req, res) => {
   }
 })
 
+exports.getBoard = asyncHandler(async (req, res) => {
+  const { boardId } = req;
+  try {
+    const board = await Board.findById(boardId);
+    if (board) {
+      res.status(200).json({
+        board
+      })
+    } else {
+      res.status(404);
+    }
+  } catch (err) {
+    res.status(500);
+    console.error(err);
+  }
+})
+
 exports.createColumn = asyncHandler(async (req, res) => {
   const { title } = req.body;
   if (title) {
@@ -39,9 +56,7 @@ exports.createColumn = asyncHandler(async (req, res) => {
       const column = new Column({ title });
       const doc = await column.save();
       res.status(201).json({
-        success : {
-          columnId: doc._id,
-        }
+        column
       });
     } catch (err) {
       res.status(500);
@@ -92,6 +107,7 @@ exports.moveCard = asyncHandler(async (req, res) => {
     const ogCol = await Column.findOne({ _id: ogColId });
     ogCol.cards = ogCol.cards.filter(card => card._id !== cardId);
     await ogCol.save();
+    
     res.status(200);
   } catch (err) {
     res.status(500);
