@@ -6,7 +6,7 @@ const columnSchema = new mongoose.Schema({
     required: true,
     unique: false
   },
-  columns: [{
+  cards: [{
     type: String,
   }]
 })
