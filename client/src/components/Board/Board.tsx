@@ -2,6 +2,8 @@ import { useState } from 'react';
 import Column from './Column';
 import mockData from './MockData';
 import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { Grid } from '@material-ui/core';
+
 const Board = () => {
   const [state, setState] = useState(mockData);
   const onDragEnd = (result: DropResult) => {
@@ -58,9 +60,15 @@ const Board = () => {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      {state.columns.map((column: any) => (
-        <Column Column={column} key={column.Id} Tasks={column.Tasks.map((task: number) => state.tasks[task])}></Column>
-      ))}
+      <Grid container direction="row">
+        {state.columns.map((column: any) => (
+          <Column
+            Column={column}
+            key={column.Id}
+            Tasks={column.Tasks.map((task: number) => state.tasks[task])}
+          ></Column>
+        ))}
+      </Grid>
     </DragDropContext>
   );
 };
