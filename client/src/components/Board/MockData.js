@@ -2,17 +2,17 @@ const mockData = {
   tasks: [
     {
       Name: 'Test Task 1',
-      Color: 'red',
+      Color: '#5ACD76',
       Id: '0',
     },
     {
       Name: 'another test',
-      Color: 'red',
+      Color: '#FF5D48',
       Id: '1',
     },
     {
       Name: 'the final test',
-      Color: 'red',
+      Color: '#EDAB1D',
       Id: '2',
     },
   ],
