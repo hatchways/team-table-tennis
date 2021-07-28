@@ -6,7 +6,7 @@ import * as Yup from 'yup';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
 import { CircularProgress } from '@material-ui/core';
-import demoButton from '../../../components/DemoButton/demoButton';
+import DemoButton from '../../../components/DemoButton/demoButton';
 
 interface Props {
   handleSubmit: (
@@ -113,6 +113,7 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
               {isSubmitting ? <CircularProgress style={{ color: 'white' }} /> : 'Create'}
             </Button>
           </Box>
+          <DemoButton />
         </form>
       )}
     </Formik>
