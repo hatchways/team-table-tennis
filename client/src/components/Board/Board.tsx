@@ -1,74 +1,91 @@
 import { useState } from 'react';
 import Column from './Column';
+import { Column as ColumnType } from '../../interface/Column';
 import mockData from './MockData';
-import { DragDropContext, DropResult } from 'react-beautiful-dnd';
+import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 import { Grid } from '@material-ui/core';
 
 const Board = () => {
   const [state, setState] = useState(mockData);
   const onDragEnd = (result: DropResult) => {
-    const { destination, source, draggableId } = result;
+    const { destination, source, draggableId, type } = result;
     if (!destination) {
       return;
     }
     if (destination.droppableId === source.droppableId && destination.index === source.index) {
       return;
     }
-    const start = state.columns[Number(source.droppableId)];
-    const finish = state.columns[Number(destination.droppableId)];
-    const startTasks = Array.from(start.Tasks);
-    startTasks.splice(source.index, 1);
-    if (start === finish) {
-      startTasks.splice(destination.index, 0, Number(draggableId));
-      const newColumn: any = {
-        ...start,
-        Tasks: startTasks,
-      };
-      const newColumns = state.columns;
-      newColumns[Number(source.droppableId)] = newColumn;
 
-      const newState = {
-        ...state,
-        columns: [...newColumns],
-      };
-      setState(newState);
+    if (type === 'column') {
+      console.log('moved column');
+      const newColumnOrder = Array.from(state.columnOrder);
+      newColumnOrder.splice(source.index, 1);
+      newColumnOrder.splice(destination.index, 0, draggableId);
+      setState({ ...state, columnOrder: newColumnOrder });
+
+      return;
     } else {
-      console.log('other column');
-      // Move to another column
-      const finishTasks = Array.from(finish.Tasks);
-      finishTasks.splice(destination.index, 0, Number(draggableId));
-      const destinationColumn: any = {
-        ...finish,
-        Tasks: finishTasks,
-      };
-      const sourceColumn: any = {
-        ...start,
-        Tasks: startTasks,
-      };
+      const start = state.columns[source.droppableId];
+      const finish = state.columns[destination.droppableId];
+      const startTasks = Array.from(start.Tasks);
+      startTasks.splice(source.index, 1);
+      if (start === finish) {
+        startTasks.splice(destination.index, 0, draggableId);
+        const newColumn: any = {
+          ...start,
+          Tasks: startTasks,
+        };
+        const newColumns = state.columns;
+        newColumns[source.droppableId] = newColumn;
 
-      const newColumns = state.columns;
-      newColumns[Number(destination.droppableId)] = destinationColumn;
-      newColumns[Number(source.droppableId)] = sourceColumn;
+        const newState = {
+          ...state,
+          columns: newColumns,
+        };
+        setState(newState);
+      } else {
+        // Move to another column
+        const finishTasks = Array.from(finish.Tasks);
+        finishTasks.splice(destination.index, 0, draggableId);
+        const destinationColumn: any = {
+          ...finish,
+          Tasks: finishTasks,
+        };
+        const sourceColumn: any = {
+          ...start,
+          Tasks: startTasks,
+        };
 
-      const newState = {
-        ...state,
-        columns: [...newColumns],
-      };
-      setState(newState);
+        const newColumns = state.columns;
+        newColumns[destination.droppableId] = destinationColumn;
+        newColumns[source.droppableId] = sourceColumn;
+
+        const newState = {
+          ...state,
+          columns: newColumns,
+        };
+        setState(newState);
+      }
     }
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <Grid container direction="row" justify="center">
-        {state.columns.map((column: any) => (
-          <Column
-            Column={column}
-            key={column.Id}
-            Tasks={column.Tasks.map((task: number) => state.tasks[task])}
-          ></Column>
-        ))}
-      </Grid>
+      <Droppable droppableId="board" direction="horizontal" type="column">
+        {(provided) => (
+          <Grid container direction="row" justify="center" ref={provided.innerRef}>
+            {state.columnOrder.map((Id, index) => (
+              <Column
+                Column={state.columns[Id]}
+                key={Id}
+                Tasks={state.columns[Id].Tasks.map((task: string) => state.tasks[task])}
+                index={index}
+              ></Column>
+            ))}
+            {provided.placeholder}
+          </Grid>
+        )}
+      </Droppable>
     </DragDropContext>
   );
 };
