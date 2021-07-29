@@ -30,7 +30,7 @@ const Task = (props: any) => {
             title={
               <>
                 <RemoveRoundedIcon
-                  style={{ fontSize: 75, border: 2, borderColor: 'black' }}
+                  style={{ transform: 'scale(4)', width: 50 }}
                   htmlColor={state.color}
                   onClick={expandHandler}
                 ></RemoveRoundedIcon>
@@ -44,6 +44,7 @@ const Task = (props: any) => {
             <CardContent>
               {colors.map((color, index) => (
                 <FiberManualRecord
+                  style={{ stroke: 'black', strokeWidth: 1 }}
                   htmlColor={color}
                   key={index}
                   onClick={() => {
