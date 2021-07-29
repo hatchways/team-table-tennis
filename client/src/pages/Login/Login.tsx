@@ -10,7 +10,6 @@ import LoginForm from './LoginForm/LoginForm';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
-import BG_img from '../../Images/Sign_BG_image.png';
 import BgImg from '../../components/BgImg/BgImg';
 
 export default function Login(): JSX.Element {
