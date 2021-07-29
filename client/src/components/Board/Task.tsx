@@ -3,7 +3,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import { Draggable } from 'react-beautiful-dnd';
 import useStyles from './useStyles';
 import RemoveRoundedIcon from '@material-ui/icons/RemoveRounded';
-import { CardContent, Collapse } from '@material-ui/core';
+import { CardActions, CardContent, Collapse, Divider, Grid, Typography } from '@material-ui/core';
 import { useState } from 'react';
 import { FiberManualRecord } from '@material-ui/icons';
 const Task = (props: any) => {
@@ -42,17 +42,27 @@ const Task = (props: any) => {
           ></CardHeader>
           <Collapse in={state.expanded}>
             <CardContent>
-              {colors.map((color, index) => (
-                <FiberManualRecord
-                  style={{ stroke: 'black', strokeWidth: 1 }}
-                  htmlColor={color}
-                  key={index}
-                  onClick={() => {
-                    changeColor(color);
-                  }}
-                ></FiberManualRecord>
-              ))}
+              <Divider></Divider>
             </CardContent>
+            <CardActions>
+              <Grid container direction="row" alignItems="center" alignContent="center">
+                <Grid item xs={8}>
+                  <Typography variant="h6">Select Tag</Typography>
+                </Grid>
+                <Grid item xs={4}>
+                  {colors.map((color, index) => (
+                    <FiberManualRecord
+                      style={{ stroke: 'black', strokeWidth: 1 }}
+                      htmlColor={color}
+                      key={index}
+                      onClick={() => {
+                        changeColor(color);
+                      }}
+                    ></FiberManualRecord>
+                  ))}
+                </Grid>
+              </Grid>
+            </CardActions>
           </Collapse>
         </Card>
       )}

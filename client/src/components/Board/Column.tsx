@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Container } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, CardHeader, Container } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import useStyles from './useStyles';
 import Task from './Task';
@@ -24,6 +24,11 @@ const Column = (props: any) => {
               </CardContent>
             )}
           </Droppable>
+          <CardActions>
+            <Button color="primary" variant="contained" style={{ marginLeft: 10, marginBottom: 10 }}>
+              Add a card
+            </Button>
+          </CardActions>
         </Card>
       )}
     </Draggable>
