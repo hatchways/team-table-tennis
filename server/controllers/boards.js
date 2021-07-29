@@ -150,8 +150,7 @@ exports.moveCard = asyncHandler(async (req, res) => {
     const destCol = await Column.findOne({ _id: destColId });
     destCol.cards.splice(row, 0, cardId);
     await destCol.save();
-
-    res.status(200);
+    res.sendStatus(200);
   } catch (err) {
     res.status(500);
     console.error(err);

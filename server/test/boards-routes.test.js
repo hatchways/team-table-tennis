@@ -194,7 +194,7 @@ describe('Board routes', () => {
     .request(app)
     .post('/boards/columns')
     .send({
-      title: 'Col 1',
+      title: 'Col 2',
       boardId,
     })
     var col2 = res.body.column;
@@ -209,7 +209,7 @@ describe('Board routes', () => {
         columnId: col1._id
       })
 
-    var cid1 = res.cardId;
+    var cid1 = res.body.cardId;
 
     res = await chai
       .request(app)
@@ -220,38 +220,40 @@ describe('Board routes', () => {
         columnId: col2._id
       })
 
-    var cid2 = res.cardId;
-
+    var cid2 = res.body.cardId;
     // Move card 1 to column 2.
     res = await chai
       .request(app)
       .put('/boards/cards/move')
       .send({
-        ogCol: col1._id,
+        ogColId: col1._id,
         destColId: col2._id,
         row: 0,
         cardId: cid1,
       })
+
+    var res = await chai
+      .request(app)
+      .get('/boards/columns')
+      .send({
+        columnIds: [col1._id]
+      })
+      col1 = res.body.columns[0];
+
     res = await chai
       .request(app)
-      .post('/boards/cards')
+      .get('/boards/columns')
       .send({
-        title: 'card',
-        description: '1',
-        columnId: col1._id
+        columnIds: [col2._id]
       })
-  
-    cid1 = res.cardId;
-  
-    res = await chai
-      .request(app)
-      .post('/boards/cards')
-      .send({
-        title: 'card',
-        description: '2',
-        columnId: col2._id
-      })
-  
-    cid2 = res.cardId;
+    col2 = res.body.columns[0];
+
+    col1.should.have.property('title').equal('Col 1')
+    col1.should.have.property('cards').property('length').equal(0);
+    
+    col2.should.have.property('title').equal('Col 2')
+    col2.should.have.property('cards').property('length').equal(2);
+    col2.cards[0].should.equal(cid1);
+    col2.cards[1].should.equal(cid2);
   })
 })
