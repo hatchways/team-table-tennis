@@ -10,7 +10,12 @@ import SignUpForm from './SignUpForm/SignUpForm';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
+<<<<<<< HEAD
 import BgImg from '../../components/BgImg/BgImg';
+=======
+import { Container } from '@material-ui/core';
+import BG_img from '../../Images/Sign_BG_image.png';
+>>>>>>> parent of c283b45 (moved demoButton out of the form container)
 
 export default function Register(): JSX.Element {
   const classes = useStyles();
