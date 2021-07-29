@@ -13,7 +13,7 @@ exports.createBoard = asyncHandler(async (req, res) => {
       await inProgress.save();
       await completed.save();
 
-      const board = new Board({ title, columns: [inProgress, completed]});
+      const board = new Board({ title, columns: [inProgress._id, completed._id]});
       const doc = await board.save();
 
       res.status(201).json({
@@ -33,7 +33,7 @@ exports.createBoard = asyncHandler(async (req, res) => {
 })
 
 exports.getBoard = asyncHandler(async (req, res) => {
-  const { boardId } = req;
+  const { boardId } = req.body;
   try {
     const board = await Board.findById(boardId);
     if (board) {
@@ -58,7 +58,7 @@ exports.createColumn = asyncHandler(async (req, res) => {
       
       // Add column to board.
       const board = await Board.findById(boardId);
-      board.columns.push(column);
+      board.columns.push(column._id);
       await board.save();
       res.status(201).json({
         column

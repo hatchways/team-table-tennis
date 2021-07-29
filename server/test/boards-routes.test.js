@@ -6,7 +6,7 @@ chai.should();
 chai.use(chaiHttp);
 
 var boardId = "";
-var columnId;
+var columnId = "";
 
 describe('Board routes', () => {
 
@@ -23,8 +23,8 @@ describe('Board routes', () => {
             .property('boardId')
             .not.eql(undefined)
           boardId = res.body.success.boardId;
+          done();
         }
-        done();
       })
   })
 
@@ -37,12 +37,12 @@ describe('Board routes', () => {
         if (err) {
           console.error(err);
         } else {
-          const board = res.body.board;
-          board.should.have.property('id').equal(boardId);
+          const { board } = res.body;
+          board.should.have.property('_id').equal(boardId);
           board.should.have.property('columns').property('length').equal(2);
+          done();
         }
       })
-    done();
   })
 
   it('should create a column', (done) => {
@@ -84,6 +84,23 @@ describe('Board routes', () => {
           column.title.should.equal('Test');
           column.cards.length.should.equal(0);
           column._id.should.equal(columnId);
+          done();
+        }
+      })
+  })
+
+  it('should add the column to the board', (done) => {
+    chai
+      .request(app)
+      .get('/boards')
+      .send({ boardId })
+      .end((err ,res) => {
+        if (err) {
+          console.error(err);
+        } else {
+          const { board } = res.body;
+          const filtered = board.columns.filter(col => col === columnId);
+          filtered.should.have.property('length').should.not.equal(0);
           done();
         }
       })
