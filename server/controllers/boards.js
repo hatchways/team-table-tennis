@@ -77,8 +77,8 @@ exports.createColumn = asyncHandler(async (req, res) => {
 exports.getColumns = asyncHandler(async (req, res) => {
   const { columnIds } = req.body;
   try {
-    const columns = await Promise.all(columnIds.map(async (col) => {
-      const doc = await Column.findById(col);
+    const columns = await Promise.all(columnIds.map(async (id) => {
+      const doc = await Column.findById(id);
       return doc;
     }));
     res.status(200).json({
@@ -90,9 +90,9 @@ exports.getColumns = asyncHandler(async (req, res) => {
 })
 
 exports.updateColumn = asyncHandler(async (req, res) => {
-  const { id, title, columns } = req.body;
+  const { id, title, cards } = req.body;
   const filter = { _id : id };
-  const update = { title, columns };
+  const update = { title, cards };
   try {
     await Column.findOneAndUpdate(filter, update);
     res.status(200);
@@ -103,30 +103,53 @@ exports.updateColumn = asyncHandler(async (req, res) => {
 })
 
 exports.createCard = asyncHandler(async (req, res) => {
-  const { title, description } = req.body;
+  const { title, description, columnId } = req.body;
   const card = new Card({ title });
   if (description) {
     card.description = description;
   }
   try {
     await card.save();
-    res.status(201)
+
+    const column = await Column.findById(columnId);
+    column.cards.push(card._id);
+    await column.save();
+
+    res.status(201).json({
+      cardId: card._id
+    })
   } catch (err) {
     console.error(err);
     res.status(500);
   }
 })
 
+exports.getCards = asyncHandler(async (req, res) => {
+  const { cardIds } = req.body;
+  try {
+    const cards = await Promise.all(cardIds.map(async (id) => {
+      const doc = await Card.findById(id);
+      return doc;
+    }));
+    res.status(200).json({
+      cards
+    })
+  } catch (err) {
+    console.error(err);
+  }
+})
+
 exports.moveCard = asyncHandler(async (req, res) => {
   const { ogColId, destColId, row, cardId } = req.body;
   try {
+    const ogCol = await Column.findOne({ _id: ogColId });
+    ogCol.cards = ogCol.cards.filter(id => id !== cardId);
+    await ogCol.save();
+    // TODO: make sure to check element exists to begin with.
+
     const destCol = await Column.findOne({ _id: destColId });
     destCol.cards.splice(row, 0, cardId);
     await destCol.save();
-
-    const ogCol = await Column.findOne({ _id: ogColId });
-    ogCol.cards = ogCol.cards.filter(card => card._id !== cardId);
-    await ogCol.save();
 
     res.status(200);
   } catch (err) {

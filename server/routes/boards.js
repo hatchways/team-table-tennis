@@ -7,6 +7,7 @@ const {
   getColumns,
   updateColumn,
   createCard,
+  getCards,
   moveCard
 } = require('../controllers/boards.js')
 
@@ -20,7 +21,8 @@ router.route('/columns').get(getColumns)
 router.route('/columns').put(updateColumn);
 
 // Card
-router.route('/card').post(createCard);
-router.route('/card').patch(moveCard);
+router.route('/cards').get(getCards);
+router.route('/cards').post(createCard);
+router.route('/cards/move').put(moveCard);
 
 module.exports = router;
