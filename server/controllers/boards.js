@@ -50,11 +50,16 @@ exports.getBoard = asyncHandler(async (req, res) => {
 })
 
 exports.createColumn = asyncHandler(async (req, res) => {
-  const { title } = req.body;
+  const { title, boardId } = req.body;
   if (title) {
     try {
       const column = new Column({ title });
-      const doc = await column.save();
+      await column.save();
+      
+      // Add column to board.
+      const board = await Board.findById(boardId);
+      board.columns.push(column);
+      await board.save();
       res.status(201).json({
         column
       });
@@ -66,6 +71,21 @@ exports.createColumn = asyncHandler(async (req, res) => {
     res.status(400).send({
       message: 'Column title is empty'
     });
+  }
+})
+
+exports.getColumns = asyncHandler(async (req, res) => {
+  const { columnIds } = req.body;
+  try {
+    const columns = await Promise.all(columnIds.map(async (col) => {
+      const doc = await Column.findById(col);
+      return doc;
+    }));
+    res.status(200).json({
+      columns
+    })
+  } catch (err) {
+    console.error(err);
   }
 })
 
@@ -107,7 +127,7 @@ exports.moveCard = asyncHandler(async (req, res) => {
     const ogCol = await Column.findOne({ _id: ogColId });
     ogCol.cards = ogCol.cards.filter(card => card._id !== cardId);
     await ogCol.save();
-    
+
     res.status(200);
   } catch (err) {
     res.status(500);

@@ -4,21 +4,23 @@ const {
   getBoard,
   createBoard,
   createColumn,
+  getColumns,
   updateColumn,
   createCard,
   moveCard
 } = require('../controllers/boards.js')
 
 // Board
-router.route('/create-board').post(createBoard);
-router.route('/get-board').get(getBoard);
+router.route('/').post(createBoard);
+router.route('/').get(getBoard);
 
 // Column
-router.route('/create-column').post(createColumn);
-router.route('/update-column').post(updateColumn);
+router.route('/columns').post(createColumn);
+router.route('/columns').get(getColumns)
+router.route('/columns').put(updateColumn);
 
 // Card
-router.route('/create-card').post(createCard);
-router.route('/move-card').post(moveCard);
+router.route('/card').post(createCard);
+router.route('/card').patch(moveCard);
 
 module.exports = router;
