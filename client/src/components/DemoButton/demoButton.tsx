@@ -26,7 +26,7 @@ export default function DemoButton(): JSX.Element {
   };
 
   return (
-    <form onSubmit={() => handleSubmit({ email, password })}>
+    <form onSubmit={() => handleSubmit({ email, password })} noValidate>
       <Button type="submit" color="primary">
         Try Demo
       </Button>
