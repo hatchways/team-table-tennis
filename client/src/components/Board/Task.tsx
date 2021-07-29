@@ -26,14 +26,18 @@ const Task = (props: any) => {
           ref={provided.innerRef}
           className={classes.task}
         >
-          <RemoveRoundedIcon
-            style={{ fontSize: 75 }}
-            htmlColor={state.color}
-            onClick={expandHandler}
-          ></RemoveRoundedIcon>
           <CardHeader
-            title={props.task.Name}
-            titleTypographyProps={{ variant: 'h6' }}
+            title={
+              <>
+                <RemoveRoundedIcon
+                  style={{ fontSize: 75, border: 2, borderColor: 'black' }}
+                  htmlColor={state.color}
+                  onClick={expandHandler}
+                ></RemoveRoundedIcon>
+                <br></br>
+                <strong>{props.task.Name}</strong>
+              </>
+            }
             onClick={expandHandler}
           ></CardHeader>
           <Collapse in={state.expanded}>
