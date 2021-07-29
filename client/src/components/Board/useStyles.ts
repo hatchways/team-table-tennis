@@ -13,6 +13,10 @@ const useStyles = makeStyles(() => ({
   task: {
     marginTop: 10,
     marginBottom: 10,
+    '&:focus': {
+      border: '3px solid',
+      borderColor: '#80A3FB',
+    },
   },
 }));
 

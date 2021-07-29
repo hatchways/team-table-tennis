@@ -6,6 +6,7 @@ import RemoveRoundedIcon from '@material-ui/icons/RemoveRounded';
 import { CardActions, CardContent, Collapse, Divider, Grid, Typography } from '@material-ui/core';
 import { useState } from 'react';
 import { FiberManualRecord } from '@material-ui/icons';
+
 const Task = (props: any) => {
   const classes = useStyles();
   const colors = ['#FFFFFF', '#FF5D48', '#EDAB1D', '#59B0FF', '#D460F7'];
@@ -25,6 +26,7 @@ const Task = (props: any) => {
           {...provided.draggableProps}
           ref={provided.innerRef}
           className={classes.task}
+          elevation={0}
         >
           <CardHeader
             title={
