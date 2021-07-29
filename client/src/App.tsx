@@ -9,6 +9,7 @@ import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
 
 import './App.css';
+import Calendar from './pages/Calendar/Calendar';
 
 function App(): JSX.Element {
   return (
@@ -25,6 +26,9 @@ function App(): JSX.Element {
                 </Route>
                 <Route path="*">
                   <Redirect to="/login" />
+                </Route>
+                <Route path="/calendar">
+                  <Calendar />
                 </Route>
               </Switch>
             </SocketProvider>
