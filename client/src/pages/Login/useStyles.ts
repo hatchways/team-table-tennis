@@ -7,6 +7,15 @@ const useStyles = makeStyles(() => ({
       borderBottom: '1.2px solid rgba(0, 0, 0, 0.2)',
     },
   },
+  LoginFormContainer: {
+    marginTop: 'auto',
+    width: '100%',
+  },
+  authHeader: {
+    margin: 'auto auto 0 auto',
+    borderTop: '1px solid #ececec',
+    width: '100%',
+  },
   authWrapper: {
     display: 'flex',
     alignItems: 'flex-start',
@@ -21,6 +30,7 @@ const useStyles = makeStyles(() => ({
     color: '#000000',
     fontWeight: 700,
     fontFamily: "'Open Sans'",
+    textAlign: 'center',
   },
 }));
 

@@ -10,6 +10,7 @@ import SignUpForm from './SignUpForm/SignUpForm';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
+import BgImg from '../../components/BgImg/BgImg';
 
 export default function Register(): JSX.Element {
   const classes = useStyles();
@@ -40,10 +41,10 @@ export default function Register(): JSX.Element {
   return (
     <Grid container component="main" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={12} sm={8} md={7} elevation={6} component={Paper} square>
+      <BgImg />
+      <Grid item xs={12} sm={8} md={6} elevation={0} component={Paper} square>
         <Box className={classes.authWrapper}>
-          <AuthHeader linkTo="/login" asideText="Already have an account?" btnText="Login" />
-          <Box width="100%" maxWidth={450} p={3} alignSelf="center">
+          <Box className={classes.SignUpFormContainer} maxWidth={450} p={3} alignSelf="center">
             <Grid container>
               <Grid item xs>
                 <Typography className={classes.welcome} component="h1" variant="h5">
@@ -52,6 +53,9 @@ export default function Register(): JSX.Element {
               </Grid>
             </Grid>
             <SignUpForm handleSubmit={handleSubmit} />
+          </Box>
+          <Box className={classes.authHeader}>
+            <AuthHeader linkTo="/login" asideText="Already have an account?" btnText="Login" />
           </Box>
           <Box p={1} alignSelf="center" />
         </Box>
