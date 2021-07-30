@@ -64,7 +64,7 @@ const Task = (props: any) => {
                       Select Tag
                     </Typography>
                   </Grid>
-                  <Grid item xs={4} alignItems="center" alignContent="center">
+                  <Grid item xs={4} alignItems="center" alignContent="center" style={{ display: 'flex' }}>
                     {colors.map((color, index) => (
                       <FiberManualRecord
                         style={{ stroke: 'black', strokeWidth: 1 }}
