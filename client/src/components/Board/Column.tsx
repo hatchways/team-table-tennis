@@ -13,11 +13,12 @@ export interface properties {
 }
 
 const Column: React.FunctionComponent<properties> = (props) => {
-  const [state, setState] = useState({ placeHolderStyle: props.placeHolderStyle, visable: -1 });
-
+  const [state, setState] = useState({ placeHolderStyle: props.placeHolderStyle, visable: -1, dragFinished: true });
   const classes = useStyles();
   const setVisable = (zAxis: number) => {
-    setState({ ...state, visable: zAxis });
+    const newState = state;
+    newState.visable = zAxis;
+    setState(newState);
   };
   const onMouseEnter = () => {
     setVisable(1);
@@ -26,13 +27,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
     setVisable(-1);
   };
   const onMouseUp = () => {
-    const placeHolderStyle: TaskPlaceHolder = {
-      clientX: 0,
-      clientY: 0,
-      clientWidth: 0,
-      clientHeight: 0,
-    };
-    setState({ ...state, visable: -1, placeHolderStyle });
+    setVisable(-1);
   };
 
   return (

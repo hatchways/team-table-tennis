@@ -15,7 +15,6 @@ const Board: React.FunctionComponent = () => {
   const onDragUpdate = (result: DragUpdate) => {
     const { draggableId } = result;
 
-    console.log(draggableId);
     const dom = document.getElementsByClassName('taskClass-' + draggableId)[0];
 
     if (!dom) {
@@ -65,6 +64,13 @@ const Board: React.FunctionComponent = () => {
 
       return;
     } else {
+      const taskPlaceHolder: TaskPlaceHolder = {
+        clientWidth: 0,
+        clientHeight: 0,
+        clientY: 0,
+        clientX: 0,
+      };
+
       const start = state.mockData.columns[source.droppableId];
 
       const finish = state.mockData.columns[destination.droppableId];
