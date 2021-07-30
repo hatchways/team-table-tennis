@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Container } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, CardHeader } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import useStyles from './useStyles';
 import Task from './Task';
@@ -12,7 +12,7 @@ export interface properties {
   Tasks: TaskInterface[];
 }
 
-const Column = (props: properties) => {
+const Column: React.FunctionComponent<properties> = (props) => {
   const [state, setState] = useState({ placeHolderStyle: props.placeHolderStyle, visable: -1 });
 
   const classes = useStyles();
@@ -55,7 +55,7 @@ const Column = (props: properties) => {
           <Droppable droppableId={props.Column.Id} type="task">
             {(provided) => (
               <CardContent ref={provided.innerRef} {...provided.droppableProps}>
-                {props.Tasks.map((task: any, index: number) => (
+                {props.Tasks.map((task: TaskInterface, index: number) => (
                   <Task key={task.Id} task={task} index={index}></Task>
                 ))}
                 {provided.placeholder}
