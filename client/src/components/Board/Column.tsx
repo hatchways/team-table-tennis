@@ -85,7 +85,10 @@ const Column = (props: properties) => {
             )}
           </Droppable>
           <CardActions>
-            <Button color="primary" variant="contained" style={{ marginLeft: 10, marginBottom: 10, zIndex: 2 }}>
+            <Button
+              variant="contained"
+              style={{ marginLeft: 10, marginBottom: 10, zIndex: 2, backgroundColor: '#759CFC', color: 'white' }}
+            >
               Add a card
             </Button>
           </CardActions>
