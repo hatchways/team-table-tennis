@@ -19,10 +19,6 @@ const Task = (props: any) => {
   const changeColor = (color: string) => {
     setState({ ...state, color: color });
   };
-  const rotateOnDrag = (dragging: boolean) => {
-    setState({ ...state, isDragging: dragging });
-    console.log(state);
-  };
   const taskClassName = (dragging: boolean) => {
     if (dragging) {
       return classes.task + ' ' + classes.taskDragging;
