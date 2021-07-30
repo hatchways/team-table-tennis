@@ -11,7 +11,7 @@ export default function DemoButton(): JSX.Element {
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
 
-  const handleSubmit = ({ email, password }: { email: string; password: string }) => {
+  const handleSubmit = ({ email, password }: { email: string; password: string }): void => {
     login(email, password).then((data) => {
       if (data.error) {
         updateSnackBarMessage(data.error.message);

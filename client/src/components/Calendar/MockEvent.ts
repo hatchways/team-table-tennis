@@ -32,7 +32,7 @@ const mockData4: IUserSchedule = {
 const mockData5: IUserSchedule = {
   title: 'Math Exam',
   start: new Date(2021, 7, 16),
-  end: new Date(2021, 7, 26),
+  end: new Date(2021, 7, 16),
   resources: 'InComplete',
 };
 
