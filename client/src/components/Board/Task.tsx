@@ -3,11 +3,16 @@ import CardHeader from '@material-ui/core/CardHeader';
 import { Draggable } from 'react-beautiful-dnd';
 import useStyles from './useStyles';
 import RemoveRoundedIcon from '@material-ui/icons/RemoveRounded';
-import { Box, CardActions, CardContent, Collapse, Divider, Grid, styled, Typography } from '@material-ui/core';
+import { Box, CardActions, CardContent, Collapse, Divider, Grid, Typography } from '@material-ui/core';
 import { useState } from 'react';
 import { FiberManualRecord } from '@material-ui/icons';
+import { Task as TaskInterface } from '../../interface/Task';
 
-const Task = (props: any) => {
+interface properties {
+  task: TaskInterface;
+  index: number;
+}
+const Task: React.FunctionComponent<properties> = (props: properties) => {
   const colors = ['#FFFFFF', '#FF5D48', '#EDAB1D', '#59B0FF', '#D460F7'];
   const [state, setState] = useState({ expanded: false, color: props.task.Color, isDragging: true });
   const classes = useStyles();
