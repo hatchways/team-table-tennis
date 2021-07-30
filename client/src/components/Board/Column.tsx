@@ -13,15 +13,25 @@ export interface properties {
 }
 
 const Column: React.FunctionComponent<properties> = (props) => {
-  const [state, setState] = useState({ placeHolderStyle: props.placeHolderStyle, visable: -1, dragFinished: true });
+  const [state, setState] = useState({ placeHolderStyle: props.placeHolderStyle, visible: -1, dragFinished: true });
   const classes = useStyles();
-  const setVisable = (zAxis: number) => {
-    const newState = state;
-    newState.visable = zAxis;
-    setState(newState);
+  const setVisable = (visible: number) => {
+    setState({ ...state, visible });
   };
   const onMouseEnter = () => {
-    setVisable(1);
+    const placeHolder = document.getElementById('placeholder-' + props.Column.Id);
+    const column = document.getElementById(props.Column.Id);
+    if (!placeHolder || !column) {
+      return;
+    }
+    if (
+      column.getBoundingClientRect().bottom <
+      placeHolder.getBoundingClientRect().bottom + placeHolder.getBoundingClientRect().height * 0.5
+    ) {
+      setVisable(-1);
+    } else {
+      setVisable(1);
+    }
   };
   const onMouseLeave = () => {
     setVisable(-1);
@@ -37,9 +47,10 @@ const Column: React.FunctionComponent<properties> = (props) => {
           className={classes.column}
           {...provided.draggableProps}
           ref={provided.innerRef}
-          onMouseEnter={onMouseEnter}
+          onMouseOver={() => onMouseEnter()}
           onMouseLeave={onMouseLeave}
           onMouseUp={onMouseUp}
+          id={props.Column.Id}
         >
           <CardHeader
             title={props.Column.Title}
@@ -48,7 +59,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
             {...provided.dragHandleProps}
           ></CardHeader>
           <Droppable droppableId={props.Column.Id} type="task">
-            {(provided) => (
+            {(provided, snapshot) => (
               <CardContent ref={provided.innerRef} {...provided.droppableProps}>
                 {props.Tasks.map((task: TaskInterface, index: number) => (
                   <Task key={task.Id} task={task} index={index}></Task>
@@ -60,8 +71,9 @@ const Column: React.FunctionComponent<properties> = (props) => {
                     height: props.placeHolderStyle.clientHeight,
                     width: props.placeHolderStyle.clientWidth,
                     position: 'absolute',
-                    zIndex: state.visable,
+                    zIndex: state.visible,
                   }}
+                  hidden={!snapshot.isDraggingOver}
                 >
                   <Card
                     elevation={0}
@@ -71,9 +83,11 @@ const Column: React.FunctionComponent<properties> = (props) => {
                       height: props.placeHolderStyle.clientHeight,
                       width: props.placeHolderStyle.clientWidth,
                       position: 'static',
-                      zIndex: state.visable,
+                      zIndex: state.visible,
                       backgroundColor: '#E5ECFC',
                     }}
+                    id={'placeholder-' + props.Column.Id}
+                    hidden={!snapshot.isDraggingOver}
                   ></Card>
                 </div>
               </CardContent>
@@ -82,6 +96,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
           <CardActions>
             <Button
               variant="contained"
+              id={'button-' + props.Column.Id}
               style={{ marginLeft: 10, marginBottom: 10, zIndex: 2, backgroundColor: '#759CFC', color: 'white' }}
             >
               Add a card

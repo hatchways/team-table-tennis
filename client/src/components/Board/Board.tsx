@@ -54,7 +54,6 @@ const Board: React.FunctionComponent = () => {
     }
 
     if (type === 'column') {
-      console.log('moved column');
       const newColumnOrder = Array.from(state.mockData.columnOrder);
       newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, draggableId);
