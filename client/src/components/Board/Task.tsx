@@ -59,15 +59,15 @@ const Task = (props: any) => {
               </CardContent>
               <CardActions>
                 <Grid container direction="row" alignItems="center" alignContent="center">
-                  <Grid item xs={8}>
+                  <Grid item xs={6}>
                     <Typography color="textSecondary" variant="h6" className={classes.selectTag}>
-                      Select Tag
+                      Select Tag:
                     </Typography>
                   </Grid>
-                  <Grid item xs={4} alignItems="center" alignContent="center" style={{ display: 'flex' }}>
+                  <Grid item xs={6} alignItems="center" alignContent="center" style={{ display: 'flex' }}>
                     {colors.map((color, index) => (
                       <FiberManualRecord
-                        style={{ stroke: 'black', strokeWidth: 1 }}
+                        style={{ stroke: '#E2E8F6', strokeWidth: color === colors[0] ? 1 : 0, fontSize: 30 }}
                         htmlColor={color}
                         key={index}
                         onClick={() => {
