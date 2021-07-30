@@ -21,6 +21,7 @@ const Column = (props: any) => {
                   <Task key={task.Id} task={task} index={index}></Task>
                 ))}
                 {provided.placeholder}
+                <Card style={{ backgroundColor: 'red' }}>test</Card>
               </CardContent>
             )}
           </Droppable>

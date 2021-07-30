@@ -1,12 +1,16 @@
 import { useState } from 'react';
 import Column from './Column';
-import { Column as ColumnType } from '../../interface/Column';
+import { TaskPlaceHolder } from '../../interface/Task';
 import mockData from './MockData';
 import { DragDropContext, DropResult, Droppable } from 'react-beautiful-dnd';
 import { Grid } from '@material-ui/core';
-
 const Board = () => {
-  const [state, setState] = useState(mockData);
+  const taskPlaceHolder: TaskPlaceHolder = { clientHeight: 0, clientWidth: 0, clientX: 0, clientY: 0 };
+
+  const [state, setState] = useState({
+    mockData: mockData,
+    taskPlaceHolder: taskPlaceHolder,
+  });
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId, type } = result;
     if (!destination) {
@@ -18,15 +22,32 @@ const Board = () => {
 
     if (type === 'column') {
       console.log('moved column');
-      const newColumnOrder = Array.from(state.columnOrder);
+      const newColumnOrder = Array.from(state.mockData.columnOrder);
       newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, draggableId);
-      setState({ ...state, columnOrder: newColumnOrder });
+      const mockData = state.mockData;
+      mockData.columnOrder = newColumnOrder;
+      setState({ ...state, mockData });
 
       return;
     } else {
-      const start = state.columns[source.droppableId];
-      const finish = state.columns[destination.droppableId];
+      const start = state.mockData.columns[source.droppableId];
+      const dom = document.querySelector(`[${'data-rbd-draggable-id'}='${draggableId}']`);
+      if (!dom) {
+        return;
+      }
+      // setup the placeholder task
+      const { clientHeight, clientWidth } = dom;
+      const taskPlaceHolder: TaskPlaceHolder = {
+        clientWidth: clientWidth,
+        clientHeight: clientHeight,
+        clientY: 0,
+        clientX: 0,
+      };
+
+      setState({ ...state, taskPlaceHolder });
+
+      const finish = state.mockData.columns[destination.droppableId];
       const startTasks = Array.from(start.Tasks);
       startTasks.splice(source.index, 1);
       if (start === finish) {
@@ -35,7 +56,7 @@ const Board = () => {
           ...start,
           Tasks: startTasks,
         };
-        const newColumns = state.columns;
+        const newColumns = state.mockData.columns;
         newColumns[source.droppableId] = newColumn;
 
         const newState = {
@@ -56,7 +77,7 @@ const Board = () => {
           Tasks: startTasks,
         };
 
-        const newColumns = state.columns;
+        const newColumns = state.mockData.columns;
         newColumns[destination.droppableId] = destinationColumn;
         newColumns[source.droppableId] = sourceColumn;
 
@@ -74,11 +95,11 @@ const Board = () => {
       <Droppable droppableId="board" direction="horizontal" type="column">
         {(provided) => (
           <Grid container direction="row" justify="center" ref={provided.innerRef}>
-            {state.columnOrder.map((Id, index) => (
+            {state.mockData.columnOrder.map((Id, index) => (
               <Column
-                Column={state.columns[Id]}
+                Column={state.mockData.columns[Id]}
                 key={Id}
-                Tasks={state.columns[Id].Tasks.map((task: string) => state.tasks[task])}
+                Tasks={state.mockData.columns[Id].Tasks.map((task: string) => state.mockData.tasks[task])}
                 index={index}
               ></Column>
             ))}
