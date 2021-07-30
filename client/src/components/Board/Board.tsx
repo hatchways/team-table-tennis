@@ -64,13 +64,6 @@ const Board: React.FunctionComponent = () => {
 
       return;
     } else {
-      const taskPlaceHolder: TaskPlaceHolder = {
-        clientWidth: 0,
-        clientHeight: 0,
-        clientY: 0,
-        clientX: 0,
-      };
-
       const start = state.mockData.columns[source.droppableId];
 
       const finish = state.mockData.columns[destination.droppableId];
