@@ -2,7 +2,7 @@ import { Tasks } from '../../interface/Task';
 import { Columns } from '../../interface/Column';
 
 const tasks: Tasks = {
-  'task-1': { Name: 'Test Task 1', Color: '#5ACD76', Id: 'task-1' },
+  'task-1': { Name: 'Essay on the enviroment', Color: '#5ACD76', Id: 'task-1' },
   'task-2': { Name: 'another test', Color: '#FF5D48', Id: 'task-2' },
   'task-3': { Name: 'the final test', Color: '#EDAB1D', Id: 'task-3' },
 };

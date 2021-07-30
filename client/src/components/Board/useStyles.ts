@@ -22,6 +22,9 @@ const useStyles = makeStyles({
     transform: 'rotate(-2Deg)',
     boxShadow: '2px 2px 2px 2px rgba(128, 163, 251, 0.3)',
   },
+  selectTag: {
+    fontWeight: 800,
+  },
 });
 
 export default useStyles;

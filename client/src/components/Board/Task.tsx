@@ -3,7 +3,7 @@ import CardHeader from '@material-ui/core/CardHeader';
 import { Draggable } from 'react-beautiful-dnd';
 import useStyles from './useStyles';
 import RemoveRoundedIcon from '@material-ui/icons/RemoveRounded';
-import { CardActions, CardContent, Collapse, Divider, Grid, styled, Typography } from '@material-ui/core';
+import { Box, CardActions, CardContent, Collapse, Divider, Grid, styled, Typography } from '@material-ui/core';
 import { useState } from 'react';
 import { FiberManualRecord } from '@material-ui/icons';
 
@@ -44,7 +44,11 @@ const Task = (props: any) => {
                     onClick={expandHandler}
                   ></RemoveRoundedIcon>
                   <br></br>
-                  <strong>{props.task.Name}</strong>
+                  <Typography variant="h6" component="div">
+                    <Box fontWeight={600} fontSize={20}>
+                      {props.task.Name}
+                    </Box>
+                  </Typography>
                 </>
               }
               onClick={expandHandler}
@@ -56,9 +60,11 @@ const Task = (props: any) => {
               <CardActions>
                 <Grid container direction="row" alignItems="center" alignContent="center">
                   <Grid item xs={8}>
-                    <Typography variant="h6">Select Tag</Typography>
+                    <Typography color="textSecondary" variant="h6" className={classes.selectTag}>
+                      Select Tag
+                    </Typography>
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={4} alignItems="center" alignContent="center">
                     {colors.map((color, index) => (
                       <FiberManualRecord
                         style={{ stroke: 'black', strokeWidth: 1 }}
