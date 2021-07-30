@@ -29,7 +29,6 @@ const Board = () => {
     if (!parentElement) {
       return;
     }
-    console.log(dom);
 
     const children = dom.parentNode?.children;
     if (!children) {
@@ -38,13 +37,6 @@ const Board = () => {
 
     // setup the placeholder task
 
-    //const clientY =
-    //  parseFloat(window.getComputedStyle(parentElement).paddingTop) +
-    //  [...children].slice(0, destination.index).reduce((total, current) => {
-    //    const style = window.getComputedStyle(current);
-    //    const marginBottom = parseFloat(style.marginBottom);
-    //    return total + current.clientHeight + marginBottom;
-    //  }, 0);
     const clientY = dom.getBoundingClientRect().y;
 
     const { clientHeight, clientWidth } = dom;
@@ -56,7 +48,6 @@ const Board = () => {
     };
     const newState = { ...state, taskPlaceHolder };
     setState(newState);
-    console.log(newState.taskPlaceHolder);
   };
   const onDragEnd = (result: DropResult) => {
     const { destination, source, draggableId, type } = result;
@@ -79,20 +70,6 @@ const Board = () => {
       return;
     } else {
       const start = state.mockData.columns[source.droppableId];
-      const dom = document.getElementsByClassName('taslClass-' + source.droppableId)[0];
-      if (!dom) {
-        return;
-      }
-      // setup the placeholder task
-      const { clientHeight, clientWidth } = dom;
-      const taskPlaceHolder: TaskPlaceHolder = {
-        clientWidth: clientWidth,
-        clientHeight: clientHeight,
-        clientY: dom.getBoundingClientRect().y,
-        clientX: dom.getBoundingClientRect().left,
-      };
-
-      setState({ ...state, taskPlaceHolder });
 
       const finish = state.mockData.columns[destination.droppableId];
       const startTasks = Array.from(start.Tasks);
@@ -103,6 +80,7 @@ const Board = () => {
           ...start,
           Tasks: startTasks,
         };
+
         const newColumns = state.mockData.columns;
         newColumns[source.droppableId] = newColumn;
 
