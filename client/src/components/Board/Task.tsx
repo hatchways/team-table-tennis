@@ -47,6 +47,11 @@ const Task = (props: any) => {
                   </Typography>
                 </>
               }
+              subheader={
+                <Typography color="textSecondary" variant="h6" className={classes.selectTag}>
+                  {props.task.Date}
+                </Typography>
+              }
               onClick={expandHandler}
             ></CardHeader>
             <Collapse in={state.expanded}>
