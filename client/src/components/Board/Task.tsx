@@ -34,7 +34,7 @@ const Task = (props: any) => {
     <Draggable draggableId={props.task.Id} index={props.index}>
       {(provided, snapshot) => (
         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
-          <Card elevation={0} className={taskClassName(snapshot.isDragging)}>
+          <Card elevation={0} className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task.Id}>
             <CardHeader
               title={
                 <>
@@ -64,7 +64,7 @@ const Task = (props: any) => {
                       Select Tag:
                     </Typography>
                   </Grid>
-                  <Grid item xs={6} alignItems="center" alignContent="center" style={{ display: 'flex' }}>
+                  <Grid item xs={6} style={{ display: 'flex' }}>
                     {colors.map((color, index) => (
                       <FiberManualRecord
                         style={{ stroke: '#E2E8F6', strokeWidth: color === colors[0] ? 1 : 0, fontSize: 30 }}

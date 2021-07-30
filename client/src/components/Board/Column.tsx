@@ -2,7 +2,16 @@ import { Button, Card, CardActions, CardContent, CardHeader, Container } from '@
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import useStyles from './useStyles';
 import Task from './Task';
-const Column = (props: any) => {
+import { Column as ColumnInterface } from '../../interface/Column';
+import { Task as TaskInterface, TaskPlaceHolder } from '../../interface/Task';
+import { placeholder } from '@babel/types';
+interface properties {
+  placeHolderStyle: TaskPlaceHolder;
+  Column: ColumnInterface;
+  index: number;
+  Tasks: TaskInterface[];
+}
+const Column = (props: properties) => {
   const classes = useStyles();
   return (
     <Draggable draggableId={props.Column.Id} index={props.index}>
@@ -21,7 +30,24 @@ const Column = (props: any) => {
                   <Task key={task.Id} task={task} index={index}></Task>
                 ))}
                 {provided.placeholder}
-                <Card style={{ backgroundColor: 'red' }}>test</Card>
+                <div
+                  style={{
+                    top: props.placeHolderStyle.clientY,
+                    height: props.placeHolderStyle.clientHeight,
+                    width: props.placeHolderStyle.clientWidth,
+                    position: 'absolute',
+                  }}
+                >
+                  <Card
+                    style={{
+                      top: props.placeHolderStyle.clientY,
+                      left: props.placeHolderStyle.clientX,
+                      height: props.placeHolderStyle.clientHeight,
+                      width: props.placeHolderStyle.clientWidth,
+                      position: 'static',
+                    }}
+                  ></Card>
+                </div>
               </CardContent>
             )}
           </Droppable>
