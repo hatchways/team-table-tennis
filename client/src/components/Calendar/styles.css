@@ -1,0 +1,33 @@
+.rbc-event{
+    margin: auto;
+    background-color: white;
+    max-width: 80%;
+    box-shadow: 0px 0px 8px rgba(177, 177, 177, 0.603);
+    margin: 1vh 3vh;
+    padding: 0vh 1vh;
+}
+.rbc-event.rbc-selected, .rbc-day-slot .rbc-selected.rbc-background-event {
+    background-color: white;
+}
+.rbc-month-view{
+    background-color: #f4f6ff;
+    border: none;
+}
+.rbc-month-header{
+    background-color: white;
+}
+.rbc-header{
+    border-bottom: none;
+    border-left: none;
+}
+.rbc-header + .rbc-header{
+    border-left: none;
+
+}
+.rbc-date-cell{
+    text-align: left;
+    margin: 8px;
+}
+.rbc-today{
+    background-color: #f4f6ff;
+}

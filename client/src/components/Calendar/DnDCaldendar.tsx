@@ -1,47 +1,42 @@
 import React from 'react';
-import { Calendar, momentLocalizer, ToolbarProps, Event, EventProps } from 'react-big-calendar';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import useStyles from './useStyles';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
 import { IUserSchedule, mockDatas } from './MockEvent';
 import { useState } from 'react';
+import './styles.css';
+import { EventComponent, Toolbar } from './extension';
+
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { DndContext, DndContextType, DndProvider } from 'react-dnd';
+import { FetchOptions } from '../../interface/FetchOptions';
+import { useAuth } from '../../context/useAuthContext';
+import { useSocket } from '../../context/useSocketContext';
+import { useHistory } from 'react-router-dom';
+import { useEffect } from 'react';
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar as any);
 
-class CalendarEvent {
-  title: string;
-  allDay: boolean;
-  start: Date;
-  endDate: Date;
-  desc: string;
-  resourceId?: string | undefined;
-  tooltip?: string | undefined;
-
-  constructor(_title: string, _start: Date, _endDate: Date, _allDay?: boolean, _desc?: string, _resourceId?: string) {
-    this.title = _title;
-    this.allDay = _allDay || false;
-    this.start = _start;
-    this.endDate = _endDate;
-    this.desc = _desc || '';
-    this.resourceId = _resourceId;
-  }
-}
-
-class CalendarResource {
-  title: string;
-  id: string;
-
-  constructor(id: string, title: string) {
-    this.id = id;
-    this.title = title;
-  }
-}
-
 const DnDCalendar = (): JSX.Element => {
   const [events, setEvent] = useState<IUserSchedule[]>(mockDatas);
+
+  const { loggedInUser } = useAuth();
+  const { initSocket } = useSocket();
+
+  const history = useHistory();
+
+  useEffect(() => {
+    initSocket();
+  }, [initSocket]);
+
+  if (loggedInUser === undefined) return <CircularProgress />;
+  if (!loggedInUser) {
+    history.push('/login');
+    // loading for a split seconds until history.push works
+    return <CircularProgress />;
+  }
 
   const moveEvent = ({ event, start, end }: { event: any; start: any; end: any }): void => {
     const selectedIndex = events.indexOf(event);
@@ -52,6 +47,12 @@ const DnDCalendar = (): JSX.Element => {
 
     setEvent(nextEvents);
   };
+  
+  const GetData = () => {
+
+  };
+
+  const UpdateData = () => {};
   return (
     <DragAndDropCalendar
       selectable
@@ -69,28 +70,5 @@ const DnDCalendar = (): JSX.Element => {
     />
   );
 };
-
-class Toolbar extends React.Component<ToolbarProps<CalendarEvent, CalendarResource>> {
-  render() {
-    const { label } = this.props;
-    return (
-      <div className="rbc-toolbar">
-        <div className="rbc-toolbar-label">{label}</div>
-      </div>
-    );
-  }
-}
-
-class EventComponent extends React.Component<EventProps<Event>> {
-  render() {
-    const { title, event } = this.props;
-    return (
-      <div className="rbc-event-content">
-        <span style={{ backgroundColor: event.resource, padding: '.2vh 4vh' }}></span>
-        <h5>{title}</h5>
-      </div>
-    );
-  }
-}
 
 export default DnDCalendar;
