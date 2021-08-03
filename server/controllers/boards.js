@@ -90,7 +90,6 @@ exports.createCard = asyncHandler(async (req, res) => {
   const column = await Column.findById(columnId);
   column.cards.push(card._id);
   await column.save();
-
   res.status(201).json({
     cardId: card._id
   })
@@ -110,7 +109,7 @@ exports.getCards = asyncHandler(async (req, res) => {
 exports.moveCard = asyncHandler(async (req, res) => {
   const { ogColId, destColId, row, cardId } = req.body;
   const ogCol = await Column.findOne({ _id: ogColId });
-  ogCol.cards = ogCol.cards.filter(id => id !== cardId);
+  ogCol.cards = ogCol.cards.filter(id => id.toString() !== cardId);
   await ogCol.save();
   // TODO: make sure to check element exists to begin with.
 
