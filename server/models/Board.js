@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ObjectId = mongoose.ObjectId;
 
 const boardSchema = new mongoose.Schema({
   title: {
@@ -8,7 +9,8 @@ const boardSchema = new mongoose.Schema({
   },
   columns:[
     {
-      type: String,
+      type: ObjectId,
+      ref: "column"
     }
   ]
 });
