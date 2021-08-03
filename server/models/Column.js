@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const ObjectId = mongoose.ObjectId;
 
 const columnSchema = new mongoose.Schema({
   title: {
@@ -7,7 +8,8 @@ const columnSchema = new mongoose.Schema({
     unique: false
   },
   cards: [{
-    type: String,
+    type: ObjectId,
+    ref: "card"
   }]
 })
 
