@@ -6,25 +6,20 @@ const Column = require('../models/Column');
 exports.createBoard = asyncHandler(async (req, res) => {
   const { title } = req.body;
   if (title) {
-    try {
-      const inProgress = new Column({ title: 'In Progress' });
-      const completed = new Column({ title : 'Completed' });
-      
-      await inProgress.save();
-      await completed.save();
+    const inProgress = new Column({ title: 'In Progress' });
+    const completed = new Column({ title : 'Completed' });
+    
+    await inProgress.save();
+    await completed.save();
 
-      const board = new Board({ title, columns: [inProgress._id, completed._id]});
-      const doc = await board.save();
+    const board = new Board({ title, columns: [inProgress._id, completed._id]});
+    const doc = await board.save();
 
-      res.status(201).json({
-        success: {
-          boardId: doc._id,
-        }
-      });
-    } catch (err) {
-      res.status(500);
-      console.error(err);
-    }
+    res.status(201).json({
+      success: {
+        boardId: doc._id,
+      }
+    });
   } else {
     res.status(400).send({
       message: 'Board title is empty'
@@ -34,39 +29,29 @@ exports.createBoard = asyncHandler(async (req, res) => {
 
 exports.getBoard = asyncHandler(async (req, res) => {
   const { boardId } = req.body;
-  try {
-    const board = await Board.findById(boardId);
-    if (board) {
-      res.status(200).json({
-        board
-      })
-    } else {
-      res.status(404);
-    }
-  } catch (err) {
-    res.status(500);
-    console.error(err);
+  const board = await Board.findById(boardId);
+  if (board) {
+    res.status(200).json({
+      board
+    })
+  } else {
+    res.status(404);
   }
 })
 
 exports.createColumn = asyncHandler(async (req, res) => {
   const { title, boardId } = req.body;
   if (title) {
-    try {
-      const column = new Column({ title });
-      await column.save();
-      
-      // Add column to board.
-      const board = await Board.findById(boardId);
-      board.columns.push(column._id);
-      await board.save();
-      res.status(201).json({
-        column
-      });
-    } catch (err) {
-      res.status(500);
-      console.error(err);
-    }
+    const column = new Column({ title });
+    await column.save();
+    
+    // Add column to board.
+    const board = await Board.findById(boardId);
+    board.columns.push(column._id);
+    await board.save();
+    res.status(201).json({
+      column
+    });
   } else {
     res.status(400).send({
       message: 'Column title is empty'
@@ -76,30 +61,21 @@ exports.createColumn = asyncHandler(async (req, res) => {
 
 exports.getColumns = asyncHandler(async (req, res) => {
   const { columnIds } = req.body;
-  try {
-    const columns = await Promise.all(columnIds.map(async (id) => {
-      const doc = await Column.findById(id);
-      return doc;
-    }));
-    res.status(200).json({
-      columns
-    })
-  } catch (err) {
-    console.error(err);
-  }
+  const columns = await Promise.all(columnIds.map(async (id) => {
+    const doc = await Column.findById(id);
+    return doc;
+  }));
+  res.status(200).json({
+    columns
+  })
 })
 
 exports.updateColumn = asyncHandler(async (req, res) => {
   const { id, title, cards } = req.body;
   const filter = { _id : id };
   const update = { title, cards };
-  try {
-    await Column.findOneAndUpdate(filter, update);
-    res.status(200);
-  } catch (err) {
-    res.status(500);
-    console.error(err);
-  }
+  await Column.findOneAndUpdate(filter, update);
+  res.status(200);
 })
 
 exports.createCard = asyncHandler(async (req, res) => {
@@ -108,51 +84,37 @@ exports.createCard = asyncHandler(async (req, res) => {
   if (description) {
     card.description = description;
   }
-  try {
-    await card.save();
+  await card.save();
 
-    const column = await Column.findById(columnId);
-    column.cards.push(card._id);
-    await column.save();
+  const column = await Column.findById(columnId);
+  column.cards.push(card._id);
+  await column.save();
 
-    res.status(201).json({
-      cardId: card._id
-    })
-  } catch (err) {
-    console.error(err);
-    res.status(500);
-  }
+  res.status(201).json({
+    cardId: card._id
+  })
 })
 
 exports.getCards = asyncHandler(async (req, res) => {
   const { cardIds } = req.body;
-  try {
-    const cards = await Promise.all(cardIds.map(async (id) => {
-      const doc = await Card.findById(id);
-      return doc;
-    }));
-    res.status(200).json({
-      cards
-    })
-  } catch (err) {
-    console.error(err);
-  }
+  const cards = await Promise.all(cardIds.map(async (id) => {
+  const doc = await Card.findById(id);
+  return doc;
+  }));
+  res.status(200).json({
+    cards
+  })
 })
 
 exports.moveCard = asyncHandler(async (req, res) => {
   const { ogColId, destColId, row, cardId } = req.body;
-  try {
-    const ogCol = await Column.findOne({ _id: ogColId });
-    ogCol.cards = ogCol.cards.filter(id => id !== cardId);
-    await ogCol.save();
-    // TODO: make sure to check element exists to begin with.
+  const ogCol = await Column.findOne({ _id: ogColId });
+  ogCol.cards = ogCol.cards.filter(id => id !== cardId);
+  await ogCol.save();
+  // TODO: make sure to check element exists to begin with.
 
-    const destCol = await Column.findOne({ _id: destColId });
-    destCol.cards.splice(row, 0, cardId);
-    await destCol.save();
-    res.sendStatus(200);
-  } catch (err) {
-    res.status(500);
-    console.error(err);
-  }
+  const destCol = await Column.findOne({ _id: destColId });
+  destCol.cards.splice(row, 0, cardId);
+  await destCol.save();
+  res.sendStatus(200);
 })
