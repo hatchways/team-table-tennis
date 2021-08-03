@@ -31,11 +31,12 @@ exports.getBoard = asyncHandler(async (req, res) => {
   const { boardId } = req.body;
   const board = await Board.findById(boardId);
   if (board) {
-    res.status(200).json({
-      board
-    })
+    res.status(200).json({ board });
   } else {
-    res.status(404);
+    const error = new Error(`Could not find board ${boardId}`);
+    res.status(404).json({
+      error
+    })
   }
 })
 
