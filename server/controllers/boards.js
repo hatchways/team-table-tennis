@@ -13,11 +13,11 @@ exports.createBoard = asyncHandler(async (req, res) => {
     await completed.save();
 
     const board = new Board({ title, columns: [inProgress._id, completed._id]});
-    const doc = await board.save();
+    await board.save();
 
     res.status(201).json({
       success: {
-        boardId: doc._id,
+        board
       }
     });
   } else {
