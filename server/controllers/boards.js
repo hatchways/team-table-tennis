@@ -42,7 +42,7 @@ exports.getBoard = asyncHandler(async (req, res) => {
 
 exports.createColumn = asyncHandler(async (req, res) => {
   const { title, boardId } = req.body;
-  if (title) {
+  if (title && boardId) {
     const column = new Column({ title });
     await column.save();
     
