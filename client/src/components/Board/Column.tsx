@@ -10,7 +10,8 @@ export interface properties {
   Column: ColumnInterface;
   index: number;
   Tasks: TaskInterface[];
-  AddTask: (columnId: string) => void;
+  addTask: (columnId: string) => void;
+  taskDialog: (taskId: string) => void;
 }
 
 const Column: React.FunctionComponent<properties> = (props) => {
@@ -49,13 +50,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
   };
   const addCard = () => {
     console.log('Add card');
-    //const Tasks = state.Tasks;
-    //const TaskOrder = state.TaskOrder;
-    //const task: TaskInterface = { Name: 'new task', Date: '', Color: '#5ACD76', Id: 'task-4' };
-    //Tasks.push(task);
-    //TaskOrder.push('task-4');
-    //setState({ ...state, Tasks, TaskOrder });
-    props.AddTask(props.Column.Id);
+    props.addTask(props.Column.Id);
   };
 
   const modelOpen = () => {
@@ -90,7 +85,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
               {(provided, snapshot) => (
                 <CardContent ref={provided.innerRef} {...provided.droppableProps}>
                   {props.Tasks.map((task: TaskInterface, index: number) => (
-                    <Task key={task.Id} task={task} index={index}></Task>
+                    <Task key={task.Id} task={task} index={index} taskDialog={props.taskDialog}></Task>
                   ))}
                   {provided.placeholder}
                   <div

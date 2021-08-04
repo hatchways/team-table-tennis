@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import Column from './Column';
 import { Column as ColumnInterface } from '../../interface/Column';
-import { TaskPlaceHolder, Tasks } from '../../interface/Task';
+import { TaskPlaceHolder } from '../../interface/Task';
 import mockData from './MockData';
 import { DragDropContext, DropResult, Droppable, DragUpdate } from 'react-beautiful-dnd';
-import { Grid } from '@material-ui/core';
+import { Grid, Modal } from '@material-ui/core';
+import TaskModal from './TaskModal';
 const Board: React.FunctionComponent = () => {
   const taskPlaceHolder: TaskPlaceHolder = { clientHeight: 0, clientWidth: 0, clientX: 0, clientY: 0 };
 
   const [state, setState] = useState({
     mockData: mockData,
     taskPlaceHolder: taskPlaceHolder,
+    selectedTask: '',
+    modalOpen: false,
   });
   const onDragUpdate = (result: DragUpdate) => {
     const { draggableId } = result;
@@ -116,9 +119,18 @@ const Board: React.FunctionComponent = () => {
       ...mockData.tasks,
       [taskId]: { Name: 'New Task', Date: '', Color: '#EDAB1D', Id: taskId, isNew: true },
     };
-    console.log(mockData.tasks);
     mockData.columns[columnId].Tasks.push(taskId);
     setState({ ...state, mockData });
+  };
+
+  const taskDialog = (taskId: string) => {
+    setState({ ...state, selectedTask: taskId, modalOpen: true });
+  };
+
+  const modalClose = () => {
+    setState({ ...state, modalOpen: false });
+    if (state.mockData.tasks[''] == null) {
+    }
   };
 
   return (
@@ -134,7 +146,8 @@ const Board: React.FunctionComponent = () => {
                   Tasks={state.mockData.columns[Id].Tasks.map((task: string) => state.mockData.tasks[task])}
                   index={index}
                   placeHolderStyle={state.taskPlaceHolder}
-                  AddTask={addTask}
+                  addTask={addTask}
+                  taskDialog={taskDialog}
                 ></Column>
               ))}
               {provided.placeholder}
@@ -142,6 +155,9 @@ const Board: React.FunctionComponent = () => {
           )}
         </Droppable>
       </DragDropContext>
+      <Modal open={state.modalOpen} onClose={modalClose}>
+        <TaskModal tasks={state.mockData.tasks} selectedTask={state.selectedTask}></TaskModal>
+      </Modal>
     </React.Fragment>
   );
 };

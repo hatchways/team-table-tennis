@@ -11,6 +11,7 @@ import { Task as TaskInterface } from '../../interface/Task';
 interface properties {
   task: TaskInterface;
   index: number;
+  taskDialog: (taskId: string) => void;
 }
 const Task: React.FunctionComponent<properties> = (props: properties) => {
   const colors = ['#FFFFFF', '#FF5D48', '#EDAB1D', '#59B0FF', '#D460F7'];
@@ -32,11 +33,18 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
       return classes.task;
     }
   };
+  const onClick = () => {
+    props.taskDialog(props.task.Id);
+  };
   return (
     <Draggable draggableId={props.task.Id} index={props.index}>
       {(provided, snapshot) => (
         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
-          <Card elevation={0} className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task.Id}>
+          <Card
+            elevation={0}
+            className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task.Id}
+            onClick={onClick}
+          >
             <CardHeader
               title={
                 <>
