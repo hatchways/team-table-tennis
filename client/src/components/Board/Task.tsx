@@ -11,16 +11,18 @@ import { Task as TaskInterface } from '../../interface/Task';
 interface properties {
   task: TaskInterface;
   index: number;
+  quickSettingActive: boolean;
 }
 const Task: React.FunctionComponent<properties> = (props: properties) => {
   const colors = ['#FFFFFF', '#FF5D48', '#EDAB1D', '#59B0FF', '#D460F7'];
-  const [state, setState] = useState({ expanded: false, color: props.task.Color, isDragging: true });
+  const [state, setState] = useState({
+    color: props.task.Color,
+    isDragging: true,
+    quickSettingActive: props.quickSettingActive,
+  });
+
   const classes = useStyles();
 
-  const expandHandler = () => {
-    const expanded = !state.expanded;
-    setState({ ...state, expanded: expanded });
-  };
   const changeColor = (color: string) => {
     setState({ ...state, color: color });
   };
@@ -42,7 +44,6 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
                   <RemoveRoundedIcon
                     style={{ transform: 'scale(4)', width: 50 }}
                     htmlColor={state.color}
-                    onClick={expandHandler}
                   ></RemoveRoundedIcon>
                   <br></br>
                   <Typography variant="h6" component="div">
@@ -57,9 +58,8 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
                   {props.task.Date}
                 </Typography>
               }
-              onClick={expandHandler}
             ></CardHeader>
-            <Collapse in={state.expanded}>
+            <Collapse in={state.quickSettingActive}>
               <CardContent>
                 <Divider></Divider>
               </CardContent>

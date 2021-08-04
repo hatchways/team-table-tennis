@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Column from './Column';
 import { Column as ColumnInterface } from '../../interface/Column';
-import { TaskPlaceHolder } from '../../interface/Task';
+import { TaskPlaceHolder, Tasks } from '../../interface/Task';
 import mockData from './MockData';
 import { DragDropContext, DropResult, Droppable, DragUpdate } from 'react-beautiful-dnd';
 import { Grid } from '@material-ui/core';
@@ -109,6 +109,14 @@ const Board: React.FunctionComponent = () => {
     }
   };
 
+  const addTask = (columnId: string) => {
+    console.log('callback: ' + columnId);
+    const mockData = state.mockData;
+    mockData.tasks = { ...mockData.tasks, 'task-4': { Name: 'New Task', Date: '', Color: '#EDAB1D', Id: 'task-4' } };
+    mockData.columns[columnId].Tasks.push('task-4');
+    setState({ ...state, mockData });
+  };
+
   return (
     <React.Fragment>
       <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
@@ -122,6 +130,7 @@ const Board: React.FunctionComponent = () => {
                   Tasks={state.mockData.columns[Id].Tasks.map((task: string) => state.mockData.tasks[task])}
                   index={index}
                   placeHolderStyle={state.taskPlaceHolder}
+                  AddTask={addTask}
                 ></Column>
               ))}
               {provided.placeholder}
