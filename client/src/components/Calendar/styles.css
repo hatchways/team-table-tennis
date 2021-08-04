@@ -1,26 +1,41 @@
-.rbc-event {
-  margin: auto;
-  background-color: white;
-  max-width: 80%;
-  box-shadow: 0px 0px 8px rgba(177, 177, 177, 0.603);
-  margin: 1vh 3vh;
-  padding: 0vh 1vh;
-}
 .rbc-today {
   background-color: #f4f6ff;
 }
-.rbc-event.rbc-selected,
-.rbc-day-slot .rbc-selected.rbc-background-event {
+
+.rbc-month-view {
+  background-color: #f4f6ff;
+  border: none;
+}
+.rbc-month-header {
   background-color: white;
 }
+.rbc-header {
+  border-bottom: none;
+  border-left: none;
+  color: rgba(78, 97, 128, 0.671);
+  padding: 1vh;
+}
+.rbc-header + .rbc-header {
+  border-left: none;
+}
+
 .rbc-month-row {
   overflow: visible;
 }
-.rbc-show-more {
-  color: rgba(104, 104, 104, 0.623);
-  text-decoration: none;
-  font-size: 1.5vh;
+.rbc-date-cell {
+  text-align: left;
+  color: rgba(78, 97, 128, 0.671);
   padding: 1vh;
+}
+.rbc-row-segment a {
+  text-align: center;
+}
+.rbc-event {
+  background-color: white;
+  max-width: 80%;
+  box-shadow: 0px 0px 8px rgba(177, 177, 177, 0.603);
+  margin: .5vh 3vh;
+  padding: 0vh 1vh;
 }
 .rbc-event-color {
   border: 1.2px solid #d6d6d6;
@@ -31,32 +46,22 @@
 }
 .rbc-event-label {
   color: black;
-  margin: auto auto 0.5vh auto;
+  margin: auto auto 1vh auto;
 }
-.rbc-row-segment a {
-  text-align: center;
-}
-.rbc-month-view {
-  background-color: #f4f6ff;
-  border: none;
-}
-.rbc-event {
-  margin: 0.2vh 3vh;
-}
-.rbc-month-header {
+.rbc-event.rbc-selected,
+.rbc-day-slot .rbc-selected.rbc-background-event {
   background-color: white;
 }
-.rbc-header {
-  border-bottom: none;
-  border-left: none;
+
+.rbc-show-more {
+  color: rgba(104, 104, 104, 0.623);
+  text-decoration: none;
+  font-size: 1.5vh;
+  padding: 1vh;
 }
-.rbc-header + .rbc-header {
-  border-left: none;
-}
-.rbc-date-cell {
-  text-align: left;
-  margin: 8px;
-}
+
+
+
 .rbc-overlay-header {
   margin: auto;
   text-align: center;

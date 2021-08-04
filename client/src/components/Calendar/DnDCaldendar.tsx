@@ -78,6 +78,7 @@ const DnDCalendar = (): JSX.Element => {
   return (
     <DragAndDropCalendar
       selectable
+      timeslots={2}
       localizer={localizer}
       events={events}
       onDragStart={console.log}
