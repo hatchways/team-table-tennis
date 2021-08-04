@@ -90,7 +90,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
               {(provided, snapshot) => (
                 <CardContent ref={provided.innerRef} {...provided.droppableProps}>
                   {props.Tasks.map((task: TaskInterface, index: number) => (
-                    <Task key={task.Id} task={task} index={index} quickSettingActive={false}></Task>
+                    <Task key={task.Id} task={task} index={index}></Task>
                   ))}
                   {provided.placeholder}
                   <div

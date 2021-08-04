@@ -110,10 +110,14 @@ const Board: React.FunctionComponent = () => {
   };
 
   const addTask = (columnId: string) => {
-    console.log('callback: ' + columnId);
+    const taskId = 'task-' + (Object.keys(state.mockData.tasks).length + 1);
     const mockData = state.mockData;
-    mockData.tasks = { ...mockData.tasks, 'task-4': { Name: 'New Task', Date: '', Color: '#EDAB1D', Id: 'task-4' } };
-    mockData.columns[columnId].Tasks.push('task-4');
+    mockData.tasks = {
+      ...mockData.tasks,
+      [taskId]: { Name: 'New Task', Date: '', Color: '#EDAB1D', Id: taskId, isNew: true },
+    };
+    console.log(mockData.tasks);
+    mockData.columns[columnId].Tasks.push(taskId);
     setState({ ...state, mockData });
   };
 

@@ -11,14 +11,13 @@ import { Task as TaskInterface } from '../../interface/Task';
 interface properties {
   task: TaskInterface;
   index: number;
-  quickSettingActive: boolean;
 }
 const Task: React.FunctionComponent<properties> = (props: properties) => {
   const colors = ['#FFFFFF', '#FF5D48', '#EDAB1D', '#59B0FF', '#D460F7'];
   const [state, setState] = useState({
     color: props.task.Color,
     isDragging: true,
-    quickSettingActive: props.quickSettingActive,
+    isNew: props.task.isNew,
   });
 
   const classes = useStyles();
@@ -59,7 +58,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
                 </Typography>
               }
             ></CardHeader>
-            <Collapse in={state.quickSettingActive}>
+            <Collapse in={state.isNew}>
               <CardContent>
                 <Divider></Divider>
               </CardContent>

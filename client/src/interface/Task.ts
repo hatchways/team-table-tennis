@@ -3,6 +3,7 @@ export interface Task {
   Date: string;
   Color: string;
   Id: string;
+  isNew: boolean;
 }
 export interface Tasks {
   [key: string]: Task;

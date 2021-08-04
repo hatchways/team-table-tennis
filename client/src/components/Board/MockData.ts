@@ -2,9 +2,9 @@ import { Tasks } from '../../interface/Task';
 import { Columns } from '../../interface/Column';
 
 const tasks: Tasks = {
-  'task-1': { Name: 'Essay on the enviroment', Date: '', Color: '#5ACD76', Id: 'task-1' },
-  'task-2': { Name: 'another test', Date: '', Color: '#FF5D48', Id: 'task-2' },
-  'task-3': { Name: 'the final test', Date: 'March 10', Color: '#EDAB1D', Id: 'task-3' },
+  'task-1': { Name: 'Essay on the enviroment', Date: '', Color: '#5ACD76', Id: 'task-1', isNew: false },
+  'task-2': { Name: 'another test', Date: '', Color: '#FF5D48', Id: 'task-2', isNew: false },
+  'task-3': { Name: 'the final test', Date: 'March 10', Color: '#EDAB1D', Id: 'task-3', isNew: false },
 };
 const columns: Columns = {
   'col-1': {
