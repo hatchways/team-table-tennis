@@ -1,14 +1,14 @@
 import React from 'react';
 import { ToolbarProps, Event, EventProps } from 'react-big-calendar';
 import { CalendarEvent, CalendarResource } from './interface';
-import { Button, Typography } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 
 export class Toolbar extends React.Component<ToolbarProps<CalendarEvent, CalendarResource>> {
-  render() {
+  render(): JSX.Element {
     const { label } = this.props;
     return (
       <div className="rbc-toolbar">
-        <Typography variant="h4" className="rbc-toolbar-label" style={{ padding: '2vh' }}>
+        <Typography variant="h4" className="rbc-toolbar-label">
           {label}
         </Typography>
       </div>
@@ -17,14 +17,12 @@ export class Toolbar extends React.Component<ToolbarProps<CalendarEvent, Calenda
 }
 
 export class EventComponent extends React.Component<EventProps<Event>> {
-  render() {
+  render(): JSX.Element {
     const { title, event } = this.props;
     return (
       <div className="rbc-event-content">
-        <Button style={{ backgroundColor: event.resource, border: '1.2px solid #d6d6d6' }}></Button>
-        <Typography style={{ color: 'black', margin: 'auto' }} className="rbc-toolbar-label">
-          {title}
-        </Typography>
+        <div className="rbc-event-color" style={{ backgroundColor: event.resource }}></div>
+        <Typography className="rbc-event-label">{title}</Typography>
       </div>
     );
   }
