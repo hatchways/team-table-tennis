@@ -1,4 +1,3 @@
-import useStyles from './useStyles';
 import { Box, Input } from '@material-ui/core';
 import { useState } from 'react';
 import { Task } from '../../interface/Task';
@@ -30,7 +29,6 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
       setState({ ...state, isEditing: false, Task: task });
     }
   };
-  const classes = useStyles();
   if (state.isEditing) {
     return (
       <Box fontWeight={600} fontSize={20}>

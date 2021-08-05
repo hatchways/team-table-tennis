@@ -26,8 +26,12 @@ const useStyles = makeStyles({
   selectTag: {
     fontWeight: 800,
   },
-  newColumn: {
-    height: '100vh',
+  newColumnModal: {
+    minWidth: '300px',
+    minHeight: '300px',
+  },
+  newColumnModalBox: {
+    minWidth: '300px',
   },
 });
 

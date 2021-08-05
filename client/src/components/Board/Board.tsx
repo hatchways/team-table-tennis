@@ -4,7 +4,18 @@ import { Column as ColumnInterface } from '../../interface/Column';
 import { TaskPlaceHolder } from '../../interface/Task';
 import mockData from './MockData';
 import { DragDropContext, DropResult, Droppable, DragUpdate } from 'react-beautiful-dnd';
-import { Box, Button, Card, CardActions, CardContent, CardHeader, Grid, Modal, TextField } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  Modal,
+  TextField,
+  Typography,
+} from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import useStyles from './useStyles';
@@ -151,14 +162,7 @@ const Board: React.FunctionComponent = () => {
   return (
     <React.Fragment>
       <Grid container direction="row" justify="flex-start" alignItems="stretch" alignContent="flex-start" spacing={0}>
-        <Grid
-          item
-          xs={1}
-          className={classes.newColumn}
-          style={{ backgroundColor: 'grey', verticalAlign: 'center' }}
-          alignItems="center"
-          justify="center"
-        >
+        <Grid item xs={1} style={{ backgroundColor: 'grey', verticalAlign: 'center' }}>
           <Box
             display="flex"
             justifyContent="center"
@@ -198,23 +202,36 @@ const Board: React.FunctionComponent = () => {
         onClose={modalClose}
         style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
       >
-        <Card>
-          <CardHeader title="Create a new column" action={<CloseIcon onClick={modalClose}></CloseIcon>}></CardHeader>
+        <Card className={classes.newColumnModal}>
+          <CardHeader action={<CloseIcon onClick={modalClose}></CloseIcon>}></CardHeader>
           <CardContent>
-            <TextField
-              id="newColumn"
-              label="Add Title"
-              variant="outlined"
-              style={{ textAlign: 'center' }}
-              onChange={(event) => {
-                changeNewColumnTitle(event.target.value);
-              }}
-            />
+            <Box display="flex" justifyContent="center" alignItems="center" className={classes.newColumnModalBox}>
+              <div>
+                <Typography variant="h6" component="div">
+                  <Box fontWeight={600} fontSize={20}>
+                    Create a new column
+                  </Box>
+                </Typography>
+              </div>
+            </Box>
+            <Box display="flex" justifyContent="center" alignItems="center" className={classes.newColumnModalBox}>
+              <TextField
+                id="newColumn"
+                variant="outlined"
+                onChange={(event) => {
+                  changeNewColumnTitle(event.target.value);
+                }}
+                placeholder="Add Title"
+                inputProps={{ style: { textAlign: 'center', color: 'black' } }}
+              />
+            </Box>
           </CardContent>
           <CardActions>
-            <Button color="primary" variant="contained" onClick={createNewColumn}>
-              Create
-            </Button>
+            <Box display="flex" justifyContent="center" alignItems="center" className={classes.newColumnModalBox}>
+              <Button color="primary" variant="contained" onClick={createNewColumn}>
+                Create
+              </Button>
+            </Box>
           </CardActions>
         </Card>
       </Modal>

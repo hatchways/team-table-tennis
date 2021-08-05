@@ -53,10 +53,6 @@ const Column: React.FunctionComponent<properties> = (props) => {
     props.addTask(props.Column.Id);
   };
 
-  const modelOpen = () => {
-    const isModelOpen = true;
-    setState({ ...state, isModelOpen });
-  };
   const modelClose = () => {
     const isModelOpen = false;
     setState({ ...state, isModelOpen });
