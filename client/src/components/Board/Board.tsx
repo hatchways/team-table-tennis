@@ -6,8 +6,11 @@ import mockData from './MockData';
 import { DragDropContext, DropResult, Droppable, DragUpdate } from 'react-beautiful-dnd';
 import { Grid, Modal } from '@material-ui/core';
 import TaskModal from './TaskModal';
+import RemoveRoundedIcon from '@material-ui/icons/RemoveRounded';
+import useStyles from './useStyles';
 const Board: React.FunctionComponent = () => {
   const taskPlaceHolder: TaskPlaceHolder = { clientHeight: 0, clientWidth: 0, clientX: 0, clientY: 0 };
+  const classes = useStyles();
 
   const [state, setState] = useState({
     mockData: mockData,
@@ -135,26 +138,31 @@ const Board: React.FunctionComponent = () => {
 
   return (
     <React.Fragment>
-      <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
-        <Droppable droppableId="board" direction="horizontal" type="column">
-          {(provided) => (
-            <Grid container direction="row" justify="center" ref={provided.innerRef}>
-              {state.mockData.columnOrder.map((Id, index) => (
-                <Column
-                  Column={state.mockData.columns[Id]}
-                  key={Id}
-                  Tasks={state.mockData.columns[Id].Tasks.map((task: string) => state.mockData.tasks[task])}
-                  index={index}
-                  placeHolderStyle={state.taskPlaceHolder}
-                  addTask={addTask}
-                  taskDialog={taskDialog}
-                ></Column>
-              ))}
-              {provided.placeholder}
-            </Grid>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <Grid container direction="row" justify="flex-start" alignItems="stretch" alignContent="flex-start" spacing={0}>
+        <Grid item xs={1} className={classes.newColumn} style={{ backgroundColor: 'grey' }}></Grid>
+        <Grid item xs>
+          <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
+            <Droppable droppableId="board" direction="horizontal" type="column">
+              {(provided) => (
+                <Grid container direction="row" justify="flex-start" ref={provided.innerRef}>
+                  {state.mockData.columnOrder.map((Id, index) => (
+                    <Column
+                      Column={state.mockData.columns[Id]}
+                      key={Id}
+                      Tasks={state.mockData.columns[Id].Tasks.map((task: string) => state.mockData.tasks[task])}
+                      index={index}
+                      placeHolderStyle={state.taskPlaceHolder}
+                      addTask={addTask}
+                      taskDialog={taskDialog}
+                    ></Column>
+                  ))}
+                  {provided.placeholder}
+                </Grid>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </Grid>
+      </Grid>
       <Modal open={state.modalOpen} onClose={modalClose}>
         <TaskModal tasks={state.mockData.tasks} selectedTask={state.selectedTask}></TaskModal>
       </Modal>

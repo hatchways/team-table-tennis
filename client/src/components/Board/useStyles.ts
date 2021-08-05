@@ -26,6 +26,9 @@ const useStyles = makeStyles({
   selectTag: {
     fontWeight: 800,
   },
+  newColumn: {
+    height: '100vh',
+  },
 });
 
 export default useStyles;
