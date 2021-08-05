@@ -26,7 +26,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
 
   const changeColor = (color: string) => {
     const task = state.task;
-    task.Color = color;
+    task.color = color;
     task.isNew = false;
     setState({ ...state, task: task });
   };
@@ -42,16 +42,16 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
   };
 
   return (
-    <Draggable draggableId={state.task.Id} index={props.index}>
+    <Draggable draggableId={state.task.id} index={props.index}>
       {(provided, snapshot) => (
         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
-          <Card elevation={0} className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task.Id}>
+          <Card elevation={0} className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task.id}>
             <CardHeader
               title={
                 <div>
                   <RemoveRoundedIcon
                     style={{ transform: 'scale(4)', width: 50 }}
-                    htmlColor={state.task.Color}
+                    htmlColor={state.task.color}
                   ></RemoveRoundedIcon>
                   <br></br>
                   <Typography variant="h6" component="div">
@@ -61,7 +61,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
               }
               subheader={
                 <Typography color="textSecondary" variant="h6" className={classes.selectTag}>
-                  {state.task.Date}
+                  {state.task.date}
                 </Typography>
               }
             ></CardHeader>

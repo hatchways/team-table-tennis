@@ -28,8 +28,8 @@ const Column: React.FunctionComponent<properties> = (props) => {
     setState({ ...state, visible });
   };
   const onMouseEnter = () => {
-    const placeHolder = document.getElementById('placeholder-' + props.Column.Id);
-    const column = document.getElementById(props.Column.Id);
+    const placeHolder = document.getElementById('placeholder-' + props.Column.id);
+    const column = document.getElementById(props.Column.id);
     if (!placeHolder || !column) {
       return;
     }
@@ -50,7 +50,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
   };
   const addCard = () => {
     console.log('Add card');
-    props.addTask(props.Column.Id);
+    props.addTask(props.Column.id);
   };
 
   const modelClose = () => {
@@ -60,7 +60,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
 
   return (
     <>
-      <Draggable draggableId={props.Column.Id} index={props.index}>
+      <Draggable draggableId={props.Column.id} index={props.index}>
         {(provided) => (
           <Card
             className={classes.column}
@@ -69,19 +69,19 @@ const Column: React.FunctionComponent<properties> = (props) => {
             onMouseOver={() => onMouseEnter()}
             onMouseLeave={onMouseLeave}
             onMouseUp={onMouseUp}
-            id={props.Column.Id}
+            id={props.Column.id}
           >
             <CardHeader
-              title={props.Column.Title}
+              title={props.Column.title}
               titleTypographyProps={{ variant: 'h5' }}
               className={classes.columnTitle}
               {...provided.dragHandleProps}
             ></CardHeader>
-            <Droppable droppableId={props.Column.Id} type="task">
+            <Droppable droppableId={props.Column.id} type="task">
               {(provided, snapshot) => (
                 <CardContent ref={provided.innerRef} {...provided.droppableProps}>
                   {props.Tasks.map((task: TaskInterface, index: number) => (
-                    <Task key={task.Id} task={task} index={index} isNew={task.isNew}></Task>
+                    <Task key={task.id} task={task} index={index} isNew={task.isNew}></Task>
                   ))}
                   {provided.placeholder}
                   <div
@@ -105,7 +105,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
                         zIndex: state.visible,
                         backgroundColor: '#E5ECFC',
                       }}
-                      id={'placeholder-' + props.Column.Id}
+                      id={'placeholder-' + props.Column.id}
                       hidden={!snapshot.isDraggingOver}
                     ></Card>
                   </div>
@@ -115,7 +115,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
             <CardActions>
               <Button
                 variant="contained"
-                id={'button-' + props.Column.Id}
+                id={'button-' + props.Column.id}
                 style={{ marginLeft: 10, marginBottom: 10, zIndex: 2, backgroundColor: '#759CFC', color: 'white' }}
                 onClick={addCard}
               >

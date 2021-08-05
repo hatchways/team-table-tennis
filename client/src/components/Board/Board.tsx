@@ -83,13 +83,13 @@ const Board: React.FunctionComponent = () => {
       const start = state.mockData.columns[source.droppableId];
 
       const finish = state.mockData.columns[destination.droppableId];
-      const startTasks = Array.from(start.Tasks);
+      const startTasks = Array.from(start.tasks);
       startTasks.splice(source.index, 1);
       if (start === finish) {
         startTasks.splice(destination.index, 0, draggableId);
         const newColumn: ColumnInterface = {
           ...start,
-          Tasks: startTasks,
+          tasks: startTasks,
         };
 
         const newColumns = state.mockData.columns;
@@ -102,15 +102,15 @@ const Board: React.FunctionComponent = () => {
         setState(newState);
       } else {
         // Move to another column
-        const finishTasks = Array.from(finish.Tasks);
+        const finishTasks = Array.from(finish.tasks);
         finishTasks.splice(destination.index, 0, draggableId);
         const destinationColumn: ColumnInterface = {
           ...finish,
-          Tasks: finishTasks,
+          tasks: finishTasks,
         };
         const sourceColumn: ColumnInterface = {
           ...start,
-          Tasks: startTasks,
+          tasks: startTasks,
         };
 
         const newColumns = state.mockData.columns;
@@ -131,9 +131,9 @@ const Board: React.FunctionComponent = () => {
     const mockData = state.mockData;
     mockData.tasks = {
       ...mockData.tasks,
-      [taskId]: { Name: 'Add title...', Date: '', Color: '#ffffff', Id: taskId, isNew: true },
+      [taskId]: { name: 'Add title...', date: '', color: '#ffffff', id: taskId, isNew: true },
     };
-    mockData.columns[columnId].Tasks.push(taskId);
+    mockData.columns[columnId].tasks.push(taskId);
     setState({ ...state, mockData });
   };
 
@@ -153,7 +153,7 @@ const Board: React.FunctionComponent = () => {
     const newColumnId = 'col-' + (mockData.columnOrder.length + 1);
     mockData.columns = {
       ...mockData.columns,
-      [newColumnId]: { Title: state.newColumnTitle, Id: newColumnId, Tasks: [] },
+      [newColumnId]: { title: state.newColumnTitle, id: newColumnId, tasks: [] },
     };
     mockData.columnOrder.push(newColumnId);
     setState({ ...state, newColumnTitle: '', mockData: mockData });
@@ -183,7 +183,7 @@ const Board: React.FunctionComponent = () => {
                     <Column
                       Column={state.mockData.columns[Id]}
                       key={Id}
-                      Tasks={state.mockData.columns[Id].Tasks.map((task: string) => state.mockData.tasks[task])}
+                      Tasks={state.mockData.columns[Id].tasks.map((task: string) => state.mockData.tasks[task])}
                       index={index}
                       placeHolderStyle={state.taskPlaceHolder}
                       addTask={addTask}

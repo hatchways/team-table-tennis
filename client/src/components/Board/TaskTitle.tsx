@@ -25,7 +25,7 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   const handleEnter = (key: string) => {
     if (key === 'Enter') {
       const task = state.Task;
-      task.Name = state.value;
+      task.name = state.value;
       setState({ ...state, isEditing: false, Task: task });
     }
   };
@@ -46,7 +46,7 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   } else {
     return (
       <Box fontWeight={600} fontSize={20} onDoubleClick={startEditingTitle}>
-        {props.Task.Name}
+        {props.Task.name}
       </Box>
     );
   }

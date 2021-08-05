@@ -15,7 +15,7 @@ const TaskModal: React.FunctionComponent<properties> = (props: properties) => {
   } else {
     return (
       <Card>
-        <CardHeader title={props.tasks[props.selectedTask].Name}></CardHeader>
+        <CardHeader title={props.tasks[props.selectedTask].name}></CardHeader>
       </Card>
     );
   }
