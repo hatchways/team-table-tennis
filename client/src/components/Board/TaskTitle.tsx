@@ -1,8 +1,7 @@
 import useStyles from './useStyles';
 import { Box, Input } from '@material-ui/core';
-import { ChangeEventHandler, useState } from 'react';
+import { useState } from 'react';
 import { Task } from '../../interface/Task';
-import { string } from 'yup/lib/locale';
 
 interface properties {
   Task: Task;

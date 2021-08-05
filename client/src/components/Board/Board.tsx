@@ -4,9 +4,9 @@ import { Column as ColumnInterface } from '../../interface/Column';
 import { TaskPlaceHolder } from '../../interface/Task';
 import mockData from './MockData';
 import { DragDropContext, DropResult, Droppable, DragUpdate } from 'react-beautiful-dnd';
-import { Grid, Modal } from '@material-ui/core';
-import TaskModal from './TaskModal';
-import RemoveRoundedIcon from '@material-ui/icons/RemoveRounded';
+import { Box, Button, Card, CardActions, CardContent, CardHeader, Grid, Modal, TextField } from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import useStyles from './useStyles';
 const Board: React.FunctionComponent = () => {
   const taskPlaceHolder: TaskPlaceHolder = { clientHeight: 0, clientWidth: 0, clientX: 0, clientY: 0 };
@@ -15,8 +15,8 @@ const Board: React.FunctionComponent = () => {
   const [state, setState] = useState({
     mockData: mockData,
     taskPlaceHolder: taskPlaceHolder,
-    selectedTask: '',
     modalOpen: false,
+    newColumnTitle: '',
   });
   const onDragUpdate = (result: DragUpdate) => {
     const { draggableId } = result;
@@ -126,20 +126,50 @@ const Board: React.FunctionComponent = () => {
     setState({ ...state, mockData });
   };
 
-  const taskDialog = (taskId: string) => {
-    setState({ ...state, selectedTask: taskId, modalOpen: true });
+  const newColumn = () => {
+    setState({ ...state, modalOpen: true });
   };
 
   const modalClose = () => {
-    setState({ ...state, modalOpen: false });
-    if (state.mockData.tasks[''] == null) {
-    }
+    setState({ ...state, modalOpen: false, newColumnTitle: '' });
+  };
+
+  const changeNewColumnTitle = (value: string) => {
+    setState({ ...state, newColumnTitle: value });
+  };
+  const createNewColumn = () => {
+    const mockData = state.mockData;
+    const newColumnId = 'col-' + (mockData.columnOrder.length + 1);
+    mockData.columns = {
+      ...mockData.columns,
+      [newColumnId]: { Title: state.newColumnTitle, Id: newColumnId, Tasks: [] },
+    };
+    mockData.columnOrder.push(newColumnId);
+    setState({ ...state, newColumnTitle: '', mockData: mockData });
   };
 
   return (
     <React.Fragment>
       <Grid container direction="row" justify="flex-start" alignItems="stretch" alignContent="flex-start" spacing={0}>
-        <Grid item xs={1} className={classes.newColumn} style={{ backgroundColor: 'grey' }}></Grid>
+        <Grid
+          item
+          xs={1}
+          className={classes.newColumn}
+          style={{ backgroundColor: 'grey', verticalAlign: 'center' }}
+          alignItems="center"
+          justify="center"
+        >
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh"
+            fontSize="10vw"
+            onClick={newColumn}
+          >
+            <AddCircleOutlineIcon style={{ fontSize: '120px', color: 'white' }}></AddCircleOutlineIcon>
+          </Box>
+        </Grid>
         <Grid item xs>
           <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
             <Droppable droppableId="board" direction="horizontal" type="column">
@@ -153,7 +183,7 @@ const Board: React.FunctionComponent = () => {
                       index={index}
                       placeHolderStyle={state.taskPlaceHolder}
                       addTask={addTask}
-                      taskDialog={taskDialog}
+                      taskDialog={newColumn}
                     ></Column>
                   ))}
                   {provided.placeholder}
@@ -163,8 +193,30 @@ const Board: React.FunctionComponent = () => {
           </DragDropContext>
         </Grid>
       </Grid>
-      <Modal open={state.modalOpen} onClose={modalClose}>
-        <TaskModal tasks={state.mockData.tasks} selectedTask={state.selectedTask}></TaskModal>
+      <Modal
+        open={state.modalOpen}
+        onClose={modalClose}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <Card>
+          <CardHeader title="Create a new column" action={<CloseIcon onClick={modalClose}></CloseIcon>}></CardHeader>
+          <CardContent>
+            <TextField
+              id="newColumn"
+              label="Add Title"
+              variant="outlined"
+              style={{ textAlign: 'center' }}
+              onChange={(event) => {
+                changeNewColumnTitle(event.target.value);
+              }}
+            />
+          </CardContent>
+          <CardActions>
+            <Button color="primary" variant="contained" onClick={createNewColumn}>
+              Create
+            </Button>
+          </CardActions>
+        </Card>
       </Modal>
     </React.Fragment>
   );
