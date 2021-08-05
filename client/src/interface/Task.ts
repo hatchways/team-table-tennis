@@ -1,8 +1,8 @@
 export interface Task {
-  Name: string;
-  Date: string;
-  Color: string;
-  Id: string;
+  name: string;
+  date: string;
+  color: string;
+  id: string;
   isNew: boolean;
 }
 export interface Tasks {
