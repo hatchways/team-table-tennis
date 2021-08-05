@@ -14,10 +14,10 @@ const useStyles = makeStyles({
     marginTop: 10,
     marginBottom: 10,
     minHeight: 100,
-    '&:focus': {
-      border: '3px solid',
-      borderColor: '#80A3FB',
-    },
+  },
+  taskNew: {
+    border: '3px solid',
+    borderColor: '#80A3FB',
   },
   taskDragging: {
     transform: 'rotate(-2Deg)',

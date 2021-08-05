@@ -3,70 +3,69 @@ import CardHeader from '@material-ui/core/CardHeader';
 import { Draggable } from 'react-beautiful-dnd';
 import useStyles from './useStyles';
 import RemoveRoundedIcon from '@material-ui/icons/RemoveRounded';
-import { Box, CardActions, CardContent, Collapse, Divider, Grid, Typography } from '@material-ui/core';
+import { CardActions, CardContent, Collapse, Divider, Grid, Typography } from '@material-ui/core';
 import { useState } from 'react';
 import { FiberManualRecord } from '@material-ui/icons';
 import { Task as TaskInterface } from '../../interface/Task';
+import TaskTitle from './TaskTitle';
 
 interface properties {
   task: TaskInterface;
   index: number;
-  taskDialog: (taskId: string) => void;
+  isNew: boolean;
 }
+
 const Task: React.FunctionComponent<properties> = (props: properties) => {
   const colors = ['#FFFFFF', '#FF5D48', '#EDAB1D', '#59B0FF', '#D460F7'];
   const [state, setState] = useState({
-    color: props.task.Color,
     isDragging: true,
-    isNew: props.task.isNew,
+    task: props.task,
   });
 
   const classes = useStyles();
 
   const changeColor = (color: string) => {
-    setState({ ...state, color: color });
+    const task = state.task;
+    task.Color = color;
+    task.isNew = false;
+    setState({ ...state, task: task });
   };
   const taskClassName = (dragging: boolean) => {
+    let output = classes.task;
     if (dragging) {
-      return classes.task + ' ' + classes.taskDragging;
-    } else {
-      return classes.task;
+      output += ' ' + classes.taskDragging;
     }
+    if (state.task.isNew) {
+      output += ' ' + classes.taskNew;
+    }
+    return output;
   };
-  const onClick = () => {
-    props.taskDialog(props.task.Id);
-  };
+
   return (
-    <Draggable draggableId={props.task.Id} index={props.index}>
+    <Draggable draggableId={state.task.Id} index={props.index}>
       {(provided, snapshot) => (
         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
-          <Card
-            elevation={0}
-            className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task.Id}
-            onClick={onClick}
-          >
+          <Card elevation={0} className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task.Id}>
             <CardHeader
               title={
-                <>
+                <div>
                   <RemoveRoundedIcon
                     style={{ transform: 'scale(4)', width: 50 }}
-                    htmlColor={state.color}
+                    htmlColor={state.task.Color}
                   ></RemoveRoundedIcon>
                   <br></br>
                   <Typography variant="h6" component="div">
-                    <Box fontWeight={600} fontSize={20}>
-                      {props.task.Name}
-                    </Box>
+                    <TaskTitle Task={state.task}></TaskTitle>
                   </Typography>
-                </>
+                </div>
               }
               subheader={
                 <Typography color="textSecondary" variant="h6" className={classes.selectTag}>
-                  {props.task.Date}
+                  {state.task.Date}
                 </Typography>
               }
             ></CardHeader>
-            <Collapse in={state.isNew}>
+            <Collapse in={state.task.isNew}>
               <CardContent>
                 <Divider></Divider>
               </CardContent>

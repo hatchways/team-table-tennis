@@ -14,3 +14,7 @@ export interface TaskPlaceHolder {
   clientY: number;
   clientX: number;
 }
+export interface TaskModel {
+  task: Task;
+  isNew: boolean;
+}

@@ -117,7 +117,7 @@ const Board: React.FunctionComponent = () => {
     const mockData = state.mockData;
     mockData.tasks = {
       ...mockData.tasks,
-      [taskId]: { Name: 'New Task', Date: '', Color: '#EDAB1D', Id: taskId, isNew: true },
+      [taskId]: { Name: 'Add title...', Date: '', Color: '#ffffff', Id: taskId, isNew: true },
     };
     mockData.columns[columnId].Tasks.push(taskId);
     setState({ ...state, mockData });
