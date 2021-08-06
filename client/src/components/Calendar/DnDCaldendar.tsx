@@ -1,44 +1,41 @@
-import React from 'react';
-import { Calendar, momentLocalizer } from 'react-big-calendar';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import moment from 'moment';
-import { IUserSchedule, mockDatas } from './MockEvent';
-import { useState } from 'react';
-import './styles.css';
-import { Toolbar, EventComponent } from './extension';
+import React, { useEffect, useState } from 'react';
+import { useAuth } from '../../context/useAuthContext';
+import { useSocket } from '../../context/useSocketContext';
+import { useHistory } from 'react-router-dom';
 import { FetchOptions } from '../../interface/FetchOptions';
 
-// import { useAuth } from '../../context/useAuthContext';
-// import { useSocket } from '../../context/useSocketContext';
-// import { useHistory } from 'react-router-dom';
+import { Mevent } from './interface';
+import { IUserSchedule, mockDatas } from './MockEvent';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import './styles.css';
 
-// import CircularProgress from '@material-ui/core/CircularProgress';
-// import { useEffect } from 'react';
-// import { HTML5Backend } from 'react-dnd-html5-backend';
-// import { DndContext, DndContextType, DndProvider } from 'react-dnd';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import moment from 'moment';
+import { Toolbar, EventComponent } from './extension';
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar as any);
 
 const DnDCalendar = (): JSX.Element => {
   const [events, setEvent] = useState<IUserSchedule[]>(mockDatas);
-  // const { loggedInUser } = useAuth();
-  // const { initSocket } = useSocket();
-  // const history = useHistory();
+  const { loggedInUser } = useAuth();
+  const { initSocket } = useSocket();
+  const history = useHistory();
 
-  // useEffect(() => {
-  //   initSocket();
-  // }, [initSocket]);
+  useEffect(() => {
+    initSocket();
+  }, [initSocket]);
 
-  // if (loggedInUser === undefined) return <CircularProgress />;
-  // if (!loggedInUser) {
-  //   history.push('/login');
-  //   // loading for a split seconds until history.push works
-  //   return <CircularProgress />;
-  // }
+  if (loggedInUser === undefined) return <CircularProgress />;
+  if (!loggedInUser) {
+    history.push('/login');
+    // loading for a split seconds until history.push works
+    return <CircularProgress />;
+  }
 
-  const moveEvent = ({ event, start, end }: { event: any; start: any; end: any }): void => {
+  const moveEvent = ({ event, start, end }: Mevent): void => {
     const selectedIndex = events.indexOf(event);
     const updatedEvent = { ...event, start, end };
 
@@ -81,7 +78,6 @@ const DnDCalendar = (): JSX.Element => {
       timeslots={2}
       localizer={localizer}
       events={events}
-      onDragStart={console.log}
       onEventDrop={moveEvent}
       components={{
         toolbar: Toolbar,

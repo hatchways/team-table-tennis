@@ -1,3 +1,9 @@
+export interface Mevent {
+  event: any;
+  start: any;
+  end: any;
+}
+
 export class CalendarEvent {
   title: string;
   allDay: boolean;
