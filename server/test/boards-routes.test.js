@@ -21,9 +21,9 @@ describe('Board routes', () => {
           console.error(err);
         } else {
           res.body.success.should.have
-            .property('boardId')
+            .property('board')
             .not.eql(undefined)
-          boardId = res.body.success.boardId;
+          boardId = res.body.success.board._id;
           done();
         }
       })
@@ -208,9 +208,8 @@ describe('Board routes', () => {
         description: '1',
         columnId: col1._id
       })
-
+    
     var cid1 = res.body.cardId;
-
     res = await chai
       .request(app)
       .post('/boards/cards')
