@@ -7,8 +7,9 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import { AuthProvider } from './context/useAuthContext';
 import { SocketProvider } from './context/useSocketContext';
 import { SnackBarProvider } from './context/useSnackbarContext';
-import ProtectedRoute from '../src/components/ProtectedRoute/ProtectedRoute';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import './App.css';
+import Calendar from './pages/Calendar/Calendar';
 
 function App(): JSX.Element {
   return (
@@ -23,6 +24,9 @@ function App(): JSX.Element {
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
                 <Route path="*">
                   <Redirect to="/login" />
+                </Route>
+                <Route exact path="/calendar">
+                  <Calendar />
                 </Route>
               </Switch>
             </SocketProvider>
