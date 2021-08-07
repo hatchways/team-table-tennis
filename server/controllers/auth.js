@@ -6,35 +6,33 @@ const generateToken = require("../utils/generateToken");
 // @desc Register user
 // @access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
   const emailExists = await User.findOne({ email });
+
+  console.log('0');
 
   if (emailExists) {
     res.status(400);
     throw new Error("A user with that email already exists");
   }
 
-  // const usernameExists = await User.findOne({ username });
-  // if (usernameExists) {
-  //   res.status(400);
-  //   throw new Error("A user with that username already exists");
-  // }
+  console.log("1", emailExists)
 
   const user = await User.create({
     email,
     password
-  });
+  })
 
   if (user) {
-    const token = generateToken(user._id);
+    console.log('2', user);
+    const token = generateToken(user._id.toString());
+    console.log('3', token);
     const secondsInWeek = 604800;
-
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: secondsInWeek * 1000
     });
-
     res.status(201).json({
       success: {
         user: {
