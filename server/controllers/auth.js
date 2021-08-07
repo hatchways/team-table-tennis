@@ -10,14 +10,10 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 
   const emailExists = await User.findOne({ email });
 
-  console.log('0');
-
   if (emailExists) {
     res.status(400);
     throw new Error("A user with that email already exists");
   }
-
-  console.log("1", emailExists)
 
   const user = await User.create({
     email,
@@ -25,9 +21,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   })
 
   if (user) {
-    console.log('2', user);
-    const token = generateToken(user._id.toString());
-    console.log('3', token);
+    const token = generateToken(user._id);
     const secondsInWeek = 604800;
     res.cookie("token", token, {
       httpOnly: true,
