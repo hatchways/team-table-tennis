@@ -13,26 +13,11 @@ const cardSchema = new mongoose.Schema({
   },
   cardDetails: [
     {
-      tags:{
-      type:Array,
-      required: false,
-      unique: false,
-    },
-      color:{
-      type:String,
-      required: false,
-      unique: false,
-    },
-      deadLine:{
-      type:Date,
-      required: false,
-      unique: false,
-    },
-      attachment:{
-      type:String,
-      required: false,
-      unique: false,
-    }}
+      tags:{ type: Array },
+      color:{ type: String },
+      deadLine: {type: Date },
+      attachment:{ type: String }
+    }
   ]
 })
 
