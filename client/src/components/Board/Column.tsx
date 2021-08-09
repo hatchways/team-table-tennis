@@ -49,7 +49,6 @@ const Column: React.FunctionComponent<properties> = (props) => {
     setVisable(-1);
   };
   const addCard = () => {
-    console.log('Add card');
     props.addTask(props.Column.id);
   };
 

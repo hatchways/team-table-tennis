@@ -11,7 +11,7 @@ const TaskModal: React.FunctionComponent<properties> = (props: properties) => {
   const classes = useStyles();
 
   if (props.tasks[props.selectedTask] == null) {
-    return <></>;
+    return null;
   } else {
     return (
       <Card>
