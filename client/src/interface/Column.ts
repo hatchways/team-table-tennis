@@ -1,7 +1,7 @@
 export interface Column {
-  Id: string;
-  Title: string;
-  Tasks: string[];
+  id: string;
+  title: string;
+  tasks: string[];
 }
 export interface Columns {
   [key: string]: Column;

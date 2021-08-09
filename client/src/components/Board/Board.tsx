@@ -4,13 +4,30 @@ import { Column as ColumnInterface } from '../../interface/Column';
 import { TaskPlaceHolder } from '../../interface/Task';
 import mockData from './MockData';
 import { DragDropContext, DropResult, Droppable, DragUpdate } from 'react-beautiful-dnd';
-import { Grid } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardHeader,
+  Grid,
+  Modal,
+  TextField,
+  Typography,
+} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import useStyles from './useStyles';
 const Board: React.FunctionComponent = () => {
   const taskPlaceHolder: TaskPlaceHolder = { clientHeight: 0, clientWidth: 0, clientX: 0, clientY: 0 };
+  const classes = useStyles();
 
   const [state, setState] = useState({
     mockData: mockData,
     taskPlaceHolder: taskPlaceHolder,
+    modalOpen: false,
+    newColumnTitle: '',
   });
   const onDragUpdate = (result: DragUpdate) => {
     const { draggableId } = result;
@@ -66,13 +83,13 @@ const Board: React.FunctionComponent = () => {
       const start = state.mockData.columns[source.droppableId];
 
       const finish = state.mockData.columns[destination.droppableId];
-      const startTasks = Array.from(start.Tasks);
+      const startTasks = Array.from(start.tasks);
       startTasks.splice(source.index, 1);
       if (start === finish) {
         startTasks.splice(destination.index, 0, draggableId);
         const newColumn: ColumnInterface = {
           ...start,
-          Tasks: startTasks,
+          tasks: startTasks,
         };
 
         const newColumns = state.mockData.columns;
@@ -85,15 +102,15 @@ const Board: React.FunctionComponent = () => {
         setState(newState);
       } else {
         // Move to another column
-        const finishTasks = Array.from(finish.Tasks);
+        const finishTasks = Array.from(finish.tasks);
         finishTasks.splice(destination.index, 0, draggableId);
         const destinationColumn: ColumnInterface = {
           ...finish,
-          Tasks: finishTasks,
+          tasks: finishTasks,
         };
         const sourceColumn: ColumnInterface = {
           ...start,
-          Tasks: startTasks,
+          tasks: startTasks,
         };
 
         const newColumns = state.mockData.columns;
@@ -109,26 +126,115 @@ const Board: React.FunctionComponent = () => {
     }
   };
 
+  const addTask = (columnId: string) => {
+    const taskId = 'task-' + (Object.keys(state.mockData.tasks).length + 1);
+    const mockData = state.mockData;
+    mockData.tasks = {
+      ...mockData.tasks,
+      [taskId]: { name: 'Add title...', date: '', color: '#ffffff', id: taskId, isNew: true },
+    };
+    mockData.columns[columnId].tasks.push(taskId);
+    setState({ ...state, mockData });
+  };
+
+  const newColumn = () => {
+    setState({ ...state, modalOpen: true });
+  };
+
+  const modalClose = () => {
+    setState({ ...state, modalOpen: false, newColumnTitle: '' });
+  };
+
+  const changeNewColumnTitle = (value: string) => {
+    setState({ ...state, newColumnTitle: value });
+  };
+  const createNewColumn = () => {
+    const mockData = state.mockData;
+    const newColumnId = 'col-' + (mockData.columnOrder.length + 1);
+    mockData.columns = {
+      ...mockData.columns,
+      [newColumnId]: { title: state.newColumnTitle, id: newColumnId, tasks: [] },
+    };
+    mockData.columnOrder.push(newColumnId);
+    setState({ ...state, newColumnTitle: '', mockData: mockData });
+  };
+
   return (
     <React.Fragment>
-      <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
-        <Droppable droppableId="board" direction="horizontal" type="column">
-          {(provided) => (
-            <Grid container direction="row" justify="center" ref={provided.innerRef}>
-              {state.mockData.columnOrder.map((Id, index) => (
-                <Column
-                  Column={state.mockData.columns[Id]}
-                  key={Id}
-                  Tasks={state.mockData.columns[Id].Tasks.map((task: string) => state.mockData.tasks[task])}
-                  index={index}
-                  placeHolderStyle={state.taskPlaceHolder}
-                ></Column>
-              ))}
-              {provided.placeholder}
-            </Grid>
-          )}
-        </Droppable>
-      </DragDropContext>
+      <Grid container direction="row" justify="flex-start" alignItems="stretch" alignContent="flex-start" spacing={0}>
+        <Grid item xs={1} style={{ backgroundColor: 'grey', verticalAlign: 'center' }}>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            minHeight="100vh"
+            fontSize="10vw"
+            onClick={newColumn}
+          >
+            <AddCircleOutlineIcon style={{ fontSize: '120px', color: 'white' }}></AddCircleOutlineIcon>
+          </Box>
+        </Grid>
+        <Grid item xs>
+          <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
+            <Droppable droppableId="board" direction="horizontal" type="column">
+              {(provided) => (
+                <Grid container direction="row" justify="flex-start" ref={provided.innerRef}>
+                  {state.mockData.columnOrder.map((Id, index) => (
+                    <Column
+                      Column={state.mockData.columns[Id]}
+                      key={Id}
+                      Tasks={state.mockData.columns[Id].tasks.map((task: string) => state.mockData.tasks[task])}
+                      index={index}
+                      placeHolderStyle={state.taskPlaceHolder}
+                      addTask={addTask}
+                      taskDialog={newColumn}
+                    ></Column>
+                  ))}
+                  {provided.placeholder}
+                </Grid>
+              )}
+            </Droppable>
+          </DragDropContext>
+        </Grid>
+      </Grid>
+      <Modal
+        open={state.modalOpen}
+        onClose={modalClose}
+        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <Card className={classes.newColumnModal}>
+          <CardHeader action={<CloseIcon onClick={modalClose}></CloseIcon>}></CardHeader>
+          <CardContent>
+            <Box display="flex" justifyContent="center" alignItems="center" className={classes.newColumnModalBox}>
+              <div>
+                <Typography variant="h6" component="div">
+                  <Box fontWeight={600} fontSize={20}>
+                    Create a new column
+                  </Box>
+                </Typography>
+              </div>
+            </Box>
+            <Box display="flex" justifyContent="center" alignItems="center" className={classes.newColumnModalBox}>
+              <TextField
+                id="newColumn"
+                variant="outlined"
+                onChange={(event) => {
+                  changeNewColumnTitle(event.target.value);
+                }}
+                placeholder="Add Title"
+                inputProps={{ style: { textAlign: 'center', color: 'black' } }}
+              />
+            </Box>
+          </CardContent>
+          <CardActions>
+            <Box display="flex" justifyContent="center" alignItems="center" className={classes.newColumnModalBox}>
+              <Button color="primary" variant="contained" onClick={createNewColumn}>
+                Create
+              </Button>
+            </Box>
+          </CardActions>
+        </Card>
+      </Modal>
     </React.Fragment>
   );
 };
