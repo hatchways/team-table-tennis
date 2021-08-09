@@ -121,7 +121,9 @@ exports.moveCard = asyncHandler(async (req, res) => {
 })
 
 exports.getDetails = asyncHandler(async (req, res) => {
-  const cardDetails = await CardDetail.find();
+  const cardId = req.params.cardID;
+  const cardDetails = await Card.find({ _id: cardId })
+    .populate("cardDetails")
   res.status(200).json({ cardDetails });
 })
 exports.createDetails = asyncHandler(async (req, res) => {
@@ -141,7 +143,14 @@ exports.createDetails = asyncHandler(async (req, res) => {
       new: true
     }
   )
-  res.status(200);
+  .exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    }
+    else {
+      res.status(200).json(result);
+    }
+  })
 })
 exports.updateDetails = asyncHandler(async (req, res) => {
   const { tags, color, deadLine, attachment, cardId } = req.body;
@@ -160,5 +169,11 @@ exports.updateDetails = asyncHandler(async (req, res) => {
       new: true
     }
   )
-  res.status(200);
+  .exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    } else {
+      res.status(200).json(result);
+    }
+  })
 })
