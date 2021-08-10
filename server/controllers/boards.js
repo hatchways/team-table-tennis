@@ -1,31 +1,34 @@
 const asyncHandler = require("express-async-handler");
-const Board = require('../models/Board');
-const Card = require('../models/Card');
-const Column = require('../models/Column');
+const Board = require("../models/Board");
+const Card = require("../models/Card");
+const Column = require("../models/Column");
 
 exports.createBoard = asyncHandler(async (req, res) => {
   const { title } = req.body;
   if (title) {
-    const inProgress = new Column({ title: 'In Progress' });
-    const completed = new Column({ title : 'Completed' });
-    
+    const inProgress = new Column({ title: "In Progress" });
+    const completed = new Column({ title: "Completed" });
+
     await inProgress.save();
     await completed.save();
 
-    const board = new Board({ title, columns: [inProgress._id, completed._id]});
+    const board = new Board({
+      title,
+      columns: [inProgress._id, completed._id],
+    });
     await board.save();
 
     res.status(201).json({
       success: {
-        board
-      }
+        board,
+      },
     });
   } else {
     res.status(400).send({
-      message: 'Board title is empty'
+      message: "Board title is empty",
     });
   }
-})
+});
 
 exports.getBoard = asyncHandler(async (req, res) => {
   const { boardId } = req.body;
@@ -35,49 +38,51 @@ exports.getBoard = asyncHandler(async (req, res) => {
   } else {
     const error = new Error(`Could not find board ${boardId}`);
     res.status(404).json({
-      error
-    })
+      error,
+    });
   }
-})
+});
 
 exports.createColumn = asyncHandler(async (req, res) => {
   const { title, boardId } = req.body;
   if (title && boardId) {
     const column = new Column({ title });
     await column.save();
-    
+
     // Add column to board.
     const board = await Board.findById(boardId);
     board.columns.push(column._id);
     await board.save();
     res.status(201).json({
-      column
+      column,
     });
   } else {
     res.status(400).send({
-      message: 'Column title is empty'
+      message: "Column title is empty",
     });
   }
-})
+});
 
 exports.getColumns = asyncHandler(async (req, res) => {
   const { columnIds } = req.body;
-  const columns = await Promise.all(columnIds.map(async (id) => {
-    const doc = await Column.findById(id);
-    return doc;
-  }));
+  const columns = await Promise.all(
+    columnIds.map(async (id) => {
+      const doc = await Column.findById(id);
+      return doc;
+    })
+  );
   res.status(200).json({
-    columns
-  })
-})
+    columns,
+  });
+});
 
 exports.updateColumn = asyncHandler(async (req, res) => {
   const { id, title, cards } = req.body;
-  const filter = { _id : id };
+  const filter = { _id: id };
   const update = { title, cards };
   await Column.findOneAndUpdate(filter, update);
   res.status(200);
-})
+});
 
 exports.createCard = asyncHandler(async (req, res) => {
   const { title, description, columnId } = req.body;
@@ -91,25 +96,27 @@ exports.createCard = asyncHandler(async (req, res) => {
   column.cards.push(card._id);
   await column.save();
   res.status(201).json({
-    cardId: card._id
-  })
-})
+    cardId: card._id,
+  });
+});
 
 exports.getCards = asyncHandler(async (req, res) => {
   const { cardIds } = req.body;
-  const cards = await Promise.all(cardIds.map(async (id) => {
-  const doc = await Card.findById(id);
-  return doc;
-  }));
+  const cards = await Promise.all(
+    cardIds.map(async (id) => {
+      const doc = await Card.findById(id);
+      return doc;
+    })
+  );
   res.status(200).json({
-    cards
-  })
-})
+    cards,
+  });
+});
 
 exports.moveCard = asyncHandler(async (req, res) => {
   const { ogColId, destColId, row, cardId } = req.body;
   const ogCol = await Column.findOne({ _id: ogColId });
-  ogCol.cards = ogCol.cards.filter(id => id.toString() !== cardId);
+  ogCol.cards = ogCol.cards.filter((id) => id.toString() !== cardId);
   await ogCol.save();
   // TODO: make sure to check element exists to begin with.
 
@@ -117,4 +124,58 @@ exports.moveCard = asyncHandler(async (req, res) => {
   destCol.cards.splice(row, 0, cardId);
   await destCol.save();
   res.sendStatus(200);
-})
+});
+
+exports.getDetails = asyncHandler(async (req, res) => {
+  const cardId = req.params.cardID;
+  const cardDetails = await Card.find({ _id: cardId }).populate("cardDetails");
+  res.status(200).json({ cardDetails });
+});
+exports.createDetails = asyncHandler(async (req, res) => {
+  const { tags, color, deadLine, attachment, cardId } = req.body;
+
+  await Card.findByIdAndUpdate(
+    cardId,
+    {
+      $push: {
+        tags,
+        color,
+        deadLine,
+        attachment,
+      },
+    },
+    {
+      new: true,
+    }
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});
+exports.updateDetails = asyncHandler(async (req, res) => {
+  const { tags, color, deadLine, attachment, cardId } = req.body;
+
+  await Card.findByIdAndUpdate(
+    cardId,
+    {
+      $set: {
+        tags,
+        color,
+        deadLine,
+        attachment,
+      },
+    },
+    {
+      new: true,
+    }
+  ).exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    } else {
+      res.status(200).json(result);
+    }
+  });
+});

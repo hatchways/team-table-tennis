@@ -49,6 +49,25 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
         <>
           <form onSubmit={handleSubmit} className={classes.form} noValidate>
             <TextField
+              id="username"
+              label={<Typography className={classes.label}>Username</Typography>}
+              fullWidth
+              margin="normal"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              InputProps={{
+                classes: { input: classes.inputs },
+              }}
+              name="username"
+              autoComplete="username"
+              autoFocus
+              helperText={touched.username ? errors.username : ''}
+              error={touched.username && Boolean(errors.username)}
+              value={values.username}
+              onChange={handleChange}
+            />
+            <TextField
               id="email"
               label={<Typography className={classes.label}>E-mail address</Typography>}
               fullWidth
