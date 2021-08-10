@@ -9,6 +9,9 @@ const {
   createCard,
   getCards,
   moveCard,
+  createDetails,
+  updateDetails,
+  getDetails,
 } = require("../controllers/boards.js");
 const protect = require("../middleware/auth.js");
 const {
