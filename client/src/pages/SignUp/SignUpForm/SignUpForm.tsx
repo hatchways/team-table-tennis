@@ -62,7 +62,7 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
                 shrink: true,
               }}
               InputProps={{
-                classes: { input: classes.inputs }, 
+                classes: { input: classes.inputs },
               }}
               name="username"
               autoComplete="username"
