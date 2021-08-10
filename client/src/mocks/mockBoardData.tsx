@@ -1,5 +1,5 @@
-const MOCK_BOARDS = [
-  {
+const MOCK_BOARDS = {
+  board1: {
     _id: '1',
     title: 'Board 1',
     columns: [
@@ -28,6 +28,12 @@ const MOCK_BOARDS = [
           },
         ],
       },
+    ],
+  },
+  board2: {
+    _id: '2',
+    title: 'Board 2',
+    columns: [
       {
         title: 'Column 2',
         cards: [
@@ -53,8 +59,33 @@ const MOCK_BOARDS = [
           },
         ],
       },
+      {
+        title: 'Column 4',
+        cards: [
+          {
+            title: 'Yet another title',
+            description: 'Yet another description',
+            cardDetails: {
+              tags: [],
+              color: '#FF69B4',
+              deadline: new Date(),
+              attachment: '',
+            },
+          },
+          {
+            title: 'Anotha title',
+            description: 'Anotha description',
+            cardDetails: {
+              tags: [],
+              color: '#FF69B4',
+              deadline: new Date(),
+              attachment: '',
+            },
+          },
+        ],
+      },
     ],
   },
-];
+};
 
 export default MOCK_BOARDS;
