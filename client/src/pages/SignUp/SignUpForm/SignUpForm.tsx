@@ -11,13 +11,11 @@ import DemoButton from '../../../components/DemoButton/demoButton';
 interface Props {
   handleSubmit: (
     {
-      username,
       email,
       password,
     }: {
       email: string;
       password: string;
-      username: string;
     },
     {
       setStatus,
@@ -25,7 +23,6 @@ interface Props {
     }: FormikHelpers<{
       email: string;
       password: string;
-      username: string;
     }>,
   ) => void;
 }
@@ -38,10 +35,8 @@ const SignUpForm = ({ handleSubmit }: Props): JSX.Element => {
       initialValues={{
         email: '',
         password: '',
-        username: '',
       }}
       validationSchema={Yup.object().shape({
-        username: Yup.string().required('Username is required').max(40, 'Username is too long'),
         email: Yup.string().required('Email is required').email('Email is not valid'),
         password: Yup.string()
           .required('Password is required')
