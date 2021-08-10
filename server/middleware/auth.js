@@ -2,13 +2,13 @@ const jwt = require("jsonwebtoken");
 
 const protect = (req, res, next) => {
   const token = req.cookies.token;
-
+  console.log("token", token);
   if (!token) {
     return res.status(401).send("No token, authorization denied");
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_TOKEN);
 
     req.user = decoded;
 
