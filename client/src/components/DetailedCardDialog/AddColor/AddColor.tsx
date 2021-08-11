@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 import Grow from '@material-ui/core/Grow';
 import Paper from '@material-ui/core/Paper';
 import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import useStyles from './useStyles';
-import { useState } from 'react';
 import { IconButton, Grid } from '@material-ui/core';
 import FormatColorFillOutlinedIcon from '@material-ui/icons/FormatColorFillOutlined';
 import { FiberManualRecord } from '@material-ui/icons';
