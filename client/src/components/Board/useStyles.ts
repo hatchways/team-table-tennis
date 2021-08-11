@@ -33,6 +33,13 @@ const useStyles = makeStyles({
   newColumnModalBox: {
     minWidth: '300px',
   },
+  deleteIcon: {
+    color: 'white',
+
+    '&:hover': {
+      color: 'black',
+    },
+  },
 });
 
 export default useStyles;
