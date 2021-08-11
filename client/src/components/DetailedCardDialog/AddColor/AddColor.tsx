@@ -13,7 +13,7 @@ import { Task as TaskInterface } from '../../../interface/Task';
 export default function AddColor() {
   const classes = useStyles();
   const colors = ['#FFFFFF', '#FF5D48', '#EDAB1D', '#59B0FF', '#D460F7'];
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const [state, setState] = useState({ expanded: false, color: colors, isDragging: true });
   const anchorRef = React.useRef<HTMLButtonElement>(null);
 
