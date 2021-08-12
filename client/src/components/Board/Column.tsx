@@ -1,16 +1,18 @@
-import { Button, Card, CardActions, CardContent, CardHeader, Modal } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, CardHeader, Input, Modal } from '@material-ui/core';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import useStyles from './useStyles';
 import Task from './Task';
 import { Column as ColumnInterface } from '../../interface/Column';
 import { Task as TaskInterface, TaskPlaceHolder } from '../../interface/Task';
 import { useState } from 'react';
+import DeleteIcon from '@material-ui/icons/Delete';
 export interface properties {
   placeHolderStyle: TaskPlaceHolder;
   Column: ColumnInterface;
   index: number;
   Tasks: TaskInterface[];
   addTask: (columnId: string) => void;
+  delete: (columnId: string) => void;
   taskDialog: (taskId: string) => void;
 }
 
@@ -57,6 +59,10 @@ const Column: React.FunctionComponent<properties> = (props) => {
     setState({ ...state, isModelOpen });
   };
 
+  const deleteColumn = () => {
+    props.delete(props.Column.id);
+  };
+
   return (
     <>
       <Draggable draggableId={props.Column.id} index={props.index}>
@@ -71,10 +77,11 @@ const Column: React.FunctionComponent<properties> = (props) => {
             id={props.Column.id}
           >
             <CardHeader
-              title={props.Column.title}
+              title={<ColumnTitle Column={props.Column}></ColumnTitle>}
               titleTypographyProps={{ variant: 'h5' }}
               className={classes.columnTitle}
               {...provided.dragHandleProps}
+              action={<DeleteIcon className={classes.deleteIcon} onClick={deleteColumn}></DeleteIcon>}
             ></CardHeader>
             <Droppable droppableId={props.Column.id} type="task">
               {(provided, snapshot) => (
@@ -132,3 +139,42 @@ const Column: React.FunctionComponent<properties> = (props) => {
 };
 
 export default Column;
+interface titleProperties {
+  Column: ColumnInterface;
+}
+const ColumnTitle: React.FunctionComponent<titleProperties> = (props) => {
+  const [state, setState] = useState({
+    editing: false,
+    Column: props.Column,
+    editValue: props.Column.title,
+  });
+
+  const doubleClick = () => {
+    setState({ ...state, editing: true });
+  };
+  const change = (value: string) => {
+    setState({ ...state, editValue: value });
+  };
+  const handleEnter = (key: string) => {
+    if (key === 'Enter') {
+      const Column = state.Column;
+      Column.title = state.editValue;
+      setState({ ...state, editing: false, Column: Column });
+    }
+  };
+  if (state.editing) {
+    return (
+      <Input
+        defaultValue={state.Column.title}
+        onChange={(event) => {
+          change(event.target.value);
+        }}
+        onKeyPress={(event) => {
+          handleEnter(event.key);
+        }}
+      ></Input>
+    );
+  } else {
+    return <span onDoubleClick={doubleClick}>{state.Column.title}</span>;
+  }
+};
