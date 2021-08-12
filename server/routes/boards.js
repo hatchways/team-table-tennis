@@ -30,8 +30,8 @@ const {
 } = require("../validate");
 
 // Board
-router.route("/").post(createBoard, validateCreateBoard);
-router.route("/").get(getBoard, validateGetBoard);
+router.route('/').post(createBoard, validateCreateBoard);
+router.route('/:boardId').get(getBoard, validateGetBoard);
 
 // Column
 router.route("/columns").post(createColumn, validateCreateColumn);

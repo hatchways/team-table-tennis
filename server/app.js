@@ -1,4 +1,5 @@
 const colors = require("colors");
+var cors = require('cors');
 const path = require("path");
 const http = require("http");
 const express = require("express");
@@ -21,7 +22,7 @@ const server = http.createServer(app);
 
 const io = socketio(server, {
   cors: {
-    origin: "*",
+    origin: '*',
   },
 });
 
@@ -32,6 +33,7 @@ io.on("connection", (socket) => {
 if (process.env.NODE_ENV === "development") {
   app.use(logger("dev"));
 }
+app.use(cors({origin: 'http://localhost:3000'}))
 app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());

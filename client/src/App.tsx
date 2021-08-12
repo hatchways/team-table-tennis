@@ -10,6 +10,7 @@ import { SnackBarProvider } from './context/useSnackbarContext';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import './App.css';
 import Calendar from './pages/Calendar/Calendar';
+import { BoardProvider } from './helpers/APICalls/board';
 
 function App(): JSX.Element {
   return (

@@ -8,7 +8,7 @@ exports.createBoard = asyncHandler(async (req, res, next) => {
   const { title } = req.body;
   if (title) {
     const inProgress = new Column({ title: 'In Progress' });
-    const completed = new Column({ title : 'Completed' });
+    const completed = new Column({ title : 'Completed' }); 
     
     await inProgress.save();
     await completed.save();
@@ -29,7 +29,10 @@ exports.createBoard = asyncHandler(async (req, res, next) => {
 })
 
 exports.getBoard = asyncHandler(async (req, res) => {
-  const { boardId } = req.body;
+  console.log("getting board 2");
+  const boardId  = req.params.boardId;
+  console.log(boardId);
+
   const board = await Board.findById(boardId);
   if (board) {
     res.status(200).json({ board });
@@ -185,7 +188,7 @@ exports.createDetails = asyncHandler(async (req, res) => {
   })
 })
 exports.updateDetails = asyncHandler(async (req, res) => {
-  const { tags, color, deadLine, attachment, cardId } = req.body;
+  const { tags, color, deadLine, attachment, cardId, title } = req.body;
 
   await Card.findByIdAndUpdate(
     cardId,
@@ -193,6 +196,7 @@ exports.updateDetails = asyncHandler(async (req, res) => {
       $set: { 
         tags,
         color,
+        title,
         deadLine,
         attachment
       }
