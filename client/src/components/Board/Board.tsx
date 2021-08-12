@@ -159,6 +159,16 @@ const Board: React.FunctionComponent = () => {
     setState({ ...state, newColumnTitle: '', mockData: mockData });
   };
 
+  const deleteColumn = (columnId: string) => {
+    const mockData = state.mockData;
+    mockData.columnOrder.splice(mockData.columnOrder.indexOf(columnId), 1);
+    mockData.columns[columnId].tasks.forEach((task) => {
+      delete mockData.tasks[columnId];
+    });
+    delete mockData.columns[columnId];
+    setState({ ...state, mockData: mockData });
+  };
+
   return (
     <React.Fragment>
       <Grid container direction="row" justify="flex-start" alignItems="stretch" alignContent="flex-start" spacing={0}>
@@ -188,6 +198,7 @@ const Board: React.FunctionComponent = () => {
                       placeHolderStyle={state.taskPlaceHolder}
                       addTask={addTask}
                       taskDialog={newColumn}
+                      delete={deleteColumn}
                     ></Column>
                   ))}
                   {provided.placeholder}

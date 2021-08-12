@@ -3,6 +3,7 @@ const Board = require('../models/Board');
 const Card = require('../models/Card');
 const Column = require('../models/Column');
 
+
 exports.createBoard = asyncHandler(async (req, res) => {
   const { title } = req.body;
   if (title) {
@@ -117,4 +118,62 @@ exports.moveCard = asyncHandler(async (req, res) => {
   destCol.cards.splice(row, 0, cardId);
   await destCol.save();
   res.sendStatus(200);
+})
+
+exports.getDetails = asyncHandler(async (req, res) => {
+  const cardId = req.params.cardID;
+  const cardDetails = await Card.find({ _id: cardId })
+    .populate("cardDetails")
+  res.status(200).json({ cardDetails });
+})
+exports.createDetails = asyncHandler(async (req, res) => {
+  const { tags, color, deadLine, attachment, cardId } = req.body;
+
+  await Card.findByIdAndUpdate(
+    cardId,
+    {
+      $push: { 
+        tags,
+        color,
+        deadLine,
+        attachment
+      }
+    },
+    {
+      new: true
+    }
+  )
+  .exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    }
+    else {
+      res.status(200).json(result);
+    }
+  })
+})
+exports.updateDetails = asyncHandler(async (req, res) => {
+  const { tags, color, deadLine, attachment, cardId } = req.body;
+
+  await Card.findByIdAndUpdate(
+    cardId,
+    {
+      $set: { 
+        tags,
+        color,
+        deadLine,
+        attachment
+      }
+    },
+    {
+      new: true
+    }
+  )
+  .exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    } else {
+      res.status(200).json(result);
+    }
+  })
 })

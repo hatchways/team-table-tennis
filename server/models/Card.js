@@ -10,7 +10,14 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: false,
     unique: false,
-  }
+  },
+  cardDetails: 
+    {
+      tags:{ type: Array },
+      color:{ type: String },
+      deadLine: {type: Date },
+      attachment:{ type: String }
+    }
 })
 
 module.exports = Card = mongoose.model('card', cardSchema)
