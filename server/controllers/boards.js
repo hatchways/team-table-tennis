@@ -4,7 +4,7 @@ const Card = require('../models/Card');
 const Column = require('../models/Column');
 
 
-exports.createBoard = asyncHandler(async (req, res) => {
+exports.createBoard = asyncHandler(async (req, res, next) => {  
   const { title } = req.body;
   if (title) {
     const inProgress = new Column({ title: 'In Progress' });
@@ -98,6 +98,7 @@ exports.createCard = asyncHandler(async (req, res) => {
 
 exports.getCards = asyncHandler(async (req, res) => {
   const { cardIds } = req.body;
+  console.log(cardIds);
   const cards = await Promise.all(cardIds.map(async (id) => {
   const doc = await Card.findById(id);
   return doc;
@@ -106,6 +107,36 @@ exports.getCards = asyncHandler(async (req, res) => {
     cards
   })
 })
+
+exports.GetCardsFromColumnId = asyncHandler(async (req, res) => {
+  const { ColumnId } = req.body;
+
+  const cards = await Promise.all(getC.map(async (id) => {
+  const doc = await Card.findById(id);
+  return doc;
+  }));
+  res.status(200).json({
+    cards
+  })
+})
+
+exports.getCard = asyncHandler(async (req, res) => {
+  const { cardId } = req.body;
+
+  const card = await Card.findById(cardId);
+  if(card){
+  res.status(200).json({
+    card
+  })
+}
+ else {
+  const error = new Error(`Could not find card ${cardId}`);
+  res.status(404).json({
+    error
+  })
+}
+})
+
 
 exports.moveCard = asyncHandler(async (req, res) => {
   const { ogColId, destColId, row, cardId } = req.body;
@@ -163,6 +194,30 @@ exports.updateDetails = asyncHandler(async (req, res) => {
         color,
         deadLine,
         attachment
+      }
+    },
+    {
+      new: true
+    }
+  )
+  .exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    } else {
+      res.status(200).json(result);
+    }
+  })
+})
+
+exports.updateDetailsColor = asyncHandler(async (req, res) => {
+  console.log("inside details");
+  const {color, cardId } = req.body;
+
+  await Card.findByIdAndUpdate(
+    cardId,
+    {
+      $set: { 
+        color,
       }
     },
     {

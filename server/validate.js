@@ -67,6 +67,12 @@ exports.validateGetCards = [
   handleErrors
 ];
 
+exports.validateGetCard = [
+  check('cardId', "No 'cardId' field found").exists(),
+  check('cardId', 'No card provided').not().isEmpty(),
+  handleErrors
+];
+
 exports.validateCreateCard = [
   check('columnId', 'Please include a Column Id').exists(),
   check('title', "Please include a title for the board").exists(),
