@@ -19,9 +19,14 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import useStyles from './useStyles';
+import { useParams } from 'react-router-dom';
+
 const Board: React.FunctionComponent = () => {
   const taskPlaceHolder: TaskPlaceHolder = { clientHeight: 0, clientWidth: 0, clientX: 0, clientY: 0 };
   const classes = useStyles();
+
+  const params = useParams();
+  console.log('params:', params);
 
   const [state, setState] = useState({
     mockData: mockData,

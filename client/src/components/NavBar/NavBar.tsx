@@ -6,9 +6,12 @@ import AccountButton from '../AccountButton/AccountButton';
 import useStyles from './useStyles';
 import logo from '../../Images/logo.png';
 
-export default function NavBar() {
-  const classes = useStyles();
+interface NavbarProps {
+  toggleSidebar: () => void;
+}
 
+export default function NavBar({ toggleSidebar }: NavbarProps): JSX.Element {
+  const classes = useStyles();
   return (
     <Container className={classes.root}>
       <Grid container direction="row" alignItems="center" justify="center" className={classes.topnavBar}>
@@ -66,7 +69,13 @@ export default function NavBar() {
           <Typography variant="h6" className={classes.title}>
             My School Board
           </Typography>
-          <IconButton edge="end" className={classes.menuButton} color="inherit" aria-label="menu">
+          <IconButton
+            edge="end"
+            onClick={toggleSidebar}
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+          >
             <MenuIcon />
           </IconButton>
         </Toolbar>

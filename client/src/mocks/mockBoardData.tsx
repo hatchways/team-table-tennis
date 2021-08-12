@@ -1,4 +1,9 @@
-const MOCK_BOARDS = {
+interface mocks {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [id: string]: any;
+}
+
+const MOCK_BOARDS: mocks = {
   board1: {
     _id: '1',
     title: 'Board 1',
