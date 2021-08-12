@@ -86,6 +86,7 @@ exports.createCard = asyncHandler(async (req, res) => {
   if (description) {
     card.description = description;
   }
+  card.cardDetails.color = "#FFFFFF";
   await card.save();
 
   const column = await Column.findById(columnId);

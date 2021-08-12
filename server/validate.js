@@ -68,7 +68,7 @@ exports.validateGetCards = [
 ];
 
 exports.validateGetCard = [
-  check('cardId', "No 'cardId' field found").exists(),
+  check('cardId', "No 'cardId ' field found").exists(),
   check('cardId', 'No card provided').not().isEmpty(),
   handleErrors
 ];
