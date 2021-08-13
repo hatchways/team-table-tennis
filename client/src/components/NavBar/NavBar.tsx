@@ -6,7 +6,7 @@ import AccountButton from '../AccountButton/AccountButton';
 import useStyles from './useStyles';
 import logo from '../../Images/logo.png';
 
-export default function NavBar() {
+export default function NavBar(props: any) {
   const classes = useStyles();
 
   return (
@@ -64,7 +64,7 @@ export default function NavBar() {
       <AppBar position="static" className={classes.appbarStyle}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            My School Board
+            {props.boardTitle}
           </Typography>
           <IconButton edge="end" className={classes.menuButton} color="inherit" aria-label="menu">
             <MenuIcon />

@@ -13,28 +13,30 @@ import BoardApi, { BoardContext, useBoard } from '../../helpers/APICalls/board';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
-  //const { updateBoardContext } = useBoard();
+  const { board } = useBoard();
   const { loggedInUser } = useAuth();
   // const { initSocket } = useSocket();
 
-  // const history = useHistory();
+  const history = useHistory();
 
   //useEffect(() => {
   //  initSocket();
   //}, [initSocket]);
 
-  if (loggedInUser === undefined) return <CircularProgress />;
+  console.log('board loaded');
+  if (loggedInUser === undefined || board === undefined) return <CircularProgress />;
   if (!loggedInUser) {
-    // history.push('/login');
+    history.push('/login');
     // loading for a split seconds until history.push works
     return <CircularProgress />;
   }
-  // BoardApi().then((data) => {
-  //   console.log('yeah');
-  // });
+  if (!board) {
+    return <CircularProgress />;
+  }
+
   return (
     <Grid container component="main" className={`${classes.root} ${classes.dashboard}`} direction="row">
-      <NavBar />
+      <NavBar boardTitle={board.title} />
       <Grid item className={classes.drawerWrapper}>
         <ChatSideBanner loggedInUser={loggedInUser} />
       </Grid>

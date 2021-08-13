@@ -11,12 +11,15 @@ import AuthHeader from '../../components/AuthHeader/AuthHeader';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import BgImg from '../../components/BgImg/BgImg';
+import BoardApi, { useBoard } from '../../helpers/APICalls/board';
 
 export default function Login(): JSX.Element {
   const classes = useStyles();
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();
+  const { updateBoardContexts } = useBoard();
 
+  console.log('inside login comp');
   const handleSubmit = (
     { email, password }: { email: string; password: string },
     { setSubmitting }: FormikHelpers<{ email: string; password: string }>,
@@ -27,6 +30,15 @@ export default function Login(): JSX.Element {
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
         updateLoginContext(data.success);
+        console.log('login worked');
+        BoardApi()
+          .then((data) => {
+            console.log('board before context' + data.board._id);
+            updateBoardContexts(data.board);
+          })
+          .catch(() => {
+            console.log('something went wrong');
+          });
       } else {
         // should not get here from backend but this catch is for an unknown issue
         console.error({ data });

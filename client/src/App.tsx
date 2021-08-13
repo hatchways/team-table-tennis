@@ -18,21 +18,21 @@ function App(): JSX.Element {
       <BrowserRouter>
         <SnackBarProvider>
           <AuthProvider>
-            <SocketProvider>
-              <Switch>
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/signup" component={Signup} />
-                <BoardProvider>
+            <BoardProvider>
+              <SocketProvider>
+                <Switch>
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/signup" component={Signup} />
                   <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-                </BoardProvider>
-                <Route path="*">
-                  <Redirect to="/login" />
-                </Route>
-                <Route exact path="/calendar">
-                  <Calendar />
-                </Route>
-              </Switch>
-            </SocketProvider>
+                  <Route path="*">
+                    <Redirect to="/login" />
+                  </Route>
+                  <Route exact path="/calendar">
+                    <Calendar />
+                  </Route>
+                </Switch>
+              </SocketProvider>
+            </BoardProvider>
           </AuthProvider>
         </SnackBarProvider>
       </BrowserRouter>

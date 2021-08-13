@@ -4,7 +4,7 @@ import { Board, Boards } from '../../interface/BoardApi';
 
 interface IBoardContext {
   board: Board | null | undefined;
-  updateBoardContext: (data: any) => void;
+  updateBoardContexts: (data: any) => void;
 }
 
 const BoardApi = async (): Promise<Boards> => {
@@ -23,22 +23,22 @@ export default BoardApi;
 
 export const BoardContext = createContext<IBoardContext>({
   board: undefined,
-  updateBoardContext: () => null,
+  updateBoardContexts: () => null,
 });
 
 export const BoardProvider: FunctionComponent = ({ children }): JSX.Element => {
-  const [board, setBoard] = useState();
+  const [board, setBoard] = useState<Board | null | undefined>();
 
-  const updateBoardContext = useCallback(
-    (data: any) => {
-      console.log('data: ' + data);
+  const updateBoardContexts = useCallback(
+    (data: Board) => {
+      console.log('data: ' + data._id);
       setBoard(data);
     },
 
     [],
   );
 
-  return <BoardContext.Provider value={{ board, updateBoardContext }}>{children}</BoardContext.Provider>;
+  return <BoardContext.Provider value={{ board, updateBoardContexts }}>{children}</BoardContext.Provider>;
 };
 
 export function useBoard(): IBoardContext {
