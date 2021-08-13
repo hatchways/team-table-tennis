@@ -1,6 +1,12 @@
 import { useState } from 'react';
-import { createContext, FunctionComponent, useCallback } from 'react';
-import { Boards } from '../../interface/BoardApi';
+import { createContext, FunctionComponent, useCallback, useContext } from 'react';
+import { Board, Boards } from '../../interface/BoardApi';
+
+interface IBoardContext {
+  board: Board | null | undefined;
+  updateBoardContext: (data: any) => void;
+}
+
 const BoardApi = async (): Promise<Boards> => {
   const boardId = '6114745022197a8d30dc040c';
   return await fetch('http://localhost:3001/boards/6114745022197a8d30dc040c', {
@@ -15,7 +21,7 @@ const BoardApi = async (): Promise<Boards> => {
 };
 export default BoardApi;
 
-export const BoardContext = createContext<any>({
+export const BoardContext = createContext<IBoardContext>({
   board: undefined,
   updateBoardContext: () => null,
 });
@@ -25,7 +31,8 @@ export const BoardProvider: FunctionComponent = ({ children }): JSX.Element => {
 
   const updateBoardContext = useCallback(
     (data: any) => {
-      //setBoard(data.boards);
+      console.log('data: ' + data);
+      setBoard(data);
     },
 
     [],
@@ -33,3 +40,8 @@ export const BoardProvider: FunctionComponent = ({ children }): JSX.Element => {
 
   return <BoardContext.Provider value={{ board, updateBoardContext }}>{children}</BoardContext.Provider>;
 };
+
+export function useBoard(): IBoardContext {
+  console.log('use board');
+  return useContext(BoardContext);
+}

@@ -6,30 +6,32 @@ import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
 import { useHistory } from 'react-router-dom';
 import ChatSideBanner from '../../components/ChatSideBanner/ChatSideBanner';
-import { useEffect } from 'react';
 
 import NavBar from '../../components/NavBar/NavBar';
 import Board from '../../components/Board/Board';
+import BoardApi, { BoardContext, useBoard } from '../../helpers/APICalls/board';
 
 export default function Dashboard(): JSX.Element {
   const classes = useStyles();
-
+  //const { updateBoardContext } = useBoard();
   const { loggedInUser } = useAuth();
-  const { initSocket } = useSocket();
+  // const { initSocket } = useSocket();
 
-  const history = useHistory();
+  // const history = useHistory();
 
-  useEffect(() => {
-    initSocket();
-  }, [initSocket]);
+  //useEffect(() => {
+  //  initSocket();
+  //}, [initSocket]);
 
   if (loggedInUser === undefined) return <CircularProgress />;
   if (!loggedInUser) {
-    history.push('/login');
+    // history.push('/login');
     // loading for a split seconds until history.push works
     return <CircularProgress />;
   }
-
+  // BoardApi().then((data) => {
+  //   console.log('yeah');
+  // });
   return (
     <Grid container component="main" className={`${classes.root} ${classes.dashboard}`} direction="row">
       <NavBar />

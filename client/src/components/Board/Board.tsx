@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import Column from './Column';
 import { Column as ColumnInterface } from '../../interface/Column';
 import { TaskPlaceHolder } from '../../interface/Task';
@@ -20,29 +20,21 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import useStyles from './useStyles';
-import BoardApi, { BoardContext } from '../../helpers/APICalls/board';
-import { AuthContext } from '../../context/useAuthContext';
 const Board: React.FunctionComponent = () => {
-  const { boardContext, updateBoardContext } = useContext(BoardContext);
-  const { loggedInUser, updateLoginContext } = useContext(AuthContext);
+  //const { board, updateBoardContext } = useContext(BoardContext);
   const taskPlaceHolder: TaskPlaceHolder = { clientHeight: 0, clientWidth: 0, clientX: 0, clientY: 0 };
   const classes = useStyles();
-  const board: BoardInterface = { _id: '', title: '', columns: [] };
   const [state, setState] = useState({
     mockData: mockData,
     taskPlaceHolder: taskPlaceHolder,
     modalOpen: false,
     newColumnTitle: '',
-    board: board,
   });
-  BoardApi().then((data: any) => {
-    board._id = data.board._id;
-    board.columns = data.board.columns;
-    board.title = data.board.title;
-    console.log(board);
-  });
-  console.log('b ' + board);
-  console.log('board ' + boardContext);
+  //BoardApi().then((data: any) => {
+  //  newBoard._id = data.board._id;
+  //  newBoard.columns = data.board.columns;
+  //  newBoard.title = data.board.title;
+  //});
 
   const onDragUpdate = (result: DragUpdate) => {
     const { draggableId } = result;
