@@ -8,6 +8,7 @@ const connectDB = require("./db");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const { cloudinary } = require('./utils/cloudinary');
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
@@ -32,10 +33,26 @@ io.on("connection", (socket) => {
 if (process.env.NODE_ENV === "development") {
   app.use(logger("dev"));
 }
-app.use(json());
-app.use(urlencoded({ extended: false }));
+/* app.use(json()); */
+/* app.use(urlencoded({ extended: false })); */
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
+
+app.post("/api/upload", async (req, res) => {
+  try {
+    const fileStr = req.body.data;
+    const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
+      upload_preset: 'dev_setups',
+/*       public_id: 'Car' */
+    })
+    console.log(uploadedResponse)
+    res.json({msg: "Uploaded"})
+  } catch (error) {
+    res.status(500).json({err: 'Something went wrong'})
+  }
+});
 
 app.use((req, res, next) => {
   req.io = io;

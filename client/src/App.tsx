@@ -10,6 +10,7 @@ import { SnackBarProvider } from './context/useSnackbarContext';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import './App.css';
 import Calendar from './pages/Calendar/Calendar';
+import Profile from './pages/Profile/Profile';
 
 function App(): JSX.Element {
   return (
@@ -22,6 +23,7 @@ function App(): JSX.Element {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
+                <Route exact path="/profile" component={Profile} />
                 <Route path="*">
                   <Redirect to="/login" />
                 </Route>
