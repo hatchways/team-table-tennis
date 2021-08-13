@@ -20,7 +20,7 @@ const DragAndDropCalendar = withDragAndDrop(Calendar as any);
 
 const DnDCalendar = (): JSX.Element => {
   const [events, setEvent] = useState<IUserSchedule[]>(mockDatas);
-  const { loggedInUser } = useAuth();
+  const { loggedInUserBoard: loggedInUser } = useAuth();
   const { initSocket } = useSocket();
   const history = useHistory();
 

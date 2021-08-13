@@ -12,6 +12,7 @@ import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import BgImg from '../../components/BgImg/BgImg';
 import BoardApi, { useBoard } from '../../helpers/APICalls/board';
+import { useAuthBoard } from '../../context/useAuthBoardContext';
 
 export default function Login(): JSX.Element {
   const classes = useStyles();
@@ -31,14 +32,6 @@ export default function Login(): JSX.Element {
       } else if (data.success) {
         updateLoginContext(data.success);
         console.log('login worked');
-        BoardApi()
-          .then((data) => {
-            console.log('board before context' + data.board._id);
-            updateBoardContexts(data.board);
-          })
-          .catch(() => {
-            console.log('something went wrong');
-          });
       } else {
         // should not get here from backend but this catch is for an unknown issue
         console.error({ data });

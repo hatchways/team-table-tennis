@@ -3,7 +3,7 @@ import { RouteProps, Route, Redirect } from 'react-router-dom';
 import loading from '../../Images/loading.gif';
 
 export default function ProtectedRoute(component: RouteProps): JSX.Element {
-  const { loggedInUser } = useAuth();
+  const { loggedInUserBoard: loggedInUser } = useAuth();
   const auth = loggedInUser;
 
   if (!auth) return <img src={loading} />;

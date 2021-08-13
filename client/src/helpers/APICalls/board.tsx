@@ -2,14 +2,14 @@ import { useState } from 'react';
 import { createContext, FunctionComponent, useCallback, useContext } from 'react';
 import { Board, Boards } from '../../interface/BoardApi';
 
-interface IBoardContext {
+export interface IBoardContext {
   board: Board | null | undefined;
   updateBoardContexts: (data: any) => void;
 }
 
 const BoardApi = async (): Promise<Boards> => {
   const boardId = '6114745022197a8d30dc040c';
-  return await fetch('http://localhost:3001/boards/6114745022197a8d30dc040c', {
+  return await fetch('http://localhost:3001/boards/' + boardId, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
     mode: 'cors',
