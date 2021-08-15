@@ -11,13 +11,14 @@ import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import './App.css';
 import Calendar from './pages/Calendar/Calendar';
 import { BoardProvider } from './helpers/APICalls/board';
+import { AuthBoardProvider } from './context/useAuthBoardContext';
 
 function App(): JSX.Element {
   return (
     <MuiThemeProvider theme={theme}>
       <BrowserRouter>
         <SnackBarProvider>
-          <AuthProvider>
+          <AuthBoardProvider>
             <SocketProvider>
               <Switch>
                 <Route exact path="/login" component={Login} />
@@ -31,7 +32,7 @@ function App(): JSX.Element {
                 </Route>
               </Switch>
             </SocketProvider>
-          </AuthProvider>
+          </AuthBoardProvider>
         </SnackBarProvider>
       </BrowserRouter>
     </MuiThemeProvider>

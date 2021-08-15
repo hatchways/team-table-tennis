@@ -2,39 +2,30 @@ import { useState, useContext, createContext, FunctionComponent, useEffect, useC
 import { useHistory } from 'react-router-dom';
 import { AuthApiData, AuthApiDataSuccess } from '../interface/AuthApiData';
 import { User } from '../interface/User';
-import loginWithCookies from '../helpers/APICalls/loginWithCookies';
+import { loginWithCookies } from '../helpers/APICalls/loginWithCookies';
 import logoutAPI from '../helpers/APICalls/logout';
-import { Board } from '../interface/BoardApi';
-import { UserBoard } from '../interface/UserBoard';
-import BoardApi from '../helpers/APICalls/board';
 
-export interface IAuthContext {
-  loggedInUserBoard: UserBoard | null | undefined;
+interface IAuthContext {
+  loggedInUser: User | null | undefined;
   updateLoginContext: (data: AuthApiDataSuccess) => void;
   logout: () => void;
 }
 
 export const AuthContext = createContext<IAuthContext>({
-  loggedInUserBoard: undefined,
+  loggedInUser: undefined,
   updateLoginContext: () => null,
   logout: () => null,
 });
 
 export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
   // default undefined before loading, once loaded provide user or null if logged out
-  const [loggedInUserBoard, setLoggedInUserBoard] = useState<UserBoard | null | undefined>();
+  const [loggedInUser, setLoggedInUser] = useState<User | null | undefined>();
   const history = useHistory();
 
   const updateLoginContext = useCallback(
     (data: AuthApiDataSuccess) => {
-      console.log('logged in');
-      const userBoard: UserBoard = { user: undefined, board: undefined };
-      userBoard.user = data.user;
-      BoardApi().then((data) => {
-        userBoard.board = data.board;
-        setLoggedInUserBoard(userBoard);
-        history.push('/dashboard');
-      });
+      setLoggedInUser(data.user);
+      history.push('/dashboard');
     },
     [history],
   );
@@ -44,7 +35,7 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
     await logoutAPI()
       .then(() => {
         history.push('/login');
-        setLoggedInUserBoard(null);
+        setLoggedInUser(null);
       })
       .catch((error) => console.error(error));
   }, [history]);
@@ -58,7 +49,7 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
           history.push('/dashboard');
         } else {
           // don't need to provide error feedback as this just means user doesn't have saved cookies or the cookies have not been authenticated on the backend
-          setLoggedInUserBoard(null);
+          setLoggedInUser(null);
           history.push('/login');
         }
       });
@@ -66,11 +57,7 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
     checkLoginWithCookies();
   }, [updateLoginContext, history]);
 
-  return (
-    <AuthContext.Provider value={{ loggedInUserBoard: loggedInUserBoard, updateLoginContext, logout }}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={{ loggedInUser, updateLoginContext, logout }}>{children}</AuthContext.Provider>;
 };
 
 export function useAuth(): IAuthContext {

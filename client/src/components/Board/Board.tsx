@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Column from './Column';
 import { Column as ColumnInterface } from '../../interface/Column';
 import { TaskPlaceHolder } from '../../interface/Task';
-import { Board as BoardInterface } from '../../interface/BoardApi';
 import mockData from './MockData';
 import { DragDropContext, DropResult, Droppable, DragUpdate } from 'react-beautiful-dnd';
 import {

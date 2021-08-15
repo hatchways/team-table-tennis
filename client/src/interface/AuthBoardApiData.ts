@@ -1,13 +1,14 @@
 import { Board } from './BoardApi';
 import { User } from './User';
 
-export interface AuthApiDataSuccess {
+export interface AuthBoardApiDataSuccess {
   message: string;
   user: User;
   token: string;
+  board: Board;
 }
 
-export interface AuthApiData {
+export interface AuthBoardApiData {
   error?: { message: string };
-  success?: AuthApiDataSuccess;
+  success?: AuthBoardApiDataSuccess;
 }
