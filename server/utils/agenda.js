@@ -27,7 +27,6 @@ const agenda = new Agenda(connectionOpts);
 
 
 agenda.define("send email", async function (job, done) {
-  console.log(job.attrs.data)
   console.log("sending email");
   await sendMail();
   done();
