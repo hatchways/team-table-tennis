@@ -1,9 +1,9 @@
 import { Box, Input } from '@material-ui/core';
 import { useState } from 'react';
-import { Task } from '../../interface/Task';
+import { Card as Task } from '../../interface/CardApi';
 
 interface properties {
-  Task: Task;
+  Task: Task | undefined;
 }
 const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   const [state, setState] = useState({
@@ -13,8 +13,10 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   });
 
   const startEditingTitle = () => {
-    if (props.Task.isNew) {
-      setState({ ...state, isEditing: true });
+    if (props.Task) {
+      if (props.Task.isNew) {
+        setState({ ...state, isEditing: true });
+      }
     }
   };
 
@@ -25,7 +27,7 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   const handleEnter = (key: string) => {
     if (key === 'Enter') {
       const task = state.Task;
-      task.name = state.value;
+      if (task) task.name = state.value;
       setState({ ...state, isEditing: false, Task: task });
     }
   };
@@ -46,7 +48,7 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   } else {
     return (
       <Box fontWeight={600} fontSize={20} onDoubleClick={startEditingTitle}>
-        {props.Task.name}
+        {props.Task?.name}
       </Box>
     );
   }

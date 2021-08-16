@@ -44,6 +44,61 @@ exports.getBoard = asyncHandler(async (req, res) => {
   }
 })
 
+exports.getBoardFull = asyncHandler(async (req, res) => {
+  console.log("getting board 3");
+  const boardId  = req.params.boardId;
+  console.log(boardId);
+  
+
+  const board = await Board.findById(boardId);
+  /*const columns = await Promise.all(board.columns.map(async (id) => {
+    let column = {};
+    const doc = await Column.findById(id);
+    column[doc._id] = doc;
+    return column;
+  }));
+  */
+ const columns = await getColumsAsObject(board);
+
+
+  const cards = await getCardsColums(board, columns);
+  /*await Promise.all (columns.map( async column => {
+    console.log("cards");
+
+    cards = await Promise.all( (column.cards.map(async (id) => {
+    console.log("col: " + id);
+
+      const doc = await Card.findById(id);
+      console.log("doc: " + doc)
+      cards[doc._id] = doc;
+
+    })));
+
+    console.log("card" + cards);
+
+  }));
+  */
+
+
+
+  if (board && columns && cards) {
+    console.log("cards");
+    console.log(cards);
+    res.status(200).json({ board, columns, cards });
+
+  } else {
+    const error = new Error(`Could not find board ${boardId}`);
+    res.status(404).json({
+      error
+    })
+  }
+})
+
+
+
+
+
+
 exports.createColumn = asyncHandler(async (req, res) => {
   const { title, boardId } = req.body;
   if (title && boardId) {
@@ -65,8 +120,9 @@ exports.createColumn = asyncHandler(async (req, res) => {
 })
 
 exports.getColumns = asyncHandler(async (req, res) => {
-  const { columnIds } = req.body;
-  const columns = await Promise.all(columnIds.map(async (id) => {
+  const  boardId  = req.params.boardId;
+  const board = await Board.findById(boardId);
+  const columns = await Promise.all(board.columns.map(async (id) => {
     const doc = await Column.findById(id);
     return doc;
   }));
@@ -100,12 +156,41 @@ exports.createCard = asyncHandler(async (req, res) => {
   })
 })
 
+getCardsColums = asyncHandler(async (board, columns) => {
+  console.log("inside get ");
+  let cards = {};
+  //console.log(columns);
+  for(const columnId of board.columns){
+    const column = columns[columnId];
+    for(const cardId of column.cards){
+      const card = await Card.findById(cardId);
+      cards[card._id] = card;
+    }
+  }
+  
+
+  return cards;
+})
+
+getColumsAsObject = asyncHandler(async (board) => {
+  let columns = {};
+  for(const columnId of board.columns){
+    console.log(columnId);
+    const column = await Column.findById(columnId);
+    columns[column._id] = column;
+  }
+  
+
+  return columns;
+})
+
 exports.getCards = asyncHandler(async (req, res) => {
-  const { cardIds } = req.body;
-  console.log(cardIds);
-  const cards = await Promise.all(cardIds.map(async (id) => {
-  const doc = await Card.findById(id);
-  return doc;
+  console.log("getting card");
+  const  columnId  = req.params.columnId;
+  const column = await Column.findById(columnId);
+  const cards = await Promise.all(column.cards.map(async (id) => {
+    const doc = await Card.findById(id);
+    return doc;
   }));
   res.status(200).json({
     cards
@@ -113,7 +198,7 @@ exports.getCards = asyncHandler(async (req, res) => {
 })
 
 exports.GetCardsFromColumnId = asyncHandler(async (req, res) => {
-  const { ColumnId } = req.body;
+  const ColumnId  = req.body;
 
   const cards = await Promise.all(getC.map(async (id) => {
   const doc = await Card.findById(id);

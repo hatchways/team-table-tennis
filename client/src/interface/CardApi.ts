@@ -2,7 +2,7 @@ export interface Card {
   name: string;
   date: string;
   color: string;
-  id: string;
+  _id: string;
   isNew: boolean;
 }
 export interface Cards {

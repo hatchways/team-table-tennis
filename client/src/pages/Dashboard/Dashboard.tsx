@@ -21,7 +21,7 @@ export default function Dashboard(): JSX.Element {
   //}, [initSocket]);
 
   console.log('board loaded');
-  if (loggedInUser === undefined) return <CircularProgress />;
+  if (loggedInUser === undefined || loggedInUser?.columns === undefined) return <CircularProgress />;
   if (!loggedInUser) {
     history.push('/login');
     console.log('dashboard login');

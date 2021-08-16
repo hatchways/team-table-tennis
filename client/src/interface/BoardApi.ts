@@ -1,3 +1,6 @@
+import { Cards } from './CardApi';
+import { Columns } from './ColumnApi';
+
 export interface Board {
   _id: string;
   title: string;
@@ -5,4 +8,10 @@ export interface Board {
 }
 export interface Boards {
   [key: string]: Board;
+}
+
+export interface CompleteBoard {
+  board: Board;
+  cards: Cards;
+  columns: Columns;
 }

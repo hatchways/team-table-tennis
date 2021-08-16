@@ -4,7 +4,10 @@ import { AuthBoardApiData, AuthBoardApiDataSuccess } from '../interface/AuthBoar
 import { loginWithCookiesBoard } from '../helpers/APICalls/loginWithCookies';
 import logoutAPI from '../helpers/APICalls/logout';
 import { UserBoard } from '../interface/UserBoard';
-import BoardApi from '../helpers/APICalls/board';
+import { BoardApi, GetAllBoard } from '../helpers/APICalls/board';
+import getColumns from '../helpers/APICalls/columns';
+import getCards from '../helpers/APICalls/cards';
+import { CompleteBoard } from '../interface/BoardApi';
 
 export interface IAuthContext {
   loggedInUserBoard: UserBoard | null | undefined;
@@ -13,7 +16,7 @@ export interface IAuthContext {
 }
 
 export const AuthBoardContext = createContext<IAuthContext>({
-  loggedInUserBoard: undefined,
+  loggedInUserBoard: { user: undefined, board: { _id: '-1', title: '', columns: [] }, columns: {}, cards: {} },
   updateLoginContext: () => null,
   logout: () => null,
 });
@@ -25,13 +28,23 @@ export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element 
 
   const updateLoginContext = useCallback(
     (data: AuthBoardApiDataSuccess) => {
-      console.log('begin login');
+      const userBoard: UserBoard = {
+        user: undefined,
+        board: { _id: '-1', title: '', columns: [] },
+        columns: {},
+        cards: {},
+      };
 
-      const userBoard: UserBoard = { user: undefined, board: undefined };
       userBoard.user = data.user;
-      BoardApi().then((data) => {
+      GetAllBoard().then((data: CompleteBoard) => {
         userBoard.board = data.board;
+        userBoard.cards = data.cards;
+        userBoard.columns = data.columns;
+        console.log('setting');
+        console.log('board ' + JSON.stringify(userBoard));
+
         setLoggedInUserBoard(userBoard);
+
         history.push('/dashboard');
       });
     },

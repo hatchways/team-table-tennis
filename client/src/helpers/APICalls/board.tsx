@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import { createContext, FunctionComponent, useCallback, useContext } from 'react';
-import { Board, Boards } from '../../interface/BoardApi';
+import { Board, Boards, CompleteBoard } from '../../interface/BoardApi';
 
 export interface IBoardContext {
   board: Board | null | undefined;
   updateBoardContexts: (data: any) => void;
 }
 
-const BoardApi = async (): Promise<Boards> => {
+export const BoardApi = async (): Promise<Boards> => {
   const boardId = '6114745022197a8d30dc040c';
-  return await fetch('http://localhost:3001/boards/' + boardId, {
+  return await fetch('/boards/' + boardId, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
     mode: 'cors',
@@ -19,7 +19,19 @@ const BoardApi = async (): Promise<Boards> => {
       error: { message: 'Unable to connect to server. Please try again ' + e },
     }));
 };
-export default BoardApi;
+
+export const GetAllBoard = async (): Promise<CompleteBoard> => {
+  const boardId = '6114745022197a8d30dc040c';
+  return await fetch('/boards/full/' + boardId, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    mode: 'cors',
+  })
+    .then((res) => res.json())
+    .catch((e) => ({
+      error: { message: 'Unable to connect to server. Please try again ' + e },
+    }));
+};
 
 export const BoardContext = createContext<IBoardContext>({
   board: undefined,
@@ -42,6 +54,5 @@ export const BoardProvider: FunctionComponent = ({ children }): JSX.Element => {
 };
 
 export function useBoard(): IBoardContext {
-  console.log('use board');
   return useContext(BoardContext);
 }
