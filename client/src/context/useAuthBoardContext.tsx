@@ -5,7 +5,6 @@ import { loginWithCookiesBoard } from '../helpers/APICalls/loginWithCookies';
 import logoutAPI from '../helpers/APICalls/logout';
 import { UserBoard } from '../interface/UserBoard';
 import { BoardApi, GetAllBoard } from '../helpers/APICalls/board';
-import getColumns from '../helpers/APICalls/columns';
 import getCards from '../helpers/APICalls/cards';
 import { CompleteBoard } from '../interface/BoardApi';
 

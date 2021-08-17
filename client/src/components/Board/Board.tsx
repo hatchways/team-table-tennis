@@ -23,6 +23,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import useStyles from './useStyles';
 import { useEffect } from 'react';
 import { Cards } from '../../interface/CardApi';
+import { moveColumn } from '../../helpers/APICalls/board';
 const Board: React.FunctionComponent = () => {
   const { loggedInUserBoard: userBoard } = useAuthBoard();
 
@@ -44,7 +45,9 @@ const Board: React.FunctionComponent = () => {
 
   const onDragUpdate = (result: DragUpdate) => {
     const { draggableId } = result;
-    /*
+
+    console.log(draggableId);
+
     const dom = document.getElementsByClassName('taskClass-' + draggableId)[0];
 
     if (!dom) {
@@ -73,12 +76,9 @@ const Board: React.FunctionComponent = () => {
     };
     const newState = { ...state, taskPlaceHolder };
     setState(newState);
-    */
   };
 
   const onDragEnd = (result: DropResult) => {
-    /*
-
     const { destination, source, draggableId, type } = result;
     if (!destination) {
       return;
@@ -88,15 +88,19 @@ const Board: React.FunctionComponent = () => {
     }
 
     if (type === 'column') {
-      const newColumnOrder = Array.from(state.mockData.columnOrder);
-      newColumnOrder.splice(source.index, 1);
-      newColumnOrder.splice(destination.index, 0, draggableId);
-      const mockData = state.mockData;
-      mockData.columnOrder = newColumnOrder;
-      setState({ ...state, mockData });
-
+      const newColumnOrder = state.mockData?.board.columns;
+      if (newColumnOrder) {
+        newColumnOrder.splice(source.index, 1);
+        newColumnOrder.splice(destination.index, 0, draggableId);
+        const mockData = state.mockData;
+        if (mockData?.board.columns && mockData.board) {
+          mockData.board.columns = newColumnOrder;
+          moveColumn(mockData.board._id, source.index, destination.index, draggableId);
+        }
+      }
       return;
     } else {
+      /*
       const start = state.mockData.columns[source.droppableId];
 
       const finish = state.mockData.columns[destination.droppableId];
@@ -140,9 +144,8 @@ const Board: React.FunctionComponent = () => {
         };
         setState(newState);
       }
-      
+      */
     }
-    */
   };
 
   const addTask = (columnId: string) => {

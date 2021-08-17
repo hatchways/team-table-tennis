@@ -25,7 +25,6 @@ const Column: React.FunctionComponent<properties> = (props) => {
     //Tasks: props.Tasks,
     //TaskOrder: props.TaskOrder,
   });
-  console.log(props.Tasks);
 
   const classes = useStyles();
   const setVisable = (visible: number) => {

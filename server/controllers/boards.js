@@ -29,9 +29,7 @@ exports.createBoard = asyncHandler(async (req, res, next) => {
 })
 
 exports.getBoard = asyncHandler(async (req, res) => {
-  console.log("getting board 2");
   const boardId  = req.params.boardId;
-  console.log(boardId);
 
   const board = await Board.findById(boardId);
   if (board) {
@@ -45,9 +43,7 @@ exports.getBoard = asyncHandler(async (req, res) => {
 })
 
 exports.getBoardFull = asyncHandler(async (req, res) => {
-  console.log("getting board 3");
   const boardId  = req.params.boardId;
-  console.log(boardId);
   
 
   const board = await Board.findById(boardId);
@@ -82,8 +78,6 @@ exports.getBoardFull = asyncHandler(async (req, res) => {
 
 
   if (board && columns && cards) {
-    console.log("cards");
-    console.log(cards);
     res.status(200).json({ board, columns, cards });
 
   } else {
@@ -157,7 +151,6 @@ exports.createCard = asyncHandler(async (req, res) => {
 })
 
 getCardsColums = asyncHandler(async (board, columns) => {
-  console.log("inside get ");
   let cards = {};
   //console.log(columns);
   for(const columnId of board.columns){
@@ -175,7 +168,6 @@ getCardsColums = asyncHandler(async (board, columns) => {
 getColumsAsObject = asyncHandler(async (board) => {
   let columns = {};
   for(const columnId of board.columns){
-    console.log(columnId);
     const column = await Column.findById(columnId);
     columns[column._id] = column;
   }
@@ -184,8 +176,25 @@ getColumsAsObject = asyncHandler(async (board) => {
   return columns;
 })
 
+exports.moveColumn = asyncHandler(async (req, res) => {
+  const { boardId, sourceColumnIndex, destColumnIndex, draggableId } = req.body;
+  const board = await Board.findById(boardId);
+  const newOrder = board.columns;
+  newOrder[sourceColumnIndex] = newOrder[destColumnIndex] ;  
+  newOrder[destColumnIndex] = draggableId,
+  board.columns = newOrder;
+
+  result = await Board.findByIdAndUpdate(boardId, board);
+  if(result){
+    res.status(200).json({
+      result
+    })
+  }
+
+});
+
+
 exports.getCards = asyncHandler(async (req, res) => {
-  console.log("getting card");
   const  columnId  = req.params.columnId;
   const column = await Column.findById(columnId);
   const cards = await Promise.all(column.cards.map(async (id) => {
@@ -225,6 +234,7 @@ exports.getCard = asyncHandler(async (req, res) => {
   })
 }
 })
+
 
 
 exports.moveCard = asyncHandler(async (req, res) => {
@@ -300,7 +310,6 @@ exports.updateDetails = asyncHandler(async (req, res) => {
 })
 
 exports.updateDetailsColor = asyncHandler(async (req, res) => {
-  console.log("inside details");
   const {color, cardId } = req.body;
 
   await Card.findByIdAndUpdate(

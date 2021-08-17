@@ -1,6 +1,6 @@
 import { Columns } from '../../interface/ColumnApi';
 
-const getColumns = async (boardId: string): Promise<Columns> => {
+export const getColumns = async (boardId: string): Promise<Columns> => {
   return await fetch('/boards/columns/' + boardId, {
     method: 'get',
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
@@ -11,5 +11,3 @@ const getColumns = async (boardId: string): Promise<Columns> => {
       error: { message: 'Unable to connect to server. Please try again ' + e },
     }));
 };
-
-export default getColumns;

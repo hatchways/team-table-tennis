@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { createContext, FunctionComponent, useCallback, useContext } from 'react';
 import { Board, Boards, CompleteBoard } from '../../interface/BoardApi';
+import { Column } from '../../interface/ColumnApi';
 
 export interface IBoardContext {
   board: Board | null | undefined;
@@ -33,6 +34,24 @@ export const GetAllBoard = async (): Promise<CompleteBoard> => {
     }));
 };
 
+export const moveColumn = async (
+  boardId: string,
+  sourceColumnIndex: number,
+  destColumnIndex: number,
+  draggableId: string,
+): Promise<Column[]> => {
+  return await fetch('/boards/columns/move', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    mode: 'cors',
+    body: JSON.stringify({ boardId, sourceColumnIndex, destColumnIndex, draggableId }),
+  })
+    .then((res) => res.json())
+    .catch((e) => ({
+      error: { message: 'unable to connext to server' },
+    }));
+};
+
 export const BoardContext = createContext<IBoardContext>({
   board: undefined,
   updateBoardContexts: () => null,
@@ -43,7 +62,6 @@ export const BoardProvider: FunctionComponent = ({ children }): JSX.Element => {
 
   const updateBoardContexts = useCallback(
     (data: Board) => {
-      console.log('data: ' + data._id);
       setBoard(data);
     },
 

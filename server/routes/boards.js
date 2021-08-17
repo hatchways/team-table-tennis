@@ -12,6 +12,7 @@ const {
   moveCard,
   createDetails,
   updateDetails,
+  moveColumn,
   updateDetailsColor,
   getCard,
   getDetails
@@ -36,6 +37,7 @@ router.route('/full/:boardId').get(getBoardFull);
 
 // Column
 router.route("/columns").post(createColumn, validateCreateColumn);
+router.route("/columns/move").put(moveColumn);
 router.route("/columns/:boardId").get(getColumns, validateGetColumns);
 router.route("/columns").put(updateColumn, validateUpdateColumn);
 
