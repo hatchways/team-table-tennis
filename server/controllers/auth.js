@@ -6,7 +6,7 @@ const generateToken = require("../utils/generateToken");
 // @desc Register user
 // @access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { email, password } = req.body;
 
   const emailExists = await User.findOne({ email });
 
@@ -15,15 +15,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     throw new Error("A user with that email already exists");
   }
 
-  const usernameExists = await User.findOne({ username });
-
-  if (usernameExists) {
-    res.status(400);
-    throw new Error("A user with that username already exists");
-  }
-
   const user = await User.create({
-    username,
     email,
     password
   });
@@ -41,7 +33,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
       success: {
         user: {
           id: user._id,
-          username: user.username,
           email: user.email
         }
       }
@@ -57,7 +48,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
 // @access Public
 exports.loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
-
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPassword(password))) {
@@ -68,16 +58,15 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
       httpOnly: true,
       maxAge: secondsInWeek * 1000
     });
-
     res.status(200).json({
       success: {
         user: {
           id: user._id,
-          username: user.username,
           email: user.email
         }
       }
     });
+
   } else {
     res.status(401);
     throw new Error("Invalid email or password");
@@ -99,7 +88,6 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
     success: {
       user: {
         id: user._id,
-        username: user.username,
         email: user.email
       }
     }

@@ -8,6 +8,7 @@ const connectDB = require("./db");
 const { join } = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+require("dotenv").config({ path: "./sample.env"});
 
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
@@ -57,7 +58,6 @@ if (process.env.NODE_ENV === "production") {
     res.send("API is running");
   });
 }
-
 app.use(notFound);
 app.use(errorHandler);
 

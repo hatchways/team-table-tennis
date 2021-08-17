@@ -2,6 +2,7 @@ import { AuthApiData } from '../../interface/AuthApiData';
 import { FetchOptions } from '../../interface/FetchOptions';
 
 const login = async (email: string, password: string): Promise<AuthApiData> => {
+  console.log('logging in');
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
