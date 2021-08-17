@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Column from './Column';
-import { Column as ColumnInterface } from '../../interface/Column';
+import { Column as ColumnInterface } from '../../interface/ColumnApi';
 import { TaskPlaceHolder } from '../../interface/Task';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
 import { Board as BoardInterface } from '../../interface/BoardApi';
@@ -100,51 +100,53 @@ const Board: React.FunctionComponent = () => {
       }
       return;
     } else {
-      /*
-      const start = state.mockData.columns[source.droppableId];
+      if (state.mockData && state.mockData.cards) {
+        const start = state.mockData.columns[source.droppableId];
 
-      const finish = state.mockData.columns[destination.droppableId];
-      const startTasks = Array.from(start.tasks);
-      startTasks.splice(source.index, 1);
-      if (start === finish) {
-        startTasks.splice(destination.index, 0, draggableId);
-        const newColumn: ColumnInterface = {
-          ...start,
-          tasks: startTasks,
-        };
+        const finish = state.mockData.columns[destination.droppableId];
+        const startTasks = state.mockData.columns[start._id].cards;
+        if (startTasks) {
+          startTasks.splice(source.index, 1);
+          if (start === finish) {
+            startTasks.splice(destination.index, 0, draggableId);
+            const newColumn: ColumnInterface = {
+              ...start,
+              cards: startTasks,
+            };
 
-        const newColumns = state.mockData.columns;
-        newColumns[source.droppableId] = newColumn;
+            const newColumns = state.mockData.columns;
+            newColumns[source.droppableId] = newColumn;
 
-        const newState = {
-          ...state,
-          columns: newColumns,
-        };
-        setState(newState);
-      } else {
-        // Move to another column
-        const finishTasks = Array.from(finish.tasks);
-        finishTasks.splice(destination.index, 0, draggableId);
-        const destinationColumn: ColumnInterface = {
-          ...finish,
-          tasks: finishTasks,
-        };
-        const sourceColumn: ColumnInterface = {
-          ...start,
-          tasks: startTasks,
-        };
+            const newState = {
+              ...state,
+              columns: newColumns,
+            };
+            setState(newState);
+          } else {
+            // Move to another column
+            const finishTasks = state.mockData.columns[finish._id].cards;
+            finishTasks.splice(destination.index, 0, draggableId);
+            const destinationColumn: ColumnInterface = {
+              ...finish,
+              cards: finishTasks,
+            };
+            const sourceColumn: ColumnInterface = {
+              ...start,
+              cards: startTasks,
+            };
 
-        const newColumns = state.mockData.columns;
-        newColumns[destination.droppableId] = destinationColumn;
-        newColumns[source.droppableId] = sourceColumn;
+            const newColumns = state.mockData.columns;
+            newColumns[destination.droppableId] = destinationColumn;
+            newColumns[source.droppableId] = sourceColumn;
 
-        const newState = {
-          ...state,
-          columns: newColumns,
-        };
-        setState(newState);
+            const newState = {
+              ...state,
+              columns: newColumns,
+            };
+            setState(newState);
+          }
+        }
       }
-      */
     }
   };
 
