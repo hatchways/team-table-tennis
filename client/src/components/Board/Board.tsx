@@ -122,6 +122,7 @@ const Board: React.FunctionComponent = () => {
               ...state,
               columns: newColumns,
             };
+            moveCardToAnotherColumn(start._id, start._id, start.cards, start.cards);
             setState(newState);
           } else {
             // Move to another column
