@@ -154,6 +154,8 @@ const ColumnTitle: React.FunctionComponent<titleProperties> = (props) => {
     editValue: props.Column?.title,
   });
 
+  console.log(state.Column);
+
   const doubleClick = () => {
     setState({ ...state, editing: true });
   };
@@ -172,7 +174,7 @@ const ColumnTitle: React.FunctionComponent<titleProperties> = (props) => {
   if (state.editing) {
     return (
       <Input
-        defaultValue={state.Column?.title}
+        defaultValue={state.Column!.title}
         onChange={(event) => {
           change(event.target.value);
         }}

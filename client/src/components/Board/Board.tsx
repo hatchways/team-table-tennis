@@ -25,6 +25,7 @@ import { useEffect } from 'react';
 import { Card as CardInterface, Cards } from '../../interface/CardApi';
 import { moveCardToAnotherColumn, moveColumn } from '../../helpers/APICalls/board';
 import { createCard } from '../../helpers/APICalls/cards';
+import { createColumn } from '../../helpers/APICalls/columns';
 const Board: React.FunctionComponent = () => {
   const { loggedInUserBoard: userBoard } = useAuthBoard();
 
@@ -160,16 +161,7 @@ const Board: React.FunctionComponent = () => {
   };
 
   const addTask = (columnId: string) => {
-    //const taskId = 'task-' + (Object.keys(state.mockData.tasks).length + 1);
-    //const mockData = state.mockData;
-    //mockData.tasks = {
-    //  ...mockData.tasks,
-    //  [taskId]: { name: 'Add title...', date: '', color: '#ffffff', id: taskId, isNew: true },
-    //};
-    //mockData.columns[columnId].tasks.push(taskId);
-    //setState({ ...state, mockData });
     createCard('Add title...', '', columnId).then((cardData) => {
-      //const id = card.._id;
       const card: CardInterface = {
         _id: cardData.card._id,
         date: '',
@@ -199,8 +191,7 @@ const Board: React.FunctionComponent = () => {
     setState({ ...state, newColumnTitle: value });
   };
   const createNewColumn = () => {
-    /*
-    const mockData = state.mockData;
+    /*const mockData = state.mockData;
     const newColumnId = 'col-' + (mockData.columnOrder.length + 1);
     mockData.columns = {
       ...mockData.columns,
@@ -209,6 +200,24 @@ const Board: React.FunctionComponent = () => {
     mockData.columnOrder.push(newColumnId);
     setState({ ...state, newColumnTitle: '', mockData: mockData });
     */
+    if (state.mockData) {
+      createColumn(state.newColumnTitle, state.mockData?.board._id).then((columnData) => {
+        const column: ColumnInterface = {
+          _id: columnData.column._id,
+          title: columnData.column.title,
+          cards: [],
+        };
+        const mockData = state.mockData;
+        if (mockData) {
+          mockData.columns = {
+            ...mockData.columns,
+            [column._id]: column,
+          };
+          mockData.board.columns.push(column._id);
+          setState({ ...state, mockData: mockData });
+        }
+      });
+    }
   };
 
   const deleteColumn = (columnId: string) => {
