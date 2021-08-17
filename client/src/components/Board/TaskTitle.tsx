@@ -32,6 +32,7 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
       if (task) {
         task.title = state.value;
         setState({ ...state, isEditing: false, Task: task });
+        console.log(state.Task?.title);
         if (state.Task?.cardDetails.color !== props.newColor) {
           quickUpdate(task._id, task.title, task.cardDetails.color);
         }

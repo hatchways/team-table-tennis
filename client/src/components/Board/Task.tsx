@@ -9,6 +9,7 @@ import { FiberManualRecord } from '@material-ui/icons';
 import { Card as TaskInterface } from '../../interface/CardApi';
 import TaskTitle from './TaskTitle';
 import { quickUpdate } from '../../helpers/APICalls/cards';
+import { useAuthBoard } from '../../context/useAuthBoardContext';
 
 interface properties {
   task: TaskInterface | undefined;
@@ -22,6 +23,8 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
     task: props.task,
   });
 
+  const { loggedInUserBoard: userBoard } = useAuthBoard();
+
   const task = state.task;
 
   const classes = useStyles();
@@ -32,6 +35,9 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
       task.cardDetails.color = color;
       if (task.cardDetails.color !== colors[0]) {
         quickUpdate(task._id, task.title, task.cardDetails.color);
+        if (userBoard) {
+          userBoard.cards[task._id].title = task.title;
+        }
       }
     }
     setState({ ...state, task: task });

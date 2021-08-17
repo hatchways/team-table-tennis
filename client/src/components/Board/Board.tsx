@@ -48,8 +48,6 @@ const Board: React.FunctionComponent = () => {
   const onDragUpdate = (result: DragUpdate) => {
     const { draggableId } = result;
 
-    console.log(draggableId);
-
     const dom = document.getElementsByClassName('taskClass-' + draggableId)[0];
 
     if (!dom) {
