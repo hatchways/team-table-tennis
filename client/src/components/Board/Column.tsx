@@ -154,8 +154,6 @@ const ColumnTitle: React.FunctionComponent<titleProperties> = (props) => {
     editValue: props.Column?.title,
   });
 
-  console.log(state.Column);
-
   const doubleClick = () => {
     setState({ ...state, editing: true });
   };

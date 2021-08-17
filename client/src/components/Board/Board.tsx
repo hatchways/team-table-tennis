@@ -25,7 +25,7 @@ import { useEffect } from 'react';
 import { Card as CardInterface, Cards } from '../../interface/CardApi';
 import { moveCardToAnotherColumn, moveColumn } from '../../helpers/APICalls/board';
 import { createCard } from '../../helpers/APICalls/cards';
-import { createColumn } from '../../helpers/APICalls/columns';
+import { createColumn, deleteColumnApi } from '../../helpers/APICalls/columns';
 const Board: React.FunctionComponent = () => {
   const { loggedInUserBoard: userBoard } = useAuthBoard();
 
@@ -191,15 +191,6 @@ const Board: React.FunctionComponent = () => {
     setState({ ...state, newColumnTitle: value });
   };
   const createNewColumn = () => {
-    /*const mockData = state.mockData;
-    const newColumnId = 'col-' + (mockData.columnOrder.length + 1);
-    mockData.columns = {
-      ...mockData.columns,
-      [newColumnId]: { title: state.newColumnTitle, _id: newColumnId, tasks: [] },
-    };
-    mockData.columnOrder.push(newColumnId);
-    setState({ ...state, newColumnTitle: '', mockData: mockData });
-    */
     if (state.mockData) {
       createColumn(state.newColumnTitle, state.mockData?.board._id).then((columnData) => {
         const column: ColumnInterface = {
@@ -221,15 +212,16 @@ const Board: React.FunctionComponent = () => {
   };
 
   const deleteColumn = (columnId: string) => {
-    /*
     const mockData = state.mockData;
-    mockData.columnOrder.splice(mockData.columnOrder.indexOf(columnId), 1);
-    mockData.columns[columnId].tasks.forEach((task) => {
-      delete mockData.tasks[columnId];
-    });
-    delete mockData.columns[columnId];
-    setState({ ...state, mockData: mockData });
-    */
+    if (mockData) {
+      mockData.board.columns.splice(mockData.board.columns.indexOf(columnId), 1);
+      mockData.columns[columnId].cards.forEach((card) => {
+        delete mockData.cards[card];
+      });
+      delete mockData.columns[columnId];
+      setState({ ...state, mockData: mockData });
+      deleteColumnApi(columnId, mockData.board._id);
+    }
   };
 
   const fillOutTasks = (columId: string) => {

@@ -150,9 +150,38 @@ exports.createCard = asyncHandler(async (req, res) => {
   })
 })
 
+exports.deleteColumn = asyncHandler(async ( req, res) => {
+  const { columnId, boardId } = req.body;
+
+  const board = await Board.findById(boardId);
+  board.columns.splice(board.columns.indexOf(columnId), 1);
+  await Board.findByIdAndUpdate(boardId, board);
+  await deleteAllCardsInsideColumn(columnId);
+
+  await Column.findByIdAndDelete(
+    columnId,
+  )
+  .exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    }
+    else {
+      res.status(200).json(result);
+    }
+  })
+})
+
+deleteAllCardsInsideColumn = asyncHandler(async (columnId) => {
+  console.log("inside delete 2");
+
+  const column = await Column.findById(columnId);
+  for(const card of column.cards){
+    await Card.findByIdAndDelete(card._id);
+  }
+})
+
 getCardsColums = asyncHandler(async (board, columns) => {
   let cards = {};
-  //console.log(columns);
   for(const columnId of board.columns){
     const column = columns[columnId];
     for(const cardId of column.cards){
@@ -297,7 +326,6 @@ exports.createDetails = asyncHandler(async (req, res) => {
 
 exports.quickUpdateCard = asyncHandler(async (req, res) =>{
   const {cardId ,title, color } = req.body;
-  console.log("inside update: " + cardId);
   await Card.findByIdAndUpdate(cardId,
     {
       $set: {
