@@ -40,9 +40,7 @@ export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element 
         userBoard.board = data.board;
         userBoard.cards = data.cards;
         userBoard.columns = data.columns;
-        console.log('setting');
-        console.log('board ' + JSON.stringify(userBoard));
-
+        console.log(userBoard);
         setLoggedInUserBoard(userBoard);
 
         history.push('/dashboard');

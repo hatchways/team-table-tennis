@@ -1,9 +1,16 @@
 export interface Card {
-  name: string;
+  title: string;
   date: string;
-  color: string;
   _id: string;
   isNew: boolean;
+  description: string;
+  cardDetails: CardDetails;
+}
+export interface CardDetails {
+  color: string;
+  tags: string[];
+  deadLine: Date;
+  attatchment: string;
 }
 export interface Cards {
   [key: string]: Card;

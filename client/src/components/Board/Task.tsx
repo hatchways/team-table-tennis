@@ -27,7 +27,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
   const changeColor = (color: string) => {
     const task = state.task;
     if (task) {
-      task.color = color;
+      task.cardDetails.color = color;
       task.isNew = false;
     }
     setState({ ...state, task: task });
@@ -55,7 +55,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
                   <div>
                     <RemoveRoundedIcon
                       style={{ transform: 'scale(4)', width: 50 }}
-                      htmlColor={state.task?.color}
+                      htmlColor={state.task?.cardDetails.color}
                     ></RemoveRoundedIcon>
                     <br></br>
                     <Typography variant="h6" component="div">

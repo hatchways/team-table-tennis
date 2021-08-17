@@ -22,13 +22,10 @@ import CloseIcon from '@material-ui/icons/Close';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import useStyles from './useStyles';
 import { useEffect } from 'react';
+import { Cards } from '../../interface/CardApi';
 const Board: React.FunctionComponent = () => {
   const { loggedInUserBoard: userBoard } = useAuthBoard();
 
-  useEffect(() => {
-    console.log(state.mockData?.cards);
-    //console.log('use effect: ' + JSON.stringify(state.mockData));
-  });
   //const { board, updateBoardContext } = useContext(BoardContext);
   const taskPlaceHolder: TaskPlaceHolder = { clientHeight: 0, clientWidth: 0, clientX: 0, clientY: 0 };
   const classes = useStyles();
@@ -195,6 +192,26 @@ const Board: React.FunctionComponent = () => {
     setState({ ...state, mockData: mockData });
     */
   };
+
+  const fillOutTasks = (columId: string) => {
+    let tasks: Cards = {};
+    state.mockData?.columns[columId].cards.map((taskId: string) => {
+      const task = state.mockData?.cards[taskId];
+      if (task !== undefined)
+        tasks = {
+          ...tasks,
+          [task._id]: {
+            _id: task._id,
+            title: task.title,
+            date: task.date,
+            isNew: false,
+            description: task.description,
+            cardDetails: task.cardDetails,
+          },
+        };
+    });
+    return tasks;
+  };
   if (state.mockData === undefined || state.mockData?.columns === undefined || state.mockData?.cards === undefined) {
     return <React.Fragment></React.Fragment>;
   } else {
@@ -222,7 +239,7 @@ const Board: React.FunctionComponent = () => {
                       <Column
                         Column={state.mockData?.columns[Id]}
                         key={Id}
-                        Tasks={state.mockData?.columns[Id].cards.map((task: string) => state.mockData?.cards[task])}
+                        Tasks={fillOutTasks(Id)}
                         index={index}
                         placeHolderStyle={state.taskPlaceHolder}
                         addTask={addTask}

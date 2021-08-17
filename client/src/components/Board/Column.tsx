@@ -3,14 +3,14 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import useStyles from './useStyles';
 import Task from './Task';
 import { Column as ColumnInterface } from '../../interface/ColumnApi';
-import { Card as TaskInterface, TaskPlaceHolder } from '../../interface/CardApi';
+import { Cards as TasksInterface, Card as TaskInterface, TaskPlaceHolder } from '../../interface/CardApi';
 import { useState } from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 export interface properties {
   placeHolderStyle: TaskPlaceHolder;
   Column: ColumnInterface | undefined;
   index: number;
-  Tasks: (TaskInterface | undefined)[] | undefined;
+  Tasks: TasksInterface | undefined;
   addTask: (columnId: string) => void;
   delete: (columnId: string) => void;
   taskDialog: (taskId: string) => void;
@@ -25,6 +25,8 @@ const Column: React.FunctionComponent<properties> = (props) => {
     //Tasks: props.Tasks,
     //TaskOrder: props.TaskOrder,
   });
+  console.log(props.Tasks);
+
   const classes = useStyles();
   const setVisable = (visible: number) => {
     setState({ ...state, visible });
@@ -65,80 +67,84 @@ const Column: React.FunctionComponent<properties> = (props) => {
     if (props.Column) props.delete(props.Column._id);
   };
 
-  if (props.Column) {
-    return (
-      <>
-        <Draggable draggableId={props.Column._id} index={props.index}>
-          {(provided) => (
-            <Card
-              className={classes.column}
-              {...provided.draggableProps}
-              ref={provided.innerRef}
-              onMouseOver={() => onMouseEnter()}
-              onMouseLeave={onMouseLeave}
-              onMouseUp={onMouseUp}
-              id={props.Column?._id}
-            >
-              <CardHeader
-                title={<ColumnTitle Column={props.Column}></ColumnTitle>}
-                titleTypographyProps={{ variant: 'h5' }}
-                className={classes.columnTitle}
-                {...provided.dragHandleProps}
-                action={<DeleteIcon className={classes.deleteIcon} onClick={deleteColumn}></DeleteIcon>}
-              ></CardHeader>
-              <Droppable droppableId={'' + props.Column?._id} type="task">
-                {(provided, snapshot) => (
-                  <CardContent ref={provided.innerRef} {...provided.droppableProps}>
-                    {provided.placeholder}
-                    <div
+  return (
+    <>
+      <Draggable draggableId={props.Column!._id} index={props.index}>
+        {(provided) => (
+          <Card
+            className={classes.column}
+            {...provided.draggableProps}
+            ref={provided.innerRef}
+            onMouseOver={() => onMouseEnter()}
+            onMouseLeave={onMouseLeave}
+            onMouseUp={onMouseUp}
+            id={props.Column?._id}
+          >
+            <CardHeader
+              title={<ColumnTitle Column={props.Column}></ColumnTitle>}
+              titleTypographyProps={{ variant: 'h5' }}
+              className={classes.columnTitle}
+              {...provided.dragHandleProps}
+              action={<DeleteIcon className={classes.deleteIcon} onClick={deleteColumn}></DeleteIcon>}
+            ></CardHeader>
+            <Droppable droppableId={'' + props.Column?._id} type="task">
+              {(provided, snapshot) => (
+                <CardContent ref={provided.innerRef} {...provided.droppableProps}>
+                  {props.Column?.cards.map((taskId: string, index: number) => (
+                    <Task
+                      key={props.Tasks![taskId]._id}
+                      task={props.Tasks![taskId]}
+                      index={index}
+                      isNew={props.Tasks![taskId].isNew}
+                    ></Task>
+                  ))}
+                  {provided.placeholder}
+                  <div
+                    style={{
+                      top: props.placeHolderStyle.clientY,
+                      height: props.placeHolderStyle.clientHeight,
+                      width: props.placeHolderStyle.clientWidth,
+                      position: 'absolute',
+                      zIndex: state.visible,
+                    }}
+                    hidden={!snapshot.isDraggingOver}
+                  >
+                    <Card
+                      elevation={0}
                       style={{
                         top: props.placeHolderStyle.clientY,
+                        left: props.placeHolderStyle.clientX,
                         height: props.placeHolderStyle.clientHeight,
                         width: props.placeHolderStyle.clientWidth,
-                        position: 'absolute',
+                        position: 'static',
                         zIndex: state.visible,
+                        backgroundColor: '#E5ECFC',
                       }}
+                      id={'placeholder-' + props.Column?._id}
                       hidden={!snapshot.isDraggingOver}
-                    >
-                      <Card
-                        elevation={0}
-                        style={{
-                          top: props.placeHolderStyle.clientY,
-                          left: props.placeHolderStyle.clientX,
-                          height: props.placeHolderStyle.clientHeight,
-                          width: props.placeHolderStyle.clientWidth,
-                          position: 'static',
-                          zIndex: state.visible,
-                          backgroundColor: '#E5ECFC',
-                        }}
-                        id={'placeholder-' + props.Column?._id}
-                        hidden={!snapshot.isDraggingOver}
-                      ></Card>
-                    </div>
-                  </CardContent>
-                )}
-              </Droppable>
-              <CardActions>
-                <Button
-                  variant="contained"
-                  id={'button-' + props.Column?._id}
-                  style={{ marginLeft: 10, marginBottom: 10, zIndex: 2, backgroundColor: '#759CFC', color: 'white' }}
-                  onClick={addCard}
-                >
-                  Add a card
-                </Button>
-              </CardActions>
-            </Card>
-          )}
-        </Draggable>
-        <Modal open={state.isModelOpen} onClose={modelClose}>
-          <Card></Card>
-        </Modal>
-      </>
-    );
-  } else {
-    return <></>;
-  }
+                    ></Card>
+                  </div>
+                </CardContent>
+              )}
+            </Droppable>
+            <CardActions>
+              <Button
+                variant="contained"
+                id={'button-' + props.Column?._id}
+                style={{ marginLeft: 10, marginBottom: 10, zIndex: 2, backgroundColor: '#759CFC', color: 'white' }}
+                onClick={addCard}
+              >
+                Add a card
+              </Button>
+            </CardActions>
+          </Card>
+        )}
+      </Draggable>
+      <Modal open={state.isModelOpen} onClose={modelClose}>
+        <Card></Card>
+      </Modal>
+    </>
+  );
 };
 
 export default Column;
