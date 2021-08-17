@@ -47,33 +47,12 @@ exports.getBoardFull = asyncHandler(async (req, res) => {
   
 
   const board = await Board.findById(boardId);
-  /*const columns = await Promise.all(board.columns.map(async (id) => {
-    let column = {};
-    const doc = await Column.findById(id);
-    column[doc._id] = doc;
-    return column;
-  }));
-  */
+  
  const columns = await getColumsAsObject(board);
 
 
   const cards = await getCardsColums(board, columns);
-  /*await Promise.all (columns.map( async column => {
-    console.log("cards");
 
-    cards = await Promise.all( (column.cards.map(async (id) => {
-    console.log("col: " + id);
-
-      const doc = await Card.findById(id);
-      console.log("doc: " + doc)
-      cards[doc._id] = doc;
-
-    })));
-
-    console.log("card" + cards);
-
-  }));
-  */
 
 
 

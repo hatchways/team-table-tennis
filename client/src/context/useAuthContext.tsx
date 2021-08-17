@@ -4,12 +4,7 @@ import { AuthApiData, AuthApiDataSuccess } from '../interface/AuthApiData';
 import { User } from '../interface/User';
 import { loginWithCookies } from '../helpers/APICalls/loginWithCookies';
 import logoutAPI from '../helpers/APICalls/logout';
-
-interface IAuthContext {
-  loggedInUser: User | null | undefined;
-  updateLoginContext: (data: AuthApiDataSuccess) => void;
-  logout: () => void;
-}
+import IAuthContext from '../interface/IAuthContext';
 
 export const AuthContext = createContext<IAuthContext>({
   loggedInUser: undefined,

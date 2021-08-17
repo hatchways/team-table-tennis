@@ -8,8 +8,7 @@ export interface IBoardContext {
   updateBoardContexts: (data: any) => void;
 }
 
-export const BoardApi = async (): Promise<Boards> => {
-  const boardId = '6114745022197a8d30dc040c';
+export const BoardApi = async (boardId: string): Promise<Boards> => {
   return await fetch('/boards/' + boardId, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
@@ -68,26 +67,3 @@ export const moveCardToAnotherColumn = async (
       error: { message: 'unable to connext to server' },
     }));
 };
-
-export const BoardContext = createContext<IBoardContext>({
-  board: undefined,
-  updateBoardContexts: () => null,
-});
-
-export const BoardProvider: FunctionComponent = ({ children }): JSX.Element => {
-  const [board, setBoard] = useState<Board | null | undefined>();
-
-  const updateBoardContexts = useCallback(
-    (data: Board) => {
-      setBoard(data);
-    },
-
-    [],
-  );
-
-  return <BoardContext.Provider value={{ board, updateBoardContexts }}>{children}</BoardContext.Provider>;
-};
-
-export function useBoard(): IBoardContext {
-  return useContext(BoardContext);
-}

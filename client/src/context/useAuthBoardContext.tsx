@@ -4,16 +4,11 @@ import { AuthBoardApiData, AuthBoardApiDataSuccess } from '../interface/AuthBoar
 import { loginWithCookiesBoard } from '../helpers/APICalls/loginWithCookies';
 import logoutAPI from '../helpers/APICalls/logout';
 import { UserBoard } from '../interface/UserBoard';
-import { BoardApi, GetAllBoard } from '../helpers/APICalls/board';
+import { GetAllBoard } from '../helpers/APICalls/board';
 import { CompleteBoard } from '../interface/BoardApi';
+import IAuthBoardContext from '../interface/IAuthBoardContext';
 
-export interface IAuthContext {
-  loggedInUserBoard: UserBoard | null | undefined;
-  updateLoginContext: (data: AuthBoardApiDataSuccess) => void;
-  logout: () => void;
-}
-
-export const AuthBoardContext = createContext<IAuthContext>({
+export const AuthBoardContext = createContext<IAuthBoardContext>({
   loggedInUserBoard: { user: undefined, board: { _id: '-1', title: '', columns: [] }, columns: {}, cards: {} },
   updateLoginContext: () => null,
   logout: () => null,
@@ -80,6 +75,6 @@ export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element 
   );
 };
 
-export function useAuthBoard(): IAuthContext {
+export function useAuthBoard(): IAuthBoardContext {
   return useContext(AuthBoardContext);
 }
