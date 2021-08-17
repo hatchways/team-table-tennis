@@ -37,3 +37,12 @@ export const deleteColumnApi = async (columnId: string, boardId: string): Promis
       error: { message: 'Unable to connect to server. Please try again ' + e },
     }));
 };
+
+export const updateColumnName = async (columnId: string, title: string): Promise<any> => {
+  return await fetch('/boards/columns', {
+    method: 'PUT',
+    body: JSON.stringify({ columnId, title }),
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    mode: 'cors',
+  }).then((res) => res.json());
+};
