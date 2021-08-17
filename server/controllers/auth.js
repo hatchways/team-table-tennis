@@ -28,17 +28,14 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     email,
     password
   });
-  console.log("create board");
 
   const inProgress = new Column({ title: 'In Progress' });
   const completed = new Column({ title : 'Completed' }); 
   
   await inProgress.save();
   await completed.save();
-  console.log("right before board");
   const defaultBoard = new Board({ title: 'My Board', columns: [inProgress._id, completed._id]});
   await defaultBoard.save();
-  console.log("after board");
   user.boards.push(defaultBoard._id);
   if (user) {
     const token = generateToken(user._id);
@@ -76,7 +73,6 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   if (user && (await user.matchPassword(password))) {
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
-    console.log(token);
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: secondsInWeek * 1000

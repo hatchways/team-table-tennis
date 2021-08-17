@@ -5,23 +5,23 @@ import Grid from '@material-ui/core/Grid';
 import { FormikHelpers } from 'formik';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
-import register from '../../helpers/APICalls/register';
+import { registerBoard } from '../../helpers/APICalls/register';
 import SignUpForm from './SignUpForm/SignUpForm';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
-import { useAuth } from '../../context/useAuthContext';
+import { useAuthBoard } from '../../context/useAuthBoardContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import BgImg from '../../components/BgImg/BgImg';
 
 export default function Register(): JSX.Element {
   const classes = useStyles();
-  const { updateLoginContext } = useAuth();
+  const { updateLoginContext } = useAuthBoard();
   const { updateSnackBarMessage } = useSnackBar();
 
   const handleSubmit = (
     { username, email, password }: { email: string; password: string; username: string },
     { setSubmitting }: FormikHelpers<{ email: string; password: string; username: string }>,
   ) => {
-    register(username, email, password).then((data) => {
+    registerBoard(username, email, password).then((data) => {
       if (data.error) {
         console.error({ error: data.error.message });
         setSubmitting(false);
