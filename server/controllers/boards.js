@@ -127,11 +127,22 @@ exports.getColumns = asyncHandler(async (req, res) => {
 
 exports.updateColumn = asyncHandler(async (req, res) => {
   const { id, title, cards } = req.body;
-  const filter = { _id : id };
-  const update = { title, cards };
-  await Column.findOneAndUpdate(filter, update);
-  res.status(200);
+
+  await Column.findByIdAndUpdate(id,
+    {
+      $set: {
+      title,
+      cards
+          },
+  }).exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    } else {
+      res.status(200).json(result);
+    }  });
 })
+
+
 
 exports.createCard = asyncHandler(async (req, res) => {
   const { title, description, columnId } = req.body;
@@ -172,7 +183,6 @@ exports.deleteColumn = asyncHandler(async ( req, res) => {
 })
 
 deleteAllCardsInsideColumn = asyncHandler(async (columnId) => {
-  console.log("inside delete 2");
 
   const column = await Column.findById(columnId);
   for(const card of column.cards){

@@ -6,7 +6,7 @@ import { Column as ColumnInterface } from '../../interface/ColumnApi';
 import { Cards as TasksInterface, Card as TaskInterface, TaskPlaceHolder } from '../../interface/CardApi';
 import { useState } from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { updateColumnName } from '../../helpers/APICalls/columns';
+import { updateColumn } from '../../helpers/APICalls/columns';
 export interface properties {
   placeHolderStyle: TaskPlaceHolder;
   Column: ColumnInterface | undefined;
@@ -164,8 +164,8 @@ const ColumnTitle: React.FunctionComponent<titleProperties> = (props) => {
       const Column = state.Column;
       if (Column && state.editValue) {
         Column.title = state.editValue;
-        updateColumnName(Column._id, Column.title);
       }
+      updateColumn(Column!._id, Column!.cards, Column!.title);
       setState({ ...state, editing: false, Column: Column });
     }
   };

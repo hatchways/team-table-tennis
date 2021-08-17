@@ -38,10 +38,10 @@ export const deleteColumnApi = async (columnId: string, boardId: string): Promis
     }));
 };
 
-export const updateColumnName = async (columnId: string, title: string): Promise<any> => {
+export const updateColumn = async (id: string, cards: string[], title: string): Promise<any> => {
   return await fetch('/boards/columns', {
     method: 'PUT',
-    body: JSON.stringify({ columnId, title }),
+    body: JSON.stringify({ id, title, cards }),
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
     mode: 'cors',
   }).then((res) => res.json());
