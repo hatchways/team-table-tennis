@@ -13,6 +13,9 @@ const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const boardsRouter = require("./routes/boards");
 
+const agendaStart = require("./agenda");
+let deadLineUsers;
+
 const { json, urlencoded } = express;
 
 connectDB();
@@ -46,6 +49,10 @@ app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/boards", boardsRouter);
 
+
+
+agendaStart(deadLineUsers);
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "/client/build")));
 
@@ -67,5 +74,14 @@ process.on("unhandledRejection", (err, promise) => {
   // Close server & exit process
   server.close(() => process.exit(1));
 });
+
+function FindDeadlineUsers(db){
+  let currDate = new Date(); 
+  deadLineUsers = db.collections.find({
+    "cardDetails":{
+      "Deadline" : `${currDate}`
+    }
+  })
+}
 
 module.exports = { app, server };
