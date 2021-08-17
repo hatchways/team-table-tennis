@@ -21,8 +21,7 @@ export const BoardApi = async (): Promise<Boards> => {
     }));
 };
 
-export const GetAllBoard = async (): Promise<CompleteBoard> => {
-  const boardId = '6114745022197a8d30dc040c';
+export const GetAllBoard = async (boardId: string): Promise<CompleteBoard> => {
   return await fetch('/boards/full/' + boardId, {
     method: 'GET',
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },

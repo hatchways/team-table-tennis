@@ -23,11 +23,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     throw new Error("A user with that username already exists");
   }
 
-  const user = await User.create({
-    username,
-    email,
-    password
-  });
 
   const inProgress = new Column({ title: 'In Progress' });
   const completed = new Column({ title : 'Completed' }); 
@@ -36,7 +31,12 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   await completed.save();
   const defaultBoard = new Board({ title: 'My Board', columns: [inProgress._id, completed._id]});
   await defaultBoard.save();
-  user.boards.push(defaultBoard._id);
+  const user = await User.create({
+    username,
+    email,
+    password,
+    boards: [defaultBoard._id]
+  });
   if (user) {
     const token = generateToken(user._id);
     const secondsInWeek = 604800;

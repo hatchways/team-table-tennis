@@ -34,7 +34,7 @@ export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element 
       };
 
       userBoard.user = data.user;
-      GetAllBoard().then((data: CompleteBoard) => {
+      GetAllBoard(userBoard.user.boards[0]).then((data: CompleteBoard) => {
         userBoard.board = data.board;
         userBoard.cards = data.cards;
         userBoard.columns = data.columns;
