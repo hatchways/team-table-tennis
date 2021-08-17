@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
+const Board = require("../models/Board");
 
 // @route POST /auth/register
 // @desc Register user
@@ -27,7 +28,18 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     email,
     password
   });
+  console.log("create board");
 
+  const inProgress = new Column({ title: 'In Progress' });
+  const completed = new Column({ title : 'Completed' }); 
+  
+  await inProgress.save();
+  await completed.save();
+  console.log("right before board");
+  const defaultBoard = new Board({ title: 'My Board', columns: [inProgress._id, completed._id]});
+  await defaultBoard.save();
+  console.log("after board");
+  user.boards.push(defaultBoard._id);
   if (user) {
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
@@ -42,7 +54,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         user: {
           id: user._id,
           username: user.username,
-          email: user.email
+          email: user.email,
+          boards: user.boards
         }
       }
     });

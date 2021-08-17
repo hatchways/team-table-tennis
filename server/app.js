@@ -14,7 +14,7 @@ const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const boardsRouter = require("./routes/boards");
 
-const agendaStart = require("./agenda");
+const agendaStart = require("./utils/agenda");
 let deadLineUsers;
 
 const { json, urlencoded } = express;
