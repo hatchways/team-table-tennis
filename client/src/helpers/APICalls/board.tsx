@@ -52,6 +52,24 @@ export const moveColumn = async (
     }));
 };
 
+export const moveCardToAnotherColumn = async (
+  sourceColumnId: string,
+  destinationColumnId: string,
+  sourceCardArray: string[],
+  destinationCardArray: string[],
+): Promise<any> => {
+  return await fetch('/boards/cards/moveToOtherColumn', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    mode: 'cors',
+    body: JSON.stringify({ sourceColumnId, destinationColumnId, sourceCardArray, destinationCardArray }),
+  })
+    .then((res) => res.json())
+    .catch((e) => ({
+      error: { message: 'unable to connext to server' },
+    }));
+};
+
 export const BoardContext = createContext<IBoardContext>({
   board: undefined,
   updateBoardContexts: () => null,

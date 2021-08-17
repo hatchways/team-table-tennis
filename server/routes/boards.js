@@ -15,7 +15,8 @@ const {
   moveColumn,
   updateDetailsColor,
   getCard,
-  getDetails
+  getDetails,
+  moveCardToAnotherColumn
 } = require('../controllers/boards.js');
 const protect = require("../middleware/auth.js");
 const {
@@ -45,6 +46,7 @@ router.route("/columns").put(updateColumn, validateUpdateColumn);
 router.route("/cards/:columnId").get(getCards, validateGetCards);
 router.route("/cards").post(createCard, validateCreateCard);
 router.route("/cards/move").put(moveCard, validateMoveCard);
+router.route("/cards/moveToOtherColumn").put(moveCardToAnotherColumn);
 
 // Card Detail
 router.route("/cards/getDetail/:cardId").get(protect, getDetails);

@@ -23,7 +23,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import useStyles from './useStyles';
 import { useEffect } from 'react';
 import { Cards } from '../../interface/CardApi';
-import { moveColumn } from '../../helpers/APICalls/board';
+import { moveCardToAnotherColumn, moveColumn } from '../../helpers/APICalls/board';
 const Board: React.FunctionComponent = () => {
   const { loggedInUserBoard: userBoard } = useAuthBoard();
 
@@ -144,6 +144,13 @@ const Board: React.FunctionComponent = () => {
               columns: newColumns,
             };
             setState(newState);
+
+            moveCardToAnotherColumn(
+              sourceColumn._id,
+              destinationColumn._id,
+              sourceColumn.cards,
+              destinationColumn.cards,
+            );
           }
         }
       }

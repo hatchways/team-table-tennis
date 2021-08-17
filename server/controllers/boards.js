@@ -250,6 +250,18 @@ exports.moveCard = asyncHandler(async (req, res) => {
   res.sendStatus(200);
 })
 
+exports.moveCardToAnotherColumn = asyncHandler(async (req, res) => {
+  const {sourceColumnId, destinationColumnId, sourceCardArray, destinationCardArray } = req.body;
+  const source = await Column.findByIdAndUpdate(sourceColumnId, {cards: sourceCardArray});
+  const destination = await Column.findByIdAndUpdate(destinationColumnId, {cards: destinationCardArray});
+
+  if(source && destination){
+    res.status(200).json({
+      source, destination
+    })
+  }
+})
+
 exports.getDetails = asyncHandler(async (req, res) => {
   const cardId = req.params.cardID;
   const cardDetails = await Card.find({ _id: cardId })
