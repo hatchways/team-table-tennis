@@ -8,11 +8,11 @@ import { useState } from 'react';
 import { FiberManualRecord } from '@material-ui/icons';
 import { Card as TaskInterface } from '../../interface/CardApi';
 import TaskTitle from './TaskTitle';
+import { quickUpdate } from '../../helpers/APICalls/cards';
 
 interface properties {
   task: TaskInterface | undefined;
   index: number;
-  isNew: boolean;
 }
 
 const Task: React.FunctionComponent<properties> = (props: properties) => {
@@ -22,13 +22,17 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
     task: props.task,
   });
 
+  const task = state.task;
+
   const classes = useStyles();
 
   const changeColor = (color: string) => {
     const task = state.task;
     if (task) {
       task.cardDetails.color = color;
-      task.isNew = false;
+      if (task.cardDetails.color !== colors[0]) {
+        quickUpdate(task._id, task.title, task.cardDetails.color);
+      }
     }
     setState({ ...state, task: task });
   };
@@ -38,7 +42,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
       output += ' ' + classes.taskDragging;
     }
     if (state.task) {
-      if (state.task.isNew) {
+      if (state.task.cardDetails.color === colors[0]) {
         output += ' ' + classes.taskNew;
       }
     }
@@ -59,7 +63,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
                     ></RemoveRoundedIcon>
                     <br></br>
                     <Typography variant="h6" component="div">
-                      <TaskTitle Task={state.task}></TaskTitle>
+                      <TaskTitle Task={state.task} newColor={colors[0]}></TaskTitle>
                     </Typography>
                   </div>
                 }
@@ -69,7 +73,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
                   </Typography>
                 }
               ></CardHeader>
-              <Collapse in={state.task?.isNew}>
+              <Collapse in={state.task?.cardDetails.color === colors[0]}>
                 <CardContent>
                   <Divider></Divider>
                 </CardContent>

@@ -5,7 +5,6 @@ import { loginWithCookiesBoard } from '../helpers/APICalls/loginWithCookies';
 import logoutAPI from '../helpers/APICalls/logout';
 import { UserBoard } from '../interface/UserBoard';
 import { BoardApi, GetAllBoard } from '../helpers/APICalls/board';
-import getCards from '../helpers/APICalls/cards';
 import { CompleteBoard } from '../interface/BoardApi';
 
 export interface IAuthContext {
@@ -39,7 +38,7 @@ export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element 
         userBoard.board = data.board;
         userBoard.cards = data.cards;
         userBoard.columns = data.columns;
-        console.log(userBoard);
+        //console.log(userBoard);
         setLoggedInUserBoard(userBoard);
 
         history.push('/dashboard');

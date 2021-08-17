@@ -22,8 +22,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import useStyles from './useStyles';
 import { useEffect } from 'react';
-import { Cards } from '../../interface/CardApi';
+import { Card as CardInterface, Cards } from '../../interface/CardApi';
 import { moveCardToAnotherColumn, moveColumn } from '../../helpers/APICalls/board';
+import { createCard } from '../../helpers/APICalls/cards';
 const Board: React.FunctionComponent = () => {
   const { loggedInUserBoard: userBoard } = useAuthBoard();
 
@@ -158,15 +159,31 @@ const Board: React.FunctionComponent = () => {
   };
 
   const addTask = (columnId: string) => {
-    /*const taskId = 'task-' + (Object.keys(state.mockData.tasks).length + 1);
-    const mockData = state.mockData;
-    mockData.tasks = {
-      ...mockData.tasks,
-      [taskId]: { name: 'Add title...', date: '', color: '#ffffff', id: taskId, isNew: true },
-    };
-    mockData.columns[columnId].tasks.push(taskId);
-    setState({ ...state, mockData });
-    */
+    //const taskId = 'task-' + (Object.keys(state.mockData.tasks).length + 1);
+    //const mockData = state.mockData;
+    //mockData.tasks = {
+    //  ...mockData.tasks,
+    //  [taskId]: { name: 'Add title...', date: '', color: '#ffffff', id: taskId, isNew: true },
+    //};
+    //mockData.columns[columnId].tasks.push(taskId);
+    //setState({ ...state, mockData });
+    createCard('Add title...', '', columnId).then((cardData) => {
+      //const id = card.._id;
+      const card: CardInterface = {
+        _id: cardData.card._id,
+        date: '',
+        title: cardData.card.title,
+        description: 'test',
+        cardDetails: cardData.card.cardDetails,
+      };
+      const mockData = state.mockData;
+      if (mockData) {
+        mockData.cards = { ...mockData.cards, [card._id]: card };
+        mockData.columns[columnId].cards.push(card._id);
+        setState({ ...state, mockData: mockData });
+      }
+      //console.log('Id: ' + id);
+    });
   };
 
   const newColumn = () => {
@@ -216,7 +233,6 @@ const Board: React.FunctionComponent = () => {
             _id: task._id,
             title: task.title,
             date: task.date,
-            isNew: false,
             description: task.description,
             cardDetails: task.cardDetails,
           },

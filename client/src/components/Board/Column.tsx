@@ -31,6 +31,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
     setState({ ...state, visible });
   };
   const onMouseEnter = () => {
+    /*
     if (props.Column) {
       const placeHolder = document.getElementById('placeholder-' + props.Column._id);
       const column = document.getElementById(props.Column._id);
@@ -46,9 +47,10 @@ const Column: React.FunctionComponent<properties> = (props) => {
         setVisable(1);
       }
     }
+    */
   };
   const onMouseLeave = () => {
-    setVisable(-1);
+    //setVisable(-1);
   };
   const onMouseUp = () => {
     setVisable(-1);
@@ -90,12 +92,7 @@ const Column: React.FunctionComponent<properties> = (props) => {
               {(provided, snapshot) => (
                 <CardContent ref={provided.innerRef} {...provided.droppableProps}>
                   {props.Column?.cards.map((taskId: string, index: number) => (
-                    <Task
-                      key={props.Tasks![taskId]._id}
-                      task={props.Tasks![taskId]}
-                      index={index}
-                      isNew={props.Tasks![taskId].isNew}
-                    ></Task>
+                    <Task key={props.Tasks![taskId]._id} task={props.Tasks![taskId]} index={index}></Task>
                   ))}
                   {provided.placeholder}
                   <div

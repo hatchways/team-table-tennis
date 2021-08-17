@@ -2,7 +2,6 @@ export interface Card {
   title: string;
   date: string;
   _id: string;
-  isNew: boolean;
   description: string;
   cardDetails: CardDetails;
 }

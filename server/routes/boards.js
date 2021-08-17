@@ -13,6 +13,7 @@ const {
   createDetails,
   updateDetails,
   moveColumn,
+  quickUpdateCard,
   updateDetailsColor,
   getCard,
   getDetails,
@@ -47,6 +48,7 @@ router.route("/cards/:columnId").get(getCards, validateGetCards);
 router.route("/cards").post(createCard, validateCreateCard);
 router.route("/cards/move").put(moveCard, validateMoveCard);
 router.route("/cards/moveToOtherColumn").put(moveCardToAnotherColumn);
+router.route("/cards/quickUpdate").put(quickUpdateCard);
 
 // Card Detail
 router.route("/cards/getDetail/:cardId").get(protect, getDetails);

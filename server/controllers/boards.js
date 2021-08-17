@@ -146,7 +146,7 @@ exports.createCard = asyncHandler(async (req, res) => {
   column.cards.push(card._id);
   await column.save();
   res.status(201).json({
-    cardId: card._id
+     card
   })
 })
 
@@ -294,6 +294,23 @@ exports.createDetails = asyncHandler(async (req, res) => {
     }
   })
 })
+
+exports.quickUpdateCard = asyncHandler(async (req, res) =>{
+  const {cardId ,title, color } = req.body;
+  console.log("inside update: " + cardId);
+  await Card.findByIdAndUpdate(cardId,
+    {$set: {
+      title,
+      color
+    }}
+   ).exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    } else {
+      res.status(200).json(result);
+    }  })
+});
+
 exports.updateDetails = asyncHandler(async (req, res) => {
   const { tags, color, deadLine, attachment, cardId, title } = req.body;
 

@@ -1,9 +1,11 @@
 import { Box, Input } from '@material-ui/core';
 import { useState } from 'react';
+import { quickUpdate } from '../../helpers/APICalls/cards';
 import { Card as Task } from '../../interface/CardApi';
 
 interface properties {
   Task: Task | undefined;
+  newColor: string;
 }
 const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   const [state, setState] = useState({
@@ -14,7 +16,7 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
 
   const startEditingTitle = () => {
     if (props.Task) {
-      if (props.Task.isNew) {
+      if (props.Task.cardDetails.color === props.newColor) {
         setState({ ...state, isEditing: true });
       }
     }
@@ -27,8 +29,13 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   const handleEnter = (key: string) => {
     if (key === 'Enter') {
       const task = state.Task;
-      if (task) task.title = state.value;
-      setState({ ...state, isEditing: false, Task: task });
+      if (task) {
+        task.title = state.value;
+        setState({ ...state, isEditing: false, Task: task });
+        if (state.Task?.cardDetails.color !== props.newColor) {
+          quickUpdate(task._id, task.title, task.cardDetails.color);
+        }
+      }
     }
   };
   if (state.isEditing) {
