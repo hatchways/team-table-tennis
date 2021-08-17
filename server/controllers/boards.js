@@ -299,10 +299,12 @@ exports.quickUpdateCard = asyncHandler(async (req, res) =>{
   const {cardId ,title, color } = req.body;
   console.log("inside update: " + cardId);
   await Card.findByIdAndUpdate(cardId,
-    {$set: {
+    {
+      $set: {
       title,
-      color
-    }}
+      "cardDetails.color": color
+          },
+  }
    ).exec((err, result) => {
     if (err) {
       return res.status(422).json({ error: err });
