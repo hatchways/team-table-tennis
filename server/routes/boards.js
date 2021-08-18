@@ -19,7 +19,8 @@ const {
   getDetails,
   moveCardToAnotherColumn,
   deleteColumn,
-  editCardDescription
+  editCardDescription,
+  editDeadLine
 } = require('../controllers/boards.js');
 const protect = require("../middleware/auth.js");
 const {
@@ -52,11 +53,13 @@ router.route("/cards").post(createCard, validateCreateCard);
 router.route("/cards/move").put(moveCard, validateMoveCard);
 router.route("/cards/moveToOtherColumn").put(moveCardToAnotherColumn);
 router.route("/cards/quickUpdate").put(quickUpdateCard);
-router.route("/cards/editDescription").put(editCardDescription);
 
 // Card Detail
 router.route("/cards/getDetail/:cardId").get(protect, getDetails);
 router.route("/cards/detail").put(protect, createDetails);
 router.route("/cards/updateDetails").put(protect, updateDetails);
+router.route("/cards/editDescription").put(editCardDescription);
+router.route("/cards/editDeadLine").put(editDeadLine);
+
 
 module.exports = router;

@@ -11,14 +11,14 @@ export default function NavBar(props: any) {
 
   return (
     <Container className={classes.root}>
-      <Grid container direction="row" alignItems="center" justify="center" className={classes.topnavBar}>
+      <Grid container direction="row" alignItems="center" justifyContent="center" className={classes.topnavBar}>
         <Grid item xs={3}>
           <Grid
             container
             spacing={1}
             direction="row"
             alignItems="center"
-            justify="flex-start"
+            justify-content="flex-start"
             className={classes.kanLogo}
           >
             <img src={logo} alt="logo" />
@@ -39,7 +39,7 @@ export default function NavBar(props: any) {
           </Grid>
         </Grid>
         <Grid item xs>
-          <Grid container alignItems="center" justify="flex-end">
+          <Grid container alignItems="center" justifyContent="flex-end">
             <Grid>
               <Button
                 variant="contained"
@@ -54,7 +54,7 @@ export default function NavBar(props: any) {
           </Grid>
         </Grid>
         <Grid item xs={1}>
-          <Grid container alignItems="center" justify="flex-end" className={classes.accountButton}>
+          <Grid container alignItems="center" justifyContent="flex-end" className={classes.accountButton}>
             <Grid>
               <AccountButton />
             </Grid>

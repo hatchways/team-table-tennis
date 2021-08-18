@@ -48,3 +48,16 @@ export const editDescription = async (cardId: string, description: string): Prom
       error: { message: 'Unable to connect to server. Please try again ' + e },
     }));
 };
+
+export const editDeadLine = async (cardId: string, deadLine: Date): Promise<any> => {
+  return await fetch('/boards/cards/editDeadLine', {
+    method: 'PUT',
+    body: JSON.stringify({ cardId, deadLine }),
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    mode: 'cors',
+  })
+    .then((res) => res.json())
+    .catch((e) => ({
+      error: { message: 'Unable to connect to server. Please try again ' + e },
+    }));
+};

@@ -68,7 +68,7 @@ export function DetailedCardDialog(props: DetailedCardDialogProps) {
             <Grid item xs={10}>
               <DescriptionItem card={card} />
               <CommentItem />
-              <DatePickers />
+              <DatePickers card={card} />
               <AttachmentItem />
             </Grid>
             <Grid item xs={2}>
