@@ -10,6 +10,8 @@ import FormatColorFillOutlinedIcon from '@material-ui/icons/FormatColorFillOutli
 import { FiberManualRecord } from '@material-ui/icons';
 import { Task as TaskInterface } from '../../../interface/Task';
 import { Card } from '../../../interface/CardApi';
+import { quickUpdate } from '../../../helpers/APICalls/cards';
+import { useAuthBoard } from '../../../context/useAuthBoardContext';
 interface properties {
   card: Card;
 }
@@ -17,8 +19,9 @@ export default function AddColor(props: properties) {
   const classes = useStyles();
   const colors = ['#FFFFFF', '#FF5D48', '#EDAB1D', '#59B0FF', '#D460F7'];
   const [open, setOpen] = useState(false);
-  const [state, setState] = useState({ expanded: false, color: colors, isDragging: true });
+  const [state, setState] = useState({ expanded: false, color: props.card.cardDetails.color, isDragging: true });
   const anchorRef = React.useRef<HTMLButtonElement>(null);
+  const { loggedInUserBoard: userBoard } = useAuthBoard();
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -40,7 +43,9 @@ export default function AddColor(props: properties) {
   }
 
   const changeColor = (color: string) => {
-    setState({ ...state, color: colors });
+    setState({ ...state, color: color });
+    userBoard!.cards[props.card._id].cardDetails.color = color;
+    quickUpdate(props.card._id, props.card.title, color);
   };
 
   // return focus to the button when we transitioned from !open -> open
@@ -62,7 +67,7 @@ export default function AddColor(props: properties) {
           aria-haspopup="true"
           onClick={handleToggle}
         >
-          <FormatColorFillOutlinedIcon style={{ color: props.card.cardDetails.color }} />
+          <FormatColorFillOutlinedIcon style={{ color: state.color }} />
         </IconButton>
         <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
           {({ TransitionProps, placement }) => (
