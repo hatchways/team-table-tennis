@@ -1,6 +1,5 @@
 export interface Card {
   title: string;
-  date: string;
   _id: string;
   description: string;
   cardDetails: CardDetails;

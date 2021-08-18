@@ -66,7 +66,7 @@ export function DetailedCardDialog(props: DetailedCardDialogProps) {
         <DialogContent>
           <Grid container className={classes.dialogBorder}>
             <Grid item xs={10}>
-              <DescriptionItem />
+              <DescriptionItem card={card} />
               <CommentItem />
               <DatePickers />
               <AttachmentItem />

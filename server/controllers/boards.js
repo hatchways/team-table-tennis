@@ -140,6 +140,7 @@ exports.createCard = asyncHandler(async (req, res) => {
   })
 })
 
+
 exports.deleteColumn = asyncHandler(async ( req, res) => {
   const { columnId, boardId } = req.body;
 
@@ -221,6 +222,23 @@ exports.getCards = asyncHandler(async (req, res) => {
   }));
   res.status(200).json({
     cards
+  })
+})
+exports.editCardDescription = asyncHandler(async (req, res) => {
+  const { cardId, description } = req.body;
+  await Card.findByIdAndUpdate(
+    cardId,
+    {
+      description
+    }
+  )
+  .exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    }
+    else {
+      res.status(200).json(result);
+    }
   })
 })
 

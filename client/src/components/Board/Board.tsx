@@ -156,7 +156,6 @@ const Board: React.FunctionComponent = () => {
     createCard('Add title...', '', columnId).then((cardData) => {
       const card: CardInterface = {
         _id: cardData.card._id,
-        date: '',
         title: cardData.card.title,
         description: 'test',
         cardDetails: cardData.card.cardDetails,
@@ -226,7 +225,6 @@ const Board: React.FunctionComponent = () => {
           [task._id]: {
             _id: task._id,
             title: task.title,
-            date: task.date,
             description: task.description,
             cardDetails: task.cardDetails,
           },

@@ -83,7 +83,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
                 }
                 subheader={
                   <Typography color="textSecondary" variant="h6" className={classes.selectTag}>
-                    {state.task?.date}
+                    {state.task?.cardDetails.deadLine}
                   </Typography>
                 }
               ></CardHeader>
