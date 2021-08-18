@@ -9,15 +9,9 @@ import DatePickers from './Deadline/DatePickers';
 import DialogButtons from './DialogButtons/DialogButtons';
 import AddColor from './AddColor/AddColor';
 import AttachmentItem from './Attachment/AttachmentItem';
-import { classicNameResolver } from 'typescript';
+import { StringLiteralLike } from 'typescript';
 
 const emails = [''];
-export interface IDialogItem {
-  content: string;
-  icon: string;
-  title?: string;
-}
-
 export interface DetailedCardDialogProps {
   open: boolean;
   selectedValue: string;
@@ -39,6 +33,56 @@ function DetailedCardDialog(props: DetailedCardDialogProps) {
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  /* This section creates the Add To Card buttons */
+
+  let a: any;
+
+  /* COMMENT SECTION*/
+  const createComment = () => {
+    if (a == 1) {
+      (document.getElementById('comment') as HTMLFormElement).style.display = 'inline';
+      return (a = 0);
+    } else {
+      (document.getElementById('comment') as HTMLFormElement).style.display = 'none';
+      return (a = 1);
+    }
+  };
+
+  /* DESCRIPTION SECTION*/
+  const createDescription = () => {
+    if (a == 1) {
+      (document.getElementById('description') as HTMLFormElement).style.display = 'inline';
+      return (a = 0);
+    } else {
+      (document.getElementById('description') as HTMLFormElement).style.display = 'none';
+      return (a = 1);
+    }
+  };
+
+  /* DEADLINE SECTION*/
+  const createDeadline = () => {
+    if (a == 1) {
+      (document.getElementById('deadline') as HTMLFormElement).style.display = 'inline';
+      return (a = 0);
+    } else {
+      (document.getElementById('deadline') as HTMLFormElement).style.display = 'none';
+      return (a = 1);
+    }
+  };
+
+  /* ATTACHMENT SECTION*/
+  const createAttachment = () => {
+    if (a == 1) {
+      (document.getElementById('attachment') as HTMLFormElement).style.display = 'inline';
+      return (a = 0);
+    } else {
+      (document.getElementById('attachment') as HTMLFormElement).style.display = 'none';
+      return (a = 1);
+    }
+  };
+
+  /* End of Add to Card buttons */
 
   return (
     <Dialog
@@ -73,10 +117,18 @@ function DetailedCardDialog(props: DetailedCardDialogProps) {
                   <Typography variant="caption" className={classes.buttonTitles}>
                     ADD TO CARD:
                   </Typography>
-                  <DialogButtons title="Description" />
-                  <DialogButtons title="Comment" />
-                  <DialogButtons title="Deadline" />
-                  <DialogButtons title="Attachment" />
+                  <Button className={classes.buttonStyle} onClick={createComment}>
+                    Comment
+                  </Button>
+                  <Button className={classes.buttonStyle} onClick={createDescription}>
+                    Description
+                  </Button>
+                  <Button className={classes.buttonStyle} onClick={createDeadline}>
+                    Deadline
+                  </Button>
+                  <Button className={classes.buttonStyle} onClick={createAttachment}>
+                    Attachment
+                  </Button>
                 </Box>
               </Grid>
               <Grid item>
