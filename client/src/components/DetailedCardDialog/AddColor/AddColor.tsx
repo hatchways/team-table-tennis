@@ -9,8 +9,11 @@ import { IconButton, Grid } from '@material-ui/core';
 import FormatColorFillOutlinedIcon from '@material-ui/icons/FormatColorFillOutlined';
 import { FiberManualRecord } from '@material-ui/icons';
 import { Task as TaskInterface } from '../../../interface/Task';
-
-export default function AddColor() {
+import { Card } from '../../../interface/CardApi';
+interface properties {
+  card: Card;
+}
+export default function AddColor(props: properties) {
   const classes = useStyles();
   const colors = ['#FFFFFF', '#FF5D48', '#EDAB1D', '#59B0FF', '#D460F7'];
   const [open, setOpen] = useState(false);
@@ -59,7 +62,7 @@ export default function AddColor() {
           aria-haspopup="true"
           onClick={handleToggle}
         >
-          <FormatColorFillOutlinedIcon />
+          <FormatColorFillOutlinedIcon style={{ color: props.card.cardDetails.color }} />
         </IconButton>
         <Popper open={open} anchorEl={anchorRef.current} role={undefined} transition disablePortal>
           {({ TransitionProps, placement }) => (

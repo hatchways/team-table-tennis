@@ -57,7 +57,7 @@ export function DetailedCardDialog(props: DetailedCardDialogProps) {
             <Grid container className={classes.titleContainer}>
               <AssignmentOutlinedIcon className={classes.iconColor} />
               <Grid className={classes.mainTitle}>{card.title}</Grid>
-              <AddColor />
+              <AddColor card={card} />
             </Grid>
             <Grid className={classes.progressBar}>In list ...</Grid>
           </Grid>
