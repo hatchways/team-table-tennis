@@ -17,16 +17,18 @@ export default function DatePickers(props: properties) {
 
   const getInitialDate = () => {
     const oldDate = new Date(userBoard!.cards[props.card._id].cardDetails.deadLine);
-    //date.setHours(0, 0, 0, 0);
     return moment(oldDate).format('YYYY-MM-DD');
   };
 
   const [date, setDate] = useState(getInitialDate());
 
-  console.log(date);
+  const saveDate = () => {
+    const newDate = new Date(date);
+    editDeadLine(props.card._id, newDate);
+    userBoard!.cards[props.card._id].cardDetails.deadLine = newDate;
+  };
   const handleDateChange = (value: string) => {
-    //setDate(value);
-    console.log('Date: ' + value);
+    setDate(value);
   };
   return (
     <Grid>
@@ -48,7 +50,7 @@ export default function DatePickers(props: properties) {
         }}
       />
       <Grid className={classes.savebuttonPosition}>
-        <Button className={classes.buttonStyle} color="primary" variant="contained" size="large">
+        <Button className={classes.buttonStyle} color="primary" variant="contained" size="large" onClick={saveDate}>
           Save
         </Button>
         <IconButton>

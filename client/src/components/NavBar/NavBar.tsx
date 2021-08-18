@@ -25,7 +25,7 @@ export default function NavBar(props: any) {
           </Grid>
         </Grid>
         <Grid item xs>
-          <Grid container alignItems="center" justify="flex-end">
+          <Grid container alignItems="center" justifyContent="flex-end">
             <Grid item>
               <Button size="large" startIcon={<DashboardOutlined />} className={classes.buttonFonts}>
                 Dashboard
