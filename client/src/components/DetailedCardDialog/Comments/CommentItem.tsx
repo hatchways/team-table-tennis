@@ -6,10 +6,13 @@ import ClearIcon from '@material-ui/icons/Clear';
 
 export default function CommentItem() {
   const classes = useStyles();
-  const [content, setContent] = useState('');
+  const [comment, setComment] = useState('');
+  const saveComment = () => {
+    console.log(comment);
+  };
 
   return (
-    <Grid>
+    <Grid id="comment">
       <Grid container className={classes.titleContainer}>
         <MessageOutlinedIcon className={classes.iconColor} />
         <Grid className={classes.titleFont}>Add comment:</Grid>
@@ -19,16 +22,22 @@ export default function CommentItem() {
         multiline
         rows={3}
         placeholder={'Write a comment...'}
-        value={content}
         variant="outlined"
         className={classes.textField}
-        onChange={(e) => setContent(e.target.value)}
+        value={comment}
+        onChange={(e) => setComment(e.target.value)}
       />
       <Grid className={classes.savebuttonPosition}>
-        <Button className={classes.buttonStyle} color="primary" variant="contained" size="large">
+        <Button
+          className={classes.buttonStyle}
+          color="primary"
+          variant="contained"
+          size="large"
+          onClick={() => saveComment()}
+        >
           Save
         </Button>
-        <IconButton>
+        <IconButton onClick={() => setComment('')}>
           <ClearIcon color="primary" />
         </IconButton>
       </Grid>

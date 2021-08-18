@@ -1,4 +1,5 @@
-import { TextField, Grid, DialogTitle, Button, IconButton } from '@material-ui/core';
+import { useState } from 'react';
+import { TextField, Grid, Button, IconButton } from '@material-ui/core';
 import useStyles from './useStyles';
 import ScheduleOutlinedIcon from '@material-ui/icons/ScheduleOutlined';
 import ClearIcon from '@material-ui/icons/Clear';
@@ -31,7 +32,7 @@ export default function DatePickers(props: properties) {
     setDate(value);
   };
   return (
-    <Grid>
+    <Grid id="deadline">
       <Grid container className={classes.titleContainer}>
         <ScheduleOutlinedIcon className={classes.iconColor} />
         <Grid className={classes.titleFont}>Deadline:</Grid>
@@ -53,7 +54,7 @@ export default function DatePickers(props: properties) {
         <Button className={classes.buttonStyle} color="primary" variant="contained" size="large" onClick={saveDate}>
           Save
         </Button>
-        <IconButton>
+        <IconButton onClick={() => setDeadline('')}>
           <ClearIcon color="primary" />
         </IconButton>
       </Grid>

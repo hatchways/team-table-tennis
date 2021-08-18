@@ -19,7 +19,7 @@ export default function DescriptionItem(props: properties) {
     userBoard!.cards[props.card._id].description = content;
   };
   return (
-    <Grid>
+    <Grid id="description">
       <Grid container className={classes.titleContainer}>
         <ImportContactsOutlinedIcon className={classes.iconColor} />
         <Grid className={classes.titleFont}>Description:</Grid>
@@ -38,7 +38,7 @@ export default function DescriptionItem(props: properties) {
         <Button className={classes.buttonStyle} color="primary" variant="contained" size="large" onClick={clickHandler}>
           Save
         </Button>
-        <IconButton>
+        <IconButton onClick={() => setDescription('')}>
           <ClearIcon color="primary" />
         </IconButton>
       </Grid>
