@@ -9,7 +9,12 @@ import { CompleteBoard } from '../interface/BoardApi';
 import IAuthBoardContext from '../interface/IAuthBoardContext';
 
 export const AuthBoardContext = createContext<IAuthBoardContext>({
-  loggedInUserBoard: { user: undefined, board: { _id: '-1', title: '', columns: [] }, columns: {}, cards: {} },
+  loggedInUserBoard: {
+    user: undefined,
+    board: { _id: '-1', title: '', columns: [] },
+    columns: {},
+    cards: {},
+  },
   updateLoginContext: () => null,
   logout: () => null,
 });

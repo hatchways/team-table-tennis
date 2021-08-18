@@ -10,6 +10,7 @@ import DialogButtons from './DialogButtons/DialogButtons';
 import AddColor from './AddColor/AddColor';
 import AttachmentItem from './Attachment/AttachmentItem';
 import { classicNameResolver } from 'typescript';
+import { useAuthBoard } from '../../context/useAuthBoardContext';
 
 const emails = [''];
 export interface IDialogItem {
@@ -22,9 +23,12 @@ export interface DetailedCardDialogProps {
   open: boolean;
   selectedValue: string;
   onClose: (value: string) => void;
+  selectedCard: string;
 }
 
-function DetailedCardDialog(props: DetailedCardDialogProps) {
+export function DetailedCardDialog(props: DetailedCardDialogProps) {
+  const { loggedInUserBoard: userBoard } = useAuthBoard();
+
   const classes = useStyles();
   const { onClose, selectedValue, open } = props;
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -39,85 +43,65 @@ function DetailedCardDialog(props: DetailedCardDialogProps) {
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
-  return (
-    <Dialog
-      onClose={handleClose}
-      aria-labelledby="simple-dialog-title"
-      open={open}
-      classes={{ paper: classes.dialogBox }}
-    >
-      <Grid container spacing={2} className={classes.dialogBorder}>
-        <Grid item xs={12}>
-          <Grid container className={classes.titleContainer}>
-            <AssignmentOutlinedIcon className={classes.iconColor} />
-            <Grid className={classes.mainTitle}>Card Title</Grid>
-            <AddColor />
+  const card = userBoard?.cards[props.selectedCard];
+  if (card) {
+    return (
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby="simple-dialog-title"
+        open={open}
+        classes={{ paper: classes.dialogBox }}
+      >
+        <Grid container spacing={2} className={classes.dialogBorder}>
+          <Grid item xs={12}>
+            <Grid container className={classes.titleContainer}>
+              <AssignmentOutlinedIcon className={classes.iconColor} />
+              <Grid className={classes.mainTitle}>{card.title}</Grid>
+              <AddColor />
+            </Grid>
+            <Grid className={classes.progressBar}>In list ...</Grid>
           </Grid>
-          <Grid className={classes.progressBar}>In list ...</Grid>
         </Grid>
-      </Grid>
-      <Divider className={classes.divider} />
-      <DialogContent>
-        <Grid container className={classes.dialogBorder}>
-          <Grid item xs={10}>
-            <DescriptionItem />
-            <CommentItem />
-            <DatePickers />
-            <AttachmentItem />
-          </Grid>
-          <Grid item xs={2}>
-            <Grid container direction="column" className={classes.buttonItem}>
-              <Grid item>
-                <Box className={classes.allButtons}>
-                  <Typography variant="caption" className={classes.buttonTitles}>
-                    ADD TO CARD:
-                  </Typography>
-                  <DialogButtons title="Description" />
-                  <DialogButtons title="Comment" />
-                  <DialogButtons title="Deadline" />
-                  <DialogButtons title="Attachment" />
-                </Box>
-              </Grid>
-              <Grid item>
-                <Box className={classes.allButtons}>
-                  <Typography variant="caption" className={classes.buttonTitles}>
-                    ACTIONS:
-                  </Typography>
-                  <DialogButtons title="Move" />
-                  <DialogButtons title="Copy" />
-                  <DialogButtons title="Delete" />
-                  <DialogButtons title="Share" />
-                </Box>
+        <Divider className={classes.divider} />
+        <DialogContent>
+          <Grid container className={classes.dialogBorder}>
+            <Grid item xs={10}>
+              <DescriptionItem />
+              <CommentItem />
+              <DatePickers />
+              <AttachmentItem />
+            </Grid>
+            <Grid item xs={2}>
+              <Grid container direction="column" className={classes.buttonItem}>
+                <Grid item>
+                  <Box className={classes.allButtons}>
+                    <Typography variant="caption" className={classes.buttonTitles}>
+                      ADD TO CARD:
+                    </Typography>
+                    <DialogButtons title="Description" />
+                    <DialogButtons title="Comment" />
+                    <DialogButtons title="Deadline" />
+                    <DialogButtons title="Attachment" />
+                  </Box>
+                </Grid>
+                <Grid item>
+                  <Box className={classes.allButtons}>
+                    <Typography variant="caption" className={classes.buttonTitles}>
+                      ACTIONS:
+                    </Typography>
+                    <DialogButtons title="Move" />
+                    <DialogButtons title="Copy" />
+                    <DialogButtons title="Delete" />
+                    <DialogButtons title="Share" />
+                  </Box>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </DialogContent>
-    </Dialog>
-  );
-}
-
-export default function SimpleDialogDemo() {
-  const [open, setOpen] = React.useState(false);
-  const [selectedValue, setSelectedValue] = React.useState(emails[1]);
-  const classes = useStyles();
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = (value: string) => {
-    setOpen(false);
-    setSelectedValue(value);
-  };
-
-  return (
-    <div>
-      <Button className={classes.demoButton} onClick={handleClickOpen}>
-        Detailed Card Dialog
-      </Button>
-      <DetailedCardDialog selectedValue={selectedValue} open={open} onClose={handleClose} />
-    </div>
-  );
+        </DialogContent>
+      </Dialog>
+    );
+  } else {
+    return <></>;
+  }
 }

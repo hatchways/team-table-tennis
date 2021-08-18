@@ -3,8 +3,6 @@ import Column from './Column';
 import { Column as ColumnInterface } from '../../interface/ColumnApi';
 import { TaskPlaceHolder } from '../../interface/Task';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
-import { Board as BoardInterface } from '../../interface/BoardApi';
-import mockData from './MockData';
 import { DragDropContext, DropResult, Droppable, DragUpdate } from 'react-beautiful-dnd';
 import {
   Box,
@@ -21,11 +19,11 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import useStyles from './useStyles';
-import { useEffect } from 'react';
 import { Card as CardInterface, Cards } from '../../interface/CardApi';
 import { moveCardToAnotherColumn, moveColumn } from '../../helpers/APICalls/board';
 import { createCard } from '../../helpers/APICalls/cards';
 import { createColumn, deleteColumnApi } from '../../helpers/APICalls/columns';
+import { DetailedCardDialog } from '../DetailedCardDialog/DetailedCardDialog';
 const Board: React.FunctionComponent = () => {
   const { loggedInUserBoard: userBoard } = useAuthBoard();
 
@@ -37,13 +35,9 @@ const Board: React.FunctionComponent = () => {
     taskPlaceHolder: taskPlaceHolder,
     modalOpen: false,
     newColumnTitle: '',
+    isDetailedCardOpen: false,
+    openedCard: '',
   });
-
-  //BoardApi().then((data: any) => {
-  //  newBoard._id = data.board._id;
-  //  newBoard.columns = data.board.columns;
-  //  newBoard.title = data.board.title;
-  //});
 
   const onDragUpdate = (result: DragUpdate) => {
     const { draggableId } = result;
@@ -238,8 +232,16 @@ const Board: React.FunctionComponent = () => {
           },
         };
     });
+
     return tasks;
   };
+  const handleDetailedCardClose = (value: string) => {
+    setState({ ...state, isDetailedCardOpen: false });
+  };
+  const openDetailedCard = (cardId: string) => {
+    setState({ ...state, isDetailedCardOpen: true, openedCard: cardId });
+  };
+
   if (state.mockData === undefined || state.mockData?.columns === undefined || state.mockData?.cards === undefined) {
     return <React.Fragment></React.Fragment>;
   } else {
@@ -273,6 +275,7 @@ const Board: React.FunctionComponent = () => {
                         addTask={addTask}
                         taskDialog={newColumn}
                         delete={deleteColumn}
+                        openDetailedCard={openDetailedCard}
                       ></Column>
                     ))}
                     {provided.placeholder}
@@ -320,6 +323,12 @@ const Board: React.FunctionComponent = () => {
             </CardActions>
           </Card>
         </Modal>
+        <DetailedCardDialog
+          open={state.isDetailedCardOpen}
+          onClose={handleDetailedCardClose}
+          selectedValue={'test'}
+          selectedCard={state.openedCard}
+        ></DetailedCardDialog>
       </React.Fragment>
     );
   }

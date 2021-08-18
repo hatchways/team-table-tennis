@@ -15,6 +15,7 @@ export interface properties {
   addTask: (columnId: string) => void;
   delete: (columnId: string) => void;
   taskDialog: (taskId: string) => void;
+  openDetailedCard: (columnId: string) => void;
 }
 
 const Column: React.FunctionComponent<properties> = (props) => {
@@ -91,7 +92,12 @@ const Column: React.FunctionComponent<properties> = (props) => {
               {(provided, snapshot) => (
                 <CardContent ref={provided.innerRef} {...provided.droppableProps}>
                   {props.Column?.cards.map((taskId: string, index: number) => (
-                    <Task key={props.Tasks![taskId]._id} task={props.Tasks![taskId]} index={index}></Task>
+                    <Task
+                      key={props.Tasks![taskId]._id}
+                      task={props.Tasks![taskId]}
+                      index={index}
+                      openDetailedCard={props.openDetailedCard}
+                    ></Task>
                   ))}
                   {provided.placeholder}
                   <div

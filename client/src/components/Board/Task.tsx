@@ -14,6 +14,7 @@ import { useAuthBoard } from '../../context/useAuthBoardContext';
 interface properties {
   task: TaskInterface | undefined;
   index: number;
+  openDetailedCard: (cardId: string) => void;
 }
 
 const Task: React.FunctionComponent<properties> = (props: properties) => {
@@ -54,12 +55,19 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
     }
     return output;
   };
+  const clickHandler = () => {
+    props.openDetailedCard(task!._id);
+  };
   if (state.task) {
     return (
       <Draggable draggableId={'' + state.task?._id} index={props.index}>
         {(provided, snapshot) => (
           <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
-            <Card elevation={0} className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task?._id}>
+            <Card
+              elevation={0}
+              className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task?._id}
+              onClick={clickHandler}
+            >
               <CardHeader
                 title={
                   <div>
