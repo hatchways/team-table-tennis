@@ -10,6 +10,7 @@ import { Card as TaskInterface } from '../../interface/CardApi';
 import TaskTitle from './TaskTitle';
 import { quickUpdate } from '../../helpers/APICalls/cards';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
+import moment from 'moment';
 
 interface properties {
   task: TaskInterface | undefined;
@@ -58,6 +59,11 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
   const clickHandler = () => {
     props.openDetailedCard(task!._id);
   };
+
+  const getDate = () => {
+    const date = state.task?.cardDetails.deadLine;
+    return moment(date).format('MMMM D');
+  };
   if (state.task) {
     return (
       <Draggable draggableId={'' + state.task?._id} index={props.index}>
@@ -83,7 +89,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
                 }
                 subheader={
                   <Typography color="textSecondary" variant="h6" className={classes.selectTag}>
-                    {state.task?.cardDetails.deadLine}
+                    {getDate()}
                   </Typography>
                 }
               ></CardHeader>
