@@ -1,6 +1,7 @@
 const User = require("../models/User");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
+const Board = require("../models/Board");
 
 // @route POST /auth/register
 // @desc Register user
@@ -22,12 +23,20 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     throw new Error("A user with that username already exists");
   }
 
+
+  const inProgress = new Column({ title: 'In Progress' });
+  const completed = new Column({ title : 'Completed' }); 
+  
+  await inProgress.save();
+  await completed.save();
+  const defaultBoard = new Board({ title: 'My Board', columns: [inProgress._id, completed._id]});
+  await defaultBoard.save();
   const user = await User.create({
     username,
     email,
-    password
+    password,
+    boards: [defaultBoard._id]
   });
-
   if (user) {
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
@@ -42,7 +51,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         user: {
           id: user._id,
           username: user.username,
-          email: user.email
+          email: user.email,
+          boards: user.boards
         }
       }
     });
@@ -63,7 +73,6 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
   if (user && (await user.matchPassword(password))) {
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
-
     res.cookie("token", token, {
       httpOnly: true,
       maxAge: secondsInWeek * 1000
@@ -74,7 +83,8 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
         user: {
           id: user._id,
           username: user.username,
-          email: user.email
+          email: user.email,
+          boards: user.boards
         }
       }
     });
@@ -100,7 +110,8 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
       user: {
         id: user._id,
         username: user.username,
-        email: user.email
+        email: user.email,
+        boards: user.boards
       }
     }
   });

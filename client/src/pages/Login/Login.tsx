@@ -5,28 +5,30 @@ import Grid from '@material-ui/core/Grid';
 import { FormikHelpers } from 'formik';
 import Typography from '@material-ui/core/Typography';
 import useStyles from './useStyles';
-import login from '../../helpers/APICalls/login';
+import { loginBoard } from '../../helpers/APICalls/login';
 import LoginForm from './LoginForm/LoginForm';
 import AuthHeader from '../../components/AuthHeader/AuthHeader';
-import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 import BgImg from '../../components/BgImg/BgImg';
+import { useAuthBoard } from '../../context/useAuthBoardContext';
 
 export default function Login(): JSX.Element {
   const classes = useStyles();
-  const { updateLoginContext } = useAuth();
+  const { updateLoginContext } = useAuthBoard();
   const { updateSnackBarMessage } = useSnackBar();
 
+  console.log('inside login comp');
   const handleSubmit = (
     { email, password }: { email: string; password: string },
     { setSubmitting }: FormikHelpers<{ email: string; password: string }>,
   ) => {
-    login(email, password).then((data) => {
+    loginBoard(email, password).then((data) => {
       if (data.error) {
         setSubmitting(false);
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
         updateLoginContext(data.success);
+        console.log('login worked');
       } else {
         // should not get here from backend but this catch is for an unknown issue
         console.error({ data });

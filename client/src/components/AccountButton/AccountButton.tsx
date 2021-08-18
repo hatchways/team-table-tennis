@@ -3,14 +3,14 @@ import { Container, IconButton } from '@material-ui/core/';
 import useStyles from './useStyles';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { useAuth } from '../../context/useAuthContext';
+import { useAuthBoard } from '../../context/useAuthBoardContext';
 import { AccountCircle } from '@material-ui/icons';
 
 export default function AccountButton() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const { logout } = useAuth();
+  const { logout } = useAuthBoard();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
