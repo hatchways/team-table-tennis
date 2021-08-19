@@ -115,7 +115,7 @@ export function DetailedCardDialog(props: DetailedCardDialogProps) {
           <Grid container className={classes.dialogBorder}>
             <Grid item xs={10}>
               <DescriptionItem card={card} />
-              <CommentItem />
+              <CommentItem card={card} />
               <DatePickers card={card} />
               <AttachmentItem />
             </Grid>
@@ -162,7 +162,7 @@ export function DetailedCardDialog(props: DetailedCardDialogProps) {
   }
 }
 
-export const hasData = (data: string) => {
+export const hasData = (data: string | undefined) => {
   if (data == undefined) {
     return { display: 'none' };
   } else {

@@ -19,7 +19,7 @@ export default function DatePickers(props: properties) {
   const getInitialDate = () => {
     const oldDate = new Date(userBoard!.cards[props.card._id].cardDetails.deadLine);
     if (isNaN(oldDate.getFullYear())) {
-      return '';
+      return undefined;
     } else {
       return moment(oldDate).format('YYYY-MM-DD');
     }
@@ -28,9 +28,11 @@ export default function DatePickers(props: properties) {
   const [date, setDate] = useState(getInitialDate());
 
   const saveDate = () => {
-    const newDate = new Date(date);
-    editDeadLine(props.card._id, newDate);
-    userBoard!.cards[props.card._id].cardDetails.deadLine = newDate;
+    if (date) {
+      const newDate = new Date(date);
+      editDeadLine(props.card._id, newDate);
+      userBoard!.cards[props.card._id].cardDetails.deadLine = newDate;
+    }
   };
   const handleDateChange = (value: string) => {
     setDate(value);

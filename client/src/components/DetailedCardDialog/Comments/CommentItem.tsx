@@ -4,12 +4,19 @@ import useStyles from './useStyles';
 import MessageOutlinedIcon from '@material-ui/icons/MessageOutlined';
 import ClearIcon from '@material-ui/icons/Clear';
 import { hasData } from '../DetailedCardDialog';
-
-export default function CommentItem() {
+import { useAuthBoard } from '../../../context/useAuthBoardContext';
+import { Card } from '../../../interface/CardApi';
+import { editComment } from '../../../helpers/APICalls/cards';
+interface properties {
+  card: Card;
+}
+export default function CommentItem(props: properties) {
+  const { loggedInUserBoard: userBoard } = useAuthBoard();
   const classes = useStyles();
-  const [comment, setComment] = useState('');
+  const [comment, setComment] = useState(userBoard!.cards[props.card._id].cardDetails.comment);
   const saveComment = () => {
-    console.log(comment);
+    editComment(props.card._id, comment);
+    userBoard!.cards[props.card._id].cardDetails.comment = comment;
   };
 
   return (

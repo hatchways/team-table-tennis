@@ -242,6 +242,24 @@ exports.editCardDescription = asyncHandler(async (req, res) => {
   })
 })
 
+exports.editCardComment = asyncHandler(async (req, res) => {
+  const { cardId, comment } = req.body;
+  await Card.findByIdAndUpdate(
+    cardId,
+    {
+      "cardDetails.comment" : comment
+    }
+  )
+  .exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    }
+    else {
+      res.status(200).json(result);
+    }
+  })
+})
+
 exports.editDeadLine = asyncHandler(async (req, res) => {
   const { cardId, deadLine } = req.body;
   await Card.findByIdAndUpdate(

@@ -9,6 +9,7 @@ export interface CardDetails {
   tags: string[];
   deadLine: Date;
   attatchment: string;
+  comment: string;
 }
 export interface Cards {
   [key: string]: Card;
