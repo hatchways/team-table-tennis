@@ -43,14 +43,17 @@ app.use(express.static(join(__dirname, "public")));
 app.post("/api/upload", async (req, res) => {
   try {
     const fileStr = req.body.data;
+    const username = req.body.username;
+    console.log(username);
     const uploadedResponse = await cloudinary.uploader.upload(fileStr, {
-      upload_preset: 'dev_setups',
-/*       public_id: 'Car' */
-    })
-    console.log(uploadedResponse)
-    res.json({msg: "Uploaded"})
+      upload_preset: "KanbanCloud",
+      public_id: `${username}`,
+      invalidate: true,
+    });
+    console.log(uploadedResponse);
+    res.json({ msg: "Uploaded" });
   } catch (error) {
-    res.status(500).json({err: 'Something went wrong'})
+    res.status(500).json({ err: "Something went wrong" });
   }
 });
 
