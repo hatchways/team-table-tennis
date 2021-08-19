@@ -28,10 +28,12 @@ import ListItem from '@material-ui/core/ListItem';
 import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined';
 import StorageOutlinedIcon from '@material-ui/icons/StorageOutlined';
 import AppsIcon from '@material-ui/icons/Apps';
+import { useAuthBoard } from '../../context/useAuthBoardContext';
 
 type Anchor = 'right';
 
-export default function NavBar() {
+export default function NavBar(props: any) {
+  const { loggedInUserBoard: userBoard } = useAuthBoard();
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -170,7 +172,7 @@ export default function NavBar() {
       <AppBar position="static" className={classes.appbarStyle}>
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            My School Board
+            {props.boardTitle}
           </Typography>
           <IconButton
             edge="end"
@@ -205,10 +207,10 @@ export default function NavBar() {
         </List>
         <Divider />
         <List>
-          {['Board 1', 'Board 2'].map((text, index) => (
+          {userBoard?.user?.boards.map((text, index) => (
             <ListItem button key={text}>
               <ListItemIcon>{index % 2 === 0 ? <LabelOutlinedIcon /> : <LabelOutlinedIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={userBoard.boardTitles[index]} />
             </ListItem>
           ))}
         </List>

@@ -68,6 +68,25 @@ exports.getBoardFull = asyncHandler(async (req, res) => {
 })
 
 
+exports.getBoardTitles = asyncHandler(async (req, res)=> {
+  const  userId  = req.params.userId;
+  const user  = await User.findById(userId);
+  const boardTitles = await getBoardTitlesFromUser(user);
+  if(boardTitles){
+  res.status(200).json({ boardTitles });
+  }
+})
+
+getBoardTitlesFromUser = asyncHandler(async (user)=> {
+  console.log("inside board titles");
+  const boardTitles = [];
+  for(const boardId of user.boards){
+    const board = await Board.findById(boardId);
+    const boardTitle = board.title;
+    boardTitles.push(boardTitle);
+  }
+  return boardTitles;
+})
 
 
 

@@ -9,7 +9,13 @@ import { CompleteBoard } from '../interface/BoardApi';
 import IAuthBoardContext from '../interface/IAuthBoardContext';
 
 export const AuthBoardContext = createContext<IAuthBoardContext>({
-  loggedInUserBoard: { user: undefined, board: { _id: '-1', title: '', columns: [] }, columns: {}, cards: {} },
+  loggedInUserBoard: {
+    user: undefined,
+    board: { _id: '-1', title: '', columns: [] },
+    columns: {},
+    cards: {},
+    boardTitles: [],
+  },
   updateLoginContext: () => null,
   logout: () => null,
 });
@@ -21,11 +27,13 @@ export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element 
 
   const updateLoginContext = useCallback(
     (data: AuthBoardApiDataSuccess) => {
+      console.log(data);
       const userBoard: UserBoard = {
         user: undefined,
         board: { _id: '-1', title: '', columns: [] },
         columns: {},
         cards: {},
+        boardTitles: data.boardTitles,
       };
 
       userBoard.user = data.user;
