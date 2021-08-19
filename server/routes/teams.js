@@ -8,7 +8,7 @@ const {
     teamCardDelete,
     teamCardUpdate,
     teamBoardAdd,
-    teamBoardADelete
+    teamBoardDelete
   } = require('../controllers/boards.js');
 const {
     validateCreateBoard,
@@ -23,14 +23,14 @@ const {
 } = require("../validate");
 
 
-routerrouter.route('/').get(getTeam, validateTeam);
-router.route('/delete').get(deleteTeam, validateTeamDelete);
+router.route('/').get(getTeam, validateTeam);
+router.route('/delete').delete(deleteTeam, validateTeamDelete);
 
 router.route('/card/add').post(teamCardAdd, validateTeamCard);
-router.route('/card/delete').post(teamCardDelete, validateTeamCard);
-router.route('/card/update').post(teamCardUpdate, validateTeamCard);
+router.route('/card/delete').delete(teamCardDelete, validateTeamCard);
+router.route('/card/update').put(teamCardUpdate, validateTeamCard);
 
 router.route('/board/add').post(teamBoardAdd, validateBoardCard);
-router.route('/board/delete').post(teamBoardADelete, validateBoardCard);
+router.route('/board/delete').delete(teamBoardDelete, validateBoardCard);
 
 module.exports = router;

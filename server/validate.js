@@ -8,7 +8,6 @@ const handleErrors = (req, res, next) => {
 }
 
 exports.validateRegister = [
-  check("username", "Please enter a username").not().isEmpty(),
   check("email", "Please enter a valid email address").isEmail(),
   check(
     "password",
@@ -64,6 +63,12 @@ exports.validateUpdateColumn = [
 exports.validateGetCards = [
   check('cardIds', "No 'cardIds' field found").exists(),
   check('cardIds', 'No cards provided').not().isEmpty(),
+  handleErrors
+];
+
+exports.validateGetCard = [
+  check('cardId', "No 'cardId ' field found").exists(),
+  check('cardId', 'No card provided').not().isEmpty(),
   handleErrors
 ];
 

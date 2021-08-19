@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createContext, FunctionComponent, useCallback, useContext } from 'react';
 import { Board, Boards, CompleteBoard } from '../../interface/BoardApi';
-import { Column } from '../../interface/ColumnAPI';
+import { Column } from '../../interface/ColumnApi';
 
 export interface IBoardContext {
   board: Board | null | undefined;

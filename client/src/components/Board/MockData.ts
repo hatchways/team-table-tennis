@@ -8,12 +8,12 @@ const tasks: Tasks = {
 };
 const columns: Columns = {
   'col-1': {
-    id: 'col-1',
+    _id: 'col-1',
     title: 'Philosophy',
     tasks: ['task-1', 'task-2'],
   },
   'col-2': {
-    id: 'col-2',
+    _id: 'col-2',
     title: 'Math',
     tasks: ['task-3'],
   },

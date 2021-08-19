@@ -1,3 +1,4 @@
+import { Board } from './BoardApi';
 import { User } from './User';
 
 export interface AuthApiDataSuccess {
