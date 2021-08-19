@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useAuth } from '../../context/useAuthContext';
 import { useSocket } from '../../context/useSocketContext';
 import { useHistory } from 'react-router-dom';
 import { FetchOptions } from '../../interface/FetchOptions';
@@ -14,13 +13,14 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import moment from 'moment';
 import { Toolbar, EventComponent } from './extension';
+import { useAuthBoard } from '../../context/useAuthBoardContext';
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar as any);
 
 const DnDCalendar = (): JSX.Element => {
   const [events, setEvent] = useState<IUserSchedule[]>(mockDatas);
-  const { loggedInUser } = useAuth();
+  const { loggedInUserBoard: loggedInUser } = useAuthBoard();
   const { initSocket } = useSocket();
   const history = useHistory();
 
