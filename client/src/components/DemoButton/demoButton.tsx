@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@material-ui/core';
-import login from '../../helpers/APICalls/login';
+import { loginBoard } from '../../helpers/APICalls/login';
 import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 
@@ -12,8 +12,7 @@ export default function DemoButton(): JSX.Element {
   const { updateSnackBarMessage } = useSnackBar();
 
   const handleSubmit = ({ email, password }: { email: string; password: string }): void => {
-    login(email, password).then((data) => {
-      console.log(data.error);
+    loginBoard(email, password).then((data) => {
       if (data.error) {
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {

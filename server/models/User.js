@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
+const ObjectId = mongoose.ObjectId;
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -9,15 +10,16 @@ const userSchema = new mongoose.Schema({
   },
   password: {
     type: String,
-    required: true,
-    unique: false
-
+    required: true
   },
   register_date: {
     type: Date,
-    default: Date.now,
-    unique: false
-  }
+    default: Date.now
+  },
+  boards: [{
+    type: ObjectId,
+    ref: "board"
+  }]
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {

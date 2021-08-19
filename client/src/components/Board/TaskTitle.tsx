@@ -1,9 +1,11 @@
 import { Box, Input } from '@material-ui/core';
 import { useState } from 'react';
-import { Task } from '../../interface/Task';
+import { quickUpdate } from '../../helpers/APICalls/cards';
+import { Card as Task } from '../../interface/CardApi';
 
 interface properties {
-  Task: Task;
+  Task: Task | undefined;
+  newColor: string;
 }
 const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   const [state, setState] = useState({
@@ -13,8 +15,10 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   });
 
   const startEditingTitle = () => {
-    if (props.Task.isNew) {
-      setState({ ...state, isEditing: true });
+    if (props.Task) {
+      if (props.Task.cardDetails.color === props.newColor) {
+        setState({ ...state, isEditing: true });
+      }
     }
   };
 
@@ -25,8 +29,14 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   const handleEnter = (key: string) => {
     if (key === 'Enter') {
       const task = state.Task;
-      task.name = state.value;
-      setState({ ...state, isEditing: false, Task: task });
+      if (task) {
+        task.title = state.value;
+        setState({ ...state, isEditing: false, Task: task });
+        console.log(state.Task?.title);
+        if (state.Task?.cardDetails.color !== props.newColor) {
+          quickUpdate(task._id, task.title, task.cardDetails.color);
+        }
+      }
     }
   };
   if (state.isEditing) {
@@ -46,7 +56,7 @@ const TaskTitle: React.FunctionComponent<properties> = (props: properties) => {
   } else {
     return (
       <Box fontWeight={600} fontSize={20} onDoubleClick={startEditingTitle}>
-        {props.Task.name}
+        {props.Task?.title}
       </Box>
     );
   }
