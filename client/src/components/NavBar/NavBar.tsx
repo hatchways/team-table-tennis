@@ -29,6 +29,7 @@ import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined';
 import StorageOutlinedIcon from '@material-ui/icons/StorageOutlined';
 import AppsIcon from '@material-ui/icons/Apps';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
+import { createBoard } from '../../helpers/APICalls/board';
 
 type Anchor = 'right';
 
@@ -57,6 +58,17 @@ export default function NavBar(props: any) {
     }
 
     setState({ ...state, [anchor]: open });
+  };
+
+  const handleCreateBoard = () => {
+    if (userBoard?.board && userBoard.user) {
+      const newBoardTitle = 'New Board';
+      createBoard(newBoardTitle, userBoard.user._id).then((data) => {
+        console.log(data);
+        userBoard.user = data.success.user;
+      });
+      userBoard.boardTitles.push(newBoardTitle);
+    }
   };
 
   const list = (anchor: Anchor) => (
@@ -155,6 +167,7 @@ export default function NavBar(props: any) {
                 size="large"
                 className={classes.createboardButton}
                 startIcon={<AddIcon />}
+                onClick={handleCreateBoard}
               >
                 Create board
               </Button>

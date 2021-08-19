@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Board = require('../models/Board');
 const Card = require('../models/Card');
 const Column = require('../models/Column');
+const User = require("../models/User");
 
 
 exports.createBoard = asyncHandler(async (req, res, next) => {  
@@ -19,6 +20,45 @@ exports.createBoard = asyncHandler(async (req, res, next) => {
     res.status(201).json({
       success: {
         board
+      }
+    });
+  } else {
+    res.status(400).send({
+      message: 'Board title is empty'
+    });
+  }
+})
+
+exports.createBoardWithUser = asyncHandler(async (req, res, next) => {  
+  console.log("inside");
+  const { title } = req.body;
+  const userId = req.params.userId;
+  console.log(userId);
+  console.log(title);
+
+  const user = await User.findById(userId);
+  if (title) {
+
+    const inProgress = new Column({ title: 'In Progress' });
+    const completed = new Column({ title : 'Completed' }); 
+    
+    await inProgress.save();
+    await completed.save();
+
+
+    const board = new Board({ title, columns: [inProgress._id, completed._id]});
+    await board.save();
+    console.log(board);
+    console.log(user);
+
+    user.boards.push(board._id);
+
+    await user.save();
+
+    res.status(201).json({
+      success: {
+        board,
+        user
       }
     });
   } else {

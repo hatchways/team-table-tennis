@@ -47,7 +47,7 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     res.status(201).json({
       success: {
         user: {
-          id: user._id,
+          _id: user._id,
           email: user.email,
           boards: user.boards
         },
@@ -79,7 +79,7 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
     res.status(200).json({
       success: {
         user: {
-          id: user._id,
+          _id: user._id,
           email: user.email,
           boards: user.boards
         },
@@ -108,7 +108,7 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: {
       user: {
-        id: user._id,
+        _id: user._id,
         email: user.email,
         boards: user.boards
       },

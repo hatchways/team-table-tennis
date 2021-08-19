@@ -67,3 +67,16 @@ export const moveCardToAnotherColumn = async (
       error: { message: 'unable to connext to server' },
     }));
 };
+
+export const createBoard = async (title: string, userId: string): Promise<any> => {
+  return await fetch('/boards/' + userId, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    mode: 'cors',
+    body: JSON.stringify({ title }),
+  })
+    .then((res) => res.json())
+    .catch((e) => ({
+      error: { message: 'unable to connext to server' },
+    }));
+};
