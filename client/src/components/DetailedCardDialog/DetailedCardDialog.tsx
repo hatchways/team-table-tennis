@@ -162,8 +162,8 @@ export function DetailedCardDialog(props: DetailedCardDialogProps) {
   }
 }
 
-export const hasData = (data: unknown) => {
-  if (data == undefined) {
+export const hasData = (data: string) => {
+  if (data == undefined || data === '') {
     return { display: 'none' };
   } else {
     return { display: 'inline' };

@@ -18,7 +18,11 @@ export default function DatePickers(props: properties) {
 
   const getInitialDate = () => {
     const oldDate = new Date(userBoard!.cards[props.card._id].cardDetails.deadLine);
-    return moment(oldDate).format('YYYY-MM-DD');
+    if (isNaN(oldDate.getFullYear())) {
+      return '';
+    } else {
+      return moment(oldDate).format('YYYY-MM-DD');
+    }
   };
 
   const [date, setDate] = useState(getInitialDate());
@@ -31,6 +35,7 @@ export default function DatePickers(props: properties) {
   const handleDateChange = (value: string) => {
     setDate(value);
   };
+
   return (
     <Grid id="deadline" style={hasData(date)}>
       <Grid container className={classes.titleContainer}>
