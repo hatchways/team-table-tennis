@@ -38,7 +38,7 @@ export default function DescriptionItem(props: properties) {
         <Button className={classes.buttonStyle} color="primary" variant="contained" size="large" onClick={clickHandler}>
           Save
         </Button>
-        <IconButton onClick={() => setDescription('')}>
+        <IconButton onClick={() => setContent('')}>
           <ClearIcon color="primary" />
         </IconButton>
       </Grid>

@@ -5,7 +5,6 @@ import ScheduleOutlinedIcon from '@material-ui/icons/ScheduleOutlined';
 import ClearIcon from '@material-ui/icons/Clear';
 import { useAuthBoard } from '../../../context/useAuthBoardContext';
 import { Card } from '../../../interface/CardApi';
-import { useState } from 'react';
 import { editDeadLine } from '../../../helpers/APICalls/cards';
 import moment from 'moment';
 
@@ -54,7 +53,7 @@ export default function DatePickers(props: properties) {
         <Button className={classes.buttonStyle} color="primary" variant="contained" size="large" onClick={saveDate}>
           Save
         </Button>
-        <IconButton onClick={() => setDeadline('')}>
+        <IconButton onClick={() => setDate('')}>
           <ClearIcon color="primary" />
         </IconButton>
       </Grid>

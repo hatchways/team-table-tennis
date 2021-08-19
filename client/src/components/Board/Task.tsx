@@ -57,7 +57,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
     return output;
   };
   const clickHandler = () => {
-    props.openDetailedCard(task!._id);
+    if (props.task?.cardDetails.color != colors[0]) props.openDetailedCard(task!._id);
   };
 
   const getDate = () => {
@@ -72,7 +72,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
             <Card
               elevation={0}
               className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task?._id}
-              onClick={clickHandler}
+              onDoubleClick={clickHandler}
             >
               <CardHeader
                 title={

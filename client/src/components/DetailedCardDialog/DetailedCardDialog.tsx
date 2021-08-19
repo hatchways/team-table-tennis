@@ -13,7 +13,6 @@ import { classicNameResolver } from 'typescript';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
 import { StringLiteralLike } from 'typescript';
 
-
 const emails = [''];
 export interface DetailedCardDialogProps {
   open: boolean;
@@ -90,62 +89,66 @@ export function DetailedCardDialog(props: DetailedCardDialogProps) {
 
   /* End of Add to Card buttons */
 
-  return (
-    <Dialog
-      onClose={handleClose}
-      aria-labelledby="simple-dialog-title"
-      open={open}
-      classes={{ paper: classes.dialogBox }}
-    >
-      <Grid container spacing={2} className={classes.dialogBorder}>
-        <Grid item xs={12}>
-          <Grid container className={classes.titleContainer}>
-            <AssignmentOutlinedIcon className={classes.iconColor} />
-            <Grid className={classes.mainTitle}>Card Title</Grid>
-            <AddColor />
+  const card = userBoard!.cards[props.selectedCard];
+
+  if (card) {
+    return (
+      <Dialog
+        onClose={handleClose}
+        aria-labelledby="simple-dialog-title"
+        open={open}
+        classes={{ paper: classes.dialogBox }}
+      >
+        <Grid container spacing={2} className={classes.dialogBorder}>
+          <Grid item xs={12}>
+            <Grid container className={classes.titleContainer}>
+              <AssignmentOutlinedIcon className={classes.iconColor} />
+              <Grid className={classes.mainTitle}>Card Title</Grid>
+              <AddColor card={card} />
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
-      <Divider className={classes.divider} />
-      <DialogContent>
-        <Grid container className={classes.dialogBorder}>
-          <Grid item xs={10}>
-            <DescriptionItem />
-            <CommentItem />
-            <DatePickers />
-            <AttachmentItem />
-          </Grid>
-          <Grid item xs={2}>
-            <Grid container direction="column" className={classes.buttonItem}>
-              <Grid item>
-                <Box className={classes.allButtons}>
-                  <Typography variant="caption" className={classes.buttonTitles}>
-                    ADD TO CARD:
-                  </Typography>
-                  <Button className={classes.buttonStyle} onClick={createComment}>
-                    Comment
-                  </Button>
-                  <Button className={classes.buttonStyle} onClick={createDescription}>
-                    Description
-                  </Button>
-                  <Button className={classes.buttonStyle} onClick={createDeadline}>
-                    Deadline
-                  </Button>
-                  <Button className={classes.buttonStyle} onClick={createAttachment}>
-                    Attachment
-                  </Button>
-                </Box>
-              </Grid>
-              <Grid item>
-                <Box className={classes.allButtons}>
-                  <Typography variant="caption" className={classes.buttonTitles}>
-                    ACTIONS:
-                  </Typography>
-                  <DialogButtons title="Move" />
-                  <DialogButtons title="Copy" />
-                  <DialogButtons title="Delete" />
-                  <DialogButtons title="Share" />
-                </Box>
+        <Divider className={classes.divider} />
+        <DialogContent>
+          <Grid container className={classes.dialogBorder}>
+            <Grid item xs={10}>
+              <DescriptionItem card={card} />
+              <CommentItem />
+              <DatePickers card={card} />
+              <AttachmentItem />
+            </Grid>
+            <Grid item xs={2}>
+              <Grid container direction="column" className={classes.buttonItem}>
+                <Grid item>
+                  <Box className={classes.allButtons}>
+                    <Typography variant="caption" className={classes.buttonTitles}>
+                      ADD TO CARD:
+                    </Typography>
+                    <Button className={classes.buttonStyle} onClick={createComment}>
+                      Comment
+                    </Button>
+                    <Button className={classes.buttonStyle} onClick={createDescription}>
+                      Description
+                    </Button>
+                    <Button className={classes.buttonStyle} onClick={createDeadline}>
+                      Deadline
+                    </Button>
+                    <Button className={classes.buttonStyle} onClick={createAttachment}>
+                      Attachment
+                    </Button>
+                  </Box>
+                </Grid>
+                <Grid item>
+                  <Box className={classes.allButtons}>
+                    <Typography variant="caption" className={classes.buttonTitles}>
+                      ACTIONS:
+                    </Typography>
+                    <DialogButtons title="Move" />
+                    <DialogButtons title="Copy" />
+                    <DialogButtons title="Delete" />
+                    <DialogButtons title="Share" />
+                  </Box>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
