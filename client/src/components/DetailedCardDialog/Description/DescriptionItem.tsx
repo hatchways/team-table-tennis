@@ -16,7 +16,9 @@ export default function DescriptionItem(props: properties) {
   const [content, setContent] = useState(userBoard!.cards[props.card._id].description);
 
   const clickHandler = () => {
-    editDescription(props.card._id, content);
+    if (content) {
+      editDescription(props.card._id, content);
+    }
     userBoard!.cards[props.card._id].description = content;
   };
 

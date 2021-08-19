@@ -157,7 +157,6 @@ const Board: React.FunctionComponent = () => {
       const card: CardInterface = {
         _id: cardData.card._id,
         title: cardData.card.title,
-        description: 'test',
         cardDetails: cardData.card.cardDetails,
       };
       const mockData = state.mockData;

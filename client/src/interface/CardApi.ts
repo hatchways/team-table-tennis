@@ -1,7 +1,7 @@
 export interface Card {
   title: string;
   _id: string;
-  description: string;
+  description?: string;
   cardDetails: CardDetails;
 }
 export interface CardDetails {
