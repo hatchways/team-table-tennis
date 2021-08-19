@@ -34,7 +34,7 @@ import { createBoard } from '../../helpers/APICalls/board';
 type Anchor = 'right';
 
 export default function NavBar(props: any) {
-  const { loggedInUserBoard: userBoard } = useAuthBoard();
+  const { loggedInUserBoard: userBoard, changeBoard } = useAuthBoard();
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -69,6 +69,9 @@ export default function NavBar(props: any) {
       });
       userBoard.boardTitles.push(newBoardTitle);
     }
+  };
+  const handleChangeBoard = (index: number) => {
+    changeBoard(index);
   };
 
   const list = (anchor: Anchor) => (
@@ -222,8 +225,27 @@ export default function NavBar(props: any) {
         <List>
           {userBoard?.user?.boards.map((text, index) => (
             <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <LabelOutlinedIcon /> : <LabelOutlinedIcon />}</ListItemIcon>
-              <ListItemText primary={userBoard.boardTitles[index]} />
+              <ListItemIcon>
+                {index % 2 === 0 ? (
+                  <LabelOutlinedIcon
+                    onClick={() => {
+                      handleChangeBoard(index);
+                    }}
+                  />
+                ) : (
+                  <LabelOutlinedIcon
+                    onClick={() => {
+                      handleChangeBoard(index);
+                    }}
+                  />
+                )}
+              </ListItemIcon>
+              <ListItemText
+                primary={userBoard.boardTitles[index]}
+                onClick={() => {
+                  handleChangeBoard(index);
+                }}
+              />
             </ListItem>
           ))}
         </List>

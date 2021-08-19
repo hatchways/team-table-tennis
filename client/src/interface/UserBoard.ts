@@ -9,4 +9,5 @@ export interface UserBoard {
   columns: Columns;
   cards: Cards;
   boardTitles: string[];
+  selectedBoardIndex: number;
 }
