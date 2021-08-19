@@ -18,10 +18,11 @@ export default function Register(): JSX.Element {
   const { updateSnackBarMessage } = useSnackBar();
 
   const handleSubmit = (
-    { username, email, password }: { email: string; password: string; username: string },
-    { setSubmitting }: FormikHelpers<{ email: string; password: string; username: string }>,
+    { email, password }: { email: string; password: string },
+    { setSubmitting }: FormikHelpers<{ email: string; password: string }>,
   ) => {
-    registerBoard(username, email, password).then((data) => {
+    register(email, password).then((data) => {
+      console.log(data);
       if (data.error) {
         console.error({ error: data.error.message });
         setSubmitting(false);

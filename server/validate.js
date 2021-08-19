@@ -8,7 +8,6 @@ const handleErrors = (req, res, next) => {
 }
 
 exports.validateRegister = [
-  check("username", "Please enter a username").not().isEmpty(),
   check("email", "Please enter a valid email address").isEmail(),
   check(
     "password",

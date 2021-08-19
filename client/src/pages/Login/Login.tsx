@@ -31,8 +31,6 @@ export default function Login(): JSX.Element {
         console.log('login worked');
       } else {
         // should not get here from backend but this catch is for an unknown issue
-        console.error({ data });
-
         setSubmitting(false);
         updateSnackBarMessage('An unexpected error occurred. Please try again');
       }

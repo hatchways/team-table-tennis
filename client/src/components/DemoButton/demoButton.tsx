@@ -5,8 +5,8 @@ import { useAuth } from '../../context/useAuthContext';
 import { useSnackBar } from '../../context/useSnackbarContext';
 
 export default function DemoButton(): JSX.Element {
-  const email = '';
-  const password = '';
+  const email = 'demo@hatchway.io';
+  const password = '123123';
 
   const { updateLoginContext } = useAuth();
   const { updateSnackBarMessage } = useSnackBar();

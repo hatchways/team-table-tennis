@@ -2,11 +2,11 @@ import { AuthApiData } from '../../interface/AuthApiData';
 import { AuthBoardApiData } from '../../interface/AuthBoardApiData';
 import { FetchOptions } from '../../interface/FetchOptions';
 
-export const register = async (username: string, email: string, password: string): Promise<AuthApiData> => {
+const register = async (email: string, password: string): Promise<AuthApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, email, password }),
+    body: JSON.stringify({ email, password }),
     credentials: 'include',
   };
   return await fetch(`/auth/register`, fetchOptions)
