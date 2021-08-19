@@ -43,6 +43,8 @@ export function DetailedCardDialog(props: DetailedCardDialogProps) {
 
   let a: any;
 
+  a = 1;
+
   /* COMMENT SECTION*/
   const createComment = () => {
     if (a == 1) {
@@ -159,3 +161,11 @@ export function DetailedCardDialog(props: DetailedCardDialogProps) {
     return <></>;
   }
 }
+
+export const hasData = (data: unknown) => {
+  if (data == undefined) {
+    return { display: 'none' };
+  } else {
+    return { display: 'inline' };
+  }
+};

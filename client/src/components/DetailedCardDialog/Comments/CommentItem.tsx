@@ -3,6 +3,7 @@ import { TextField, Grid, DialogTitle, Button, IconButton } from '@material-ui/c
 import useStyles from './useStyles';
 import MessageOutlinedIcon from '@material-ui/icons/MessageOutlined';
 import ClearIcon from '@material-ui/icons/Clear';
+import { hasData } from '../DetailedCardDialog';
 
 export default function CommentItem() {
   const classes = useStyles();
@@ -12,7 +13,7 @@ export default function CommentItem() {
   };
 
   return (
-    <Grid id="comment">
+    <Grid id="comment" style={hasData(comment)}>
       <Grid container className={classes.titleContainer}>
         <MessageOutlinedIcon className={classes.iconColor} />
         <Grid className={classes.titleFont}>Add comment:</Grid>

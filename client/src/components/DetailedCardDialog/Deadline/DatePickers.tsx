@@ -7,6 +7,7 @@ import { useAuthBoard } from '../../../context/useAuthBoardContext';
 import { Card } from '../../../interface/CardApi';
 import { editDeadLine } from '../../../helpers/APICalls/cards';
 import moment from 'moment';
+import { hasData } from '../DetailedCardDialog';
 
 interface properties {
   card: Card;
@@ -31,7 +32,7 @@ export default function DatePickers(props: properties) {
     setDate(value);
   };
   return (
-    <Grid id="deadline">
+    <Grid id="deadline" style={hasData(date)}>
       <Grid container className={classes.titleContainer}>
         <ScheduleOutlinedIcon className={classes.iconColor} />
         <Grid className={classes.titleFont}>Deadline:</Grid>

@@ -6,6 +6,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 import { Card } from '../../../interface/CardApi';
 import { useAuthBoard } from '../../../context/useAuthBoardContext';
 import { editDescription } from '../../../helpers/APICalls/cards';
+import { hasData } from '../DetailedCardDialog';
 interface properties {
   card: Card;
 }
@@ -18,8 +19,9 @@ export default function DescriptionItem(props: properties) {
     editDescription(props.card._id, content);
     userBoard!.cards[props.card._id].description = content;
   };
+
   return (
-    <Grid id="description">
+    <Grid id="description" style={hasData(content)}>
       <Grid container className={classes.titleContainer}>
         <ImportContactsOutlinedIcon className={classes.iconColor} />
         <Grid className={classes.titleFont}>Description:</Grid>
