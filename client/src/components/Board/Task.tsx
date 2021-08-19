@@ -62,7 +62,8 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
 
   const getDate = () => {
     const date = state.task?.cardDetails.deadLine;
-    return moment(date).format('MMMM D');
+    if (date) return moment(date).format('MMMM D');
+    else return '';
   };
   if (state.task) {
     return (
