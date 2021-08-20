@@ -191,6 +191,7 @@ const Board: React.FunctionComponent = () => {
   const createNewColumn = () => {
     if (state.mockData) {
       createColumn(state.newColumnTitle, state.mockData?.board._id).then((columnData) => {
+        console.log(columnData);
         const column: ColumnInterface = {
           _id: columnData.column._id,
           title: columnData.column.title,

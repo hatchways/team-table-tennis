@@ -37,7 +37,7 @@ const {
 
 // Board
 router.route('/').post(createBoard, validateCreateBoard);
-router.route('/:userId').post(createBoardWithUser, validateCreateBoard);
+router.route('/create/:userId').post(createBoardWithUser, validateCreateBoard);
 router.route('/:boardId').get(getBoard, validateGetBoard);
 router.route('/full/:boardId').get(getBoardFull);
 router.route('/editTitle').put(editBoardTitle);

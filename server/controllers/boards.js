@@ -30,11 +30,9 @@ exports.createBoard = asyncHandler(async (req, res, next) => {
 })
 
 exports.createBoardWithUser = asyncHandler(async (req, res, next) => {  
-  console.log("inside");
   const { title } = req.body;
   const userId = req.params.userId;
-  console.log(userId);
-  console.log(title);
+
 
   const user = await User.findById(userId);
   if (title) {
@@ -48,8 +46,7 @@ exports.createBoardWithUser = asyncHandler(async (req, res, next) => {
 
     const board = new Board({ title, columns: [inProgress._id, completed._id]});
     await board.save();
-    console.log(board);
-    console.log(user);
+
 
     user.boards.push(board._id);
 

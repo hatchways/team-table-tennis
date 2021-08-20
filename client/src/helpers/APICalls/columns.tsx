@@ -13,6 +13,7 @@ export const getColumns = async (boardId: string): Promise<Columns> => {
 };
 
 export const createColumn = async (title: string, boardId: string): Promise<any> => {
+  console.log('inside create col');
   return await fetch('/boards/columns', {
     method: 'POST',
     body: JSON.stringify({ title, boardId }),

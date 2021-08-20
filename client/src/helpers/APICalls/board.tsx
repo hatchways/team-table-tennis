@@ -69,7 +69,7 @@ export const moveCardToAnotherColumn = async (
 };
 
 export const createBoard = async (title: string, userId: string): Promise<any> => {
-  return await fetch('/boards/' + userId, {
+  return await fetch('/boards/create/' + userId, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
     mode: 'cors',
