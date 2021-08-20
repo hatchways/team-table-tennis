@@ -70,10 +70,10 @@ export default function NavBar() {
     if (userBoard?.board && userBoard.user) {
       const newBoardTitle = 'New Board';
       createBoard(newBoardTitle, userBoard.user._id).then((data) => {
-        console.log(data);
         userBoard.user = data.success.user;
+        userBoard.boardTitles.push(newBoardTitle);
+        setBoardTitles({ titles: userBoard.boardTitles });
       });
-      userBoard.boardTitles.push(newBoardTitle);
     }
   };
   const handleChangeBoard = (index: number) => {
