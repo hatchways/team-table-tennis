@@ -85,3 +85,43 @@ exports.validateMoveCard = [
   check("row", "Please include a destination row").not().isEmpty(),
   check("cardId", "Please include a card ID").not().isEmpty(),
 ];
+
+exports.validateTeam =[
+  check('teamId', 'Please include a team ID').exists(),
+  handleErrors
+]
+exports.validateTeamDelete =[
+  check('teamId', 'Please include a team ID').exists(),
+  handleErrors
+]
+exports.validateTeamCardAdd =[
+  check('boardId', 'Please include a board ID').exists(),
+  check('title', 'Please include a title').exists(),
+  check('description', 'Please include a description for the card').exists(),
+
+  handleErrors
+]
+exports.validateTeamCardDelete =[
+  check('boardId', 'Please include a Board ID').exists(),
+  check('cardId', 'Please include a Card ID').exists(),
+
+  handleErrors
+]
+exports.validateTeamCardUpdate =[
+  check('title', 'Please include a title').exists(),
+  check('desc', 'Please include a description of the card').exists(),
+  check('boardId', 'Please include a board ID').exists(),
+  check('cardId', 'Please include a card ID').exists(),
+
+  handleErrors
+]
+exports.validateTeamBoardAdd =[
+  check('title', 'Please include a title for the board').exists(),
+
+  handleErrors
+]
+exports.validateTeamBoardDelete =[
+  check('boardId', 'Please include a board ID').exists(),
+
+  handleErrors
+]

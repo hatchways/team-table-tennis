@@ -23,14 +23,14 @@ const {
 } = require("../validate");
 
 
-router.route('/:teamId').get(getTeam, validateTeam);
-router.route('/delete/:teamId').delete(deleteTeam, validateTeamDelete);
+router.route('/:teamId').get(getTeam, validateGetTeam);
+router.route('/delete/:teamId').delete(deleteTeam, validateDeleteTeam);
 
-router.route('/card/add').post(teamCardAdd, validateTeamCard);
-router.route('/card/delete').delete(teamCardDelete, validateTeamCard);
-router.route('/card/update').put(teamCardUpdate, validateTeamCard);
+router.route('/card/add').post(teamCardAdd, validateTeamCardAdd);
+router.route('/card/delete').delete(teamCardDelete, validateTeamCardDelete);
+router.route('/card/update').put(teamCardUpdate, validateTeamCardUpdate);
 
-router.route('/board/add/').post(teamBoardAdd, validateBoardCard);
-router.route('/board/delete/boardId').delete(teamBoardDelete, validateBoardCard);
+router.route('/board/add/').post(teamBoardAdd, validateTeamBoardAdd);
+router.route('/board/delete/boardId').delete(teamBoardDelete, validateTeamBoardDelete);
 
 module.exports = router;
