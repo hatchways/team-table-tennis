@@ -22,9 +22,11 @@ function App(): JSX.Element {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-                <ProtectedRoute exact path="/calendar" component={Calendar} />
                 <Route path="*">
                   <Redirect to="/login" />
+                </Route>
+                <Route exact path="/calendar">
+                  <Calendar />
                 </Route>
               </Switch>
             </SocketProvider>

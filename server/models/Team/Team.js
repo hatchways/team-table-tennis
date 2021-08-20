@@ -8,18 +8,14 @@ const teamSchema = new mongoose.Schema({
     unique: false
   },
   collaborators: [{
-      users: {
-          type: ObjectId,
-          ref: "user"
-      }
+    users: {
+    type: ObjectId,
+    ref: "user"
+    }
   }],
   boards: [{
     type: ObjectId,
-    ref: "board"
-  }],
-  cards:[{
-    type: ObjectId,
-    ref: 'card'
+    ref: "teamBoard"
   }]
 })
 
