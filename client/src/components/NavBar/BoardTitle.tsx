@@ -6,22 +6,35 @@ import { useAuthBoard } from '../../context/useAuthBoardContext';
 import { useState } from 'react';
 import { editTitle } from '../../helpers/APICalls/board';
 
-export default function BoardTitle() {
+interface properties {
+  selectedIndex: number;
+  title: string;
+  changeBoardTitles: (titles: string[]) => void;
+}
+export default function BoardTitle(props: properties) {
+  // props are needed so the board title will switch when the selected board is changed
+
   const { loggedInUserBoard: userBoard } = useAuthBoard();
   const classes = useStyles();
   const theme = useTheme();
-  const [state, setState] = useState({ isEditing: false, text: userBoard!.board.title });
+  const [state, setState] = useState({
+    isEditing: false,
+    text: props.title,
+    selectedIndex: props.selectedIndex,
+  });
   const editOrSubmitClick = () => {
+    //const isEditing = newState.isEditing;
     if (state.isEditing) {
       editTitle(state.text, userBoard!.board._id).then(() => {
         userBoard!.board.title = state.text;
         userBoard!.boardTitles[userBoard!.selectedBoardIndex] = state.text;
+        // selectedIndex now matches the state, allowing the title to update
+        setState({ ...state, selectedIndex: props.selectedIndex, isEditing: !state.isEditing });
+        props.changeBoardTitles(userBoard!.boardTitles);
       });
     } else {
-      console.log('yea');
-      setState({ ...state, text: 'test' });
+      setState({ ...state, isEditing: !state.isEditing });
     }
-    setState({ ...state, isEditing: !state.isEditing });
   };
   const clearOrDeleteClick = () => {
     if (state.isEditing) {
@@ -44,7 +57,7 @@ export default function BoardTitle() {
           ></Input>
         ) : (
           <Typography variant="h6" className={classes.title}>
-            {userBoard?.board.title}
+            {state.selectedIndex === props.selectedIndex ? state.text : props.title}
           </Typography>
         )}
       </Grid>

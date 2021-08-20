@@ -40,6 +40,7 @@ export default function NavBar() {
   const theme = useTheme();
 
   const [open, setOpen] = React.useState(false);
+  const [boardTitles, setBoardTitles] = React.useState({ titles: userBoard!.boardTitles });
   const [state, setState] = React.useState({
     right: false,
   });
@@ -47,6 +48,9 @@ export default function NavBar() {
     setOpen(true);
   };
 
+  const changeBoardTitles = (titles: string[]) => {
+    setBoardTitles({ titles: titles });
+  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -189,7 +193,11 @@ export default function NavBar() {
       </Grid>
       <AppBar position="static" className={classes.appbarStyle}>
         <Toolbar>
-          <BoardTitle />
+          <BoardTitle
+            title={userBoard!.board.title}
+            selectedIndex={userBoard!.selectedBoardIndex}
+            changeBoardTitles={changeBoardTitles}
+          />
           <IconButton
             edge="end"
             color="inherit"
@@ -241,7 +249,7 @@ export default function NavBar() {
                 )}
               </ListItemIcon>
               <ListItemText
-                primary={userBoard.boardTitles[index]}
+                primary={boardTitles.titles[index]}
                 onClick={() => {
                   handleChangeBoard(index);
                 }}
