@@ -129,7 +129,7 @@ export default function NavBar() {
             spacing={1}
             direction="row"
             alignItems="center"
-            justifyContent="flex-start"
+            justify-content="flex-start"
             className={classes.kanLogo}
           >
             <img src={logo} alt="logo" />

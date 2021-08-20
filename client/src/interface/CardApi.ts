@@ -1,8 +1,7 @@
 export interface Card {
   title: string;
-  date: string;
   _id: string;
-  description: string;
+  description?: string;
   cardDetails: CardDetails;
 }
 export interface CardDetails {
@@ -10,6 +9,7 @@ export interface CardDetails {
   tags: string[];
   deadLine: Date;
   attatchment: string;
+  comment: string;
 }
 export interface Cards {
   [key: string]: Card;

@@ -10,10 +10,12 @@ import { Card as TaskInterface } from '../../interface/CardApi';
 import TaskTitle from './TaskTitle';
 import { quickUpdate } from '../../helpers/APICalls/cards';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
+import moment from 'moment';
 
 interface properties {
   task: TaskInterface | undefined;
   index: number;
+  openDetailedCard: (cardId: string) => void;
 }
 
 const Task: React.FunctionComponent<properties> = (props: properties) => {
@@ -54,12 +56,25 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
     }
     return output;
   };
+  const clickHandler = () => {
+    if (props.task?.cardDetails.color != colors[0]) props.openDetailedCard(task!._id);
+  };
+
+  const getDate = () => {
+    const date = state.task?.cardDetails.deadLine;
+    if (date) return moment(date).format('MMMM D');
+    else return '';
+  };
   if (state.task) {
     return (
       <Draggable draggableId={'' + state.task?._id} index={props.index}>
         {(provided, snapshot) => (
           <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef}>
-            <Card elevation={0} className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task?._id}>
+            <Card
+              elevation={0}
+              className={taskClassName(snapshot.isDragging) + ' ' + 'taskClass-' + props.task?._id}
+              onDoubleClick={clickHandler}
+            >
               <CardHeader
                 title={
                   <div>
@@ -75,7 +90,7 @@ const Task: React.FunctionComponent<properties> = (props: properties) => {
                 }
                 subheader={
                   <Typography color="textSecondary" variant="h6" className={classes.selectTag}>
-                    {state.task?.date}
+                    {getDate()}
                   </Typography>
                 }
               ></CardHeader>

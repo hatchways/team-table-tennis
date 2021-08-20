@@ -15,8 +15,9 @@ const cardSchema = new mongoose.Schema({
     {
       tags:{ type: Array },
       color:{ type: String },
-      deadLine: {type: Date },
-      attachment:{ type: String }
+      deadLine: {type: Date, require: false },
+      attachment:{ type: String, require: false },
+      comment: { type: String, require: false }
     }
 })
 
