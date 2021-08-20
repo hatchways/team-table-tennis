@@ -85,6 +85,6 @@ exports.validateMoveCard = [
   check("row", "Please include a destination row").not().isEmpty(),
   check("cardId", "Please include a card ID").not().isEmpty(),
 ];
-exports.validateGetCalendar = [
+exports.validateUpdateCalendar = [
   handleErrors
 ]
