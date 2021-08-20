@@ -101,7 +101,7 @@ exports.deleteBoard = asyncHandler(async (req, res) => {
   }
 })
 
-deleteAllColumnsAndCardsInsideBoard = asyncHandler(async (board) => {
+exports.deleteAllColumnsAndCardsInsideBoard = asyncHandler(async (board) => {
    for(const columnId of board.columns){
     await deleteAllCardsInsideColumn(columnId);
   }  

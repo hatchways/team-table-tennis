@@ -12,7 +12,7 @@ export default function AccountButton() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const { logout } = useAuthBoard();
+  const { logout, logoutDemo } = useAuthBoard();
   const { loggedInUserBoard } = useAuthBoard();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -25,7 +25,13 @@ export default function AccountButton() {
 
   const handleLogout = () => {
     handleClose();
-    logout();
+    if (loggedInUserBoard && loggedInUserBoard.user) {
+      if (loggedInUserBoard.user.isDemo) {
+        logoutDemo(loggedInUserBoard.user._id);
+      } else {
+        logout();
+      }
+    }
   };
 
   const cld = new Cloudinary({

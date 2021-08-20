@@ -15,7 +15,7 @@ export const login = async (email: string, password: string): Promise<AuthApiDat
       error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
-export const loginBoard = async (email: string, password: string): Promise<AuthBoardApiData> => {
+export const loginBoard = async (email: string, password: string, isDemo: boolean): Promise<AuthBoardApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },

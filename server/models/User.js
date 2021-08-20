@@ -20,6 +20,10 @@ const userSchema = new mongoose.Schema({
     type: ObjectId,
     ref: "board"
   }],
+  isDemo: {
+    type: Boolean,
+    default: false
+  }
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {

@@ -2,7 +2,7 @@ import { useState, useContext, createContext, FunctionComponent, useEffect, useC
 import { useHistory } from 'react-router-dom';
 import { AuthBoardApiData, AuthBoardApiDataSuccess } from '../interface/AuthBoardApiData';
 import { loginWithCookiesBoard } from '../helpers/APICalls/loginWithCookies';
-import logoutAPI from '../helpers/APICalls/logout';
+import { logoutApi, logoutDemoApi } from '../helpers/APICalls/logout';
 import { UserBoard } from '../interface/UserBoard';
 import { GetAllBoard } from '../helpers/APICalls/board';
 import { CompleteBoard } from '../interface/BoardApi';
@@ -19,6 +19,7 @@ export const AuthBoardContext = createContext<IAuthBoardContext>({
   },
   updateLoginContext: () => null,
   logout: () => null,
+  logoutDemo: () => null,
   changeBoard: (boardIndex: number) => null,
 });
 
@@ -71,7 +72,7 @@ export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element 
 
   const logout = useCallback(async () => {
     // needed to remove token cookie
-    await logoutAPI()
+    await logoutApi()
       .then(() => {
         history.push('/login');
         setLoggedInUserBoard(null);
@@ -79,9 +80,22 @@ export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element 
       .catch((error) => console.error(error));
   }, [history]);
 
+  const logoutDemo = useCallback(
+    async (userId: string) => {
+      // needed to remove token cookie
+      await logoutDemoApi(userId)
+        .then(() => {
+          history.push('/login');
+          setLoggedInUserBoard(null);
+        })
+        .catch((error) => console.error(error));
+    },
+    [history],
+  );
+
   // use our cookies to check if we can login straight away
   useEffect(() => {
-    const checkLoginWithCookies = async () => {
+    const checkLoginWithCookies = async (isDemo: boolean) => {
       await loginWithCookiesBoard().then((data: AuthBoardApiData) => {
         if (data.success) {
           updateLoginContext(data.success);
@@ -93,12 +107,12 @@ export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element 
         }
       });
     };
-    checkLoginWithCookies();
+    checkLoginWithCookies(false);
   }, [updateLoginContext, history]);
 
   return (
     <AuthBoardContext.Provider
-      value={{ loggedInUserBoard: loggedInUserBoard, updateLoginContext, logout, changeBoard }}
+      value={{ loggedInUserBoard: loggedInUserBoard, updateLoginContext, logout, changeBoard, logoutDemo }}
     >
       {children}
     </AuthBoardContext.Provider>

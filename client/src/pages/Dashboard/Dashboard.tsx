@@ -15,22 +15,15 @@ export default function Dashboard(): JSX.Element {
   // const { initSocket } = useSocket();
 
   const history = useHistory();
-
-  //useEffect(() => {
-  //  initSocket();
-  //}, [initSocket]);
+  console.log('Is Demo ' + loggedInUser!.user!.isDemo);
 
   console.log('board loaded');
   if (loggedInUser === undefined || loggedInUser?.columns === undefined) return <CircularProgress />;
   if (!loggedInUser) {
     history.push('/login');
-    console.log('dashboard login');
     // loading for a split seconds until history.push works
     return <CircularProgress />;
   }
-  //if (!board) {
-  //  return <CircularProgress />;
-  //}
 
   return (
     <Grid container component="main" className={`${classes.root} ${classes.dashboard}`} direction="row">

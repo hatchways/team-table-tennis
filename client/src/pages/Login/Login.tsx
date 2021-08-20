@@ -22,12 +22,12 @@ export default function Login(): JSX.Element {
     { email, password }: { email: string; password: string },
     { setSubmitting }: FormikHelpers<{ email: string; password: string }>,
   ) => {
-    loginBoard(email, password).then((data) => {
+    loginBoard(email, password, false).then((data) => {
       if (data.error) {
         setSubmitting(false);
         updateSnackBarMessage(data.error.message);
       } else if (data.success) {
-        updateLoginContext(data.success);
+        updateLoginContext(data.success, false);
         console.log('login worked');
       } else {
         // should not get here from backend but this catch is for an unknown issue

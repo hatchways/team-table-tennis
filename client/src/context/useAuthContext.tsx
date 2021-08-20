@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import { AuthApiData, AuthApiDataSuccess } from '../interface/AuthApiData';
 import { User } from '../interface/User';
 import { loginWithCookies } from '../helpers/APICalls/loginWithCookies';
-import logoutAPI from '../helpers/APICalls/logout';
+import { logoutApi } from '../helpers/APICalls/logout';
 import IAuthContext from '../interface/IAuthContext';
 
 export const AuthContext = createContext<IAuthContext>({
@@ -27,7 +27,7 @@ export const AuthProvider: FunctionComponent = ({ children }): JSX.Element => {
 
   const logout = useCallback(async () => {
     // needed to remove token cookie
-    await logoutAPI()
+    await logoutApi()
       .then(() => {
         history.push('/login');
         setLoggedInUser(null);

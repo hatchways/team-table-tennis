@@ -15,11 +15,11 @@ const register = async (email: string, password: string): Promise<AuthApiData> =
       error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
-export const registerBoard = async (email: string, password: string): Promise<AuthBoardApiData> => {
+export const registerBoard = async (email: string, password: string, isDemo: boolean): Promise<AuthBoardApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password }),
+    body: JSON.stringify({ email, password, isDemo }),
     credentials: 'include',
   };
   return await fetch(`/auth/register`, fetchOptions)

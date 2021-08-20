@@ -2,12 +2,14 @@ const User = require("../models/User");
 const asyncHandler = require("express-async-handler");
 const generateToken = require("../utils/generateToken");
 const Board = require("../models/Board");
+const mongoose = require("mongoose");
+
 
 // @route POST /auth/register
 // @desc Register user
 // @access Public
 exports.registerUser = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, isDemo } = req.body;
 
   const emailExists = await User.findOne({ email });
 
@@ -24,12 +26,18 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
   await completed.save();
   const defaultBoard = new Board({ title: 'My Board', columns: [inProgress._id, completed._id]});
   await defaultBoard.save();
-  const user = await User.create({
+  
+  const user = new User({
     email,
     password,
-    boards: [defaultBoard._id]
+    boards: [defaultBoard._id],
+    isDemo
   });
+  await user.save();
+  console.log(user);
+
   if (user) {
+
     const token = generateToken(user._id);
     const secondsInWeek = 604800;
 
@@ -38,12 +46,14 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
       maxAge: secondsInWeek * 1000
     });
     const boardTitles = await getBoardTitlesFromUser(user);
+
     res.status(201).json({
       success: {
         user: {
           _id: user._id,
           email: user.email,
-          boards: user.boards
+          boards: user.boards,
+          isDemo
         },
         boardTitles: boardTitles
       }
@@ -75,7 +85,9 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
         user: {
           _id: user._id,
           email: user.email,
-          boards: user.boards
+          boards: user.boards,
+        isDemo: user.isDemo
+
         },
         boardTitles: boardTitles
       }
@@ -104,7 +116,8 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
       user: {
         _id: user._id,
         email: user.email,
-        boards: user.boards
+        boards: user.boards,
+        isDemo: user.isDemo
       },
       boardTitles: boardTitles
     }
@@ -119,3 +132,38 @@ exports.logoutUser = asyncHandler(async (req, res, next) => {
 
   res.send("You have successfully logged out");
 });
+
+exports.getDemoName = asyncHandler(async (req, res) =>{
+  const email = "demo-" + mongoose.Types.ObjectId();
+  res.status(200).json({
+    email
+  });
+})
+
+exports.logoutDemoUser = asyncHandler(async (req, res) => {
+  const { userId } = req.body;
+  console.log("begin: " + userId)
+
+  const user = await User.findById(userId);
+  await deleteAllBoardsInsideUser(user);
+  await User.findByIdAndDelete(userId);
+   this.logoutUser();
+});
+
+deleteAllColumnsAndCardsInsideBoard = asyncHandler(async (board) => {
+  for(const columnId of board.columns){
+   await deleteAllCardsInsideColumn(columnId);
+ }  
+})
+deleteAllBoardsInsideUser = asyncHandler(async (user) => {
+  for(const boardId of user.boards){
+   await deleteAllColumnsAndCardsInsideBoard(boardId);
+ }  
+})
+
+exports.getDemoName = asyncHandler(async (req, res) =>{
+  const email = "demo-" + mongoose.Types.ObjectId();
+  res.status(200).json({
+    email
+  });
+})
