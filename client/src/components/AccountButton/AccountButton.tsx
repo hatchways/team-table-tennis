@@ -34,7 +34,8 @@ export default function AccountButton() {
     },
   });
 
-  const myImage = cld.image('KanbanCloud/' + `${loggedInUserBoard?.user?._id}`);
+  console.log('test: ' + loggedInUserBoard!.user!.email);
+  const myImage = cld.image('KanbanCloud/' + `${loggedInUserBoard!.user!.email}`);
 
   return (
     <Container className={classes.root}>
