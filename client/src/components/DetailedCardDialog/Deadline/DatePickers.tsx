@@ -61,7 +61,14 @@ export default function DatePickers(props: properties) {
         <Button className={classes.buttonStyle} color="primary" variant="contained" size="large" onClick={saveDate}>
           Save
         </Button>
-        <IconButton onClick={() => setDate('')}>
+        <IconButton
+          onClick={() => {
+            setDate('');
+
+            const dateInput = document.getElementById('date') as HTMLInputElement;
+            dateInput.value = '';
+          }}
+        >
           <ClearIcon color="primary" />
         </IconButton>
       </Grid>
