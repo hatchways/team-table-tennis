@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSocket } from '../../context/useSocketContext';
 import { FetchOptions } from '../../interface/FetchOptions';
-import { useHistory } from 'react-router-dom';
 
 import { Mevent } from './interface';
 import { IUserSchedule, mockDatas } from './MockEvent';
@@ -13,26 +12,25 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
 import { Toolbar, EventComponent } from './extension';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
-import { CircularProgress } from '@material-ui/core';
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar as any);
+const newArray: IUserSchedule[] = [];
 
 const DnDCalendar = (): JSX.Element => {
   const { loggedInUserBoard: loggedInUser } = useAuthBoard();
-  const [events, setEvent] = useState<IUserSchedule[]>(mockDatas);
   const [userCard, setUserCard] = useState(loggedInUser?.cards);
+  const [cardInfos, setCardInfos] = useState<IUserSchedule[]>([]);
   const { initSocket } = useSocket();
-  const cardInfos: IUserSchedule[] = [];
 
   for (const card in userCard) {
-    const cardInfo = {
+    const newObj: IUserSchedule = {
       title: userCard[card].title,
       start: new Date(userCard[card].cardDetails.deadLine),
       end: new Date(userCard[card].cardDetails.deadLine),
       resource: userCard[card].cardDetails.color,
     };
-    cardInfos.push(cardInfo);
+    newArray.push(newObj);
   }
 
   useEffect(() => {
@@ -40,16 +38,17 @@ const DnDCalendar = (): JSX.Element => {
   }, [initSocket]);
   useEffect(() => {
     console.log(cardInfos);
-  });
+    setCardInfos(newArray);
+  }, [cardInfos]);
 
   const moveEvent = ({ event, start, end }: Mevent): void => {
     const selectedIndex = cardInfos.indexOf(event);
     const updatedEvent = { ...event, start, end };
 
-    const nextEvents = [...events];
+    const nextEvents = [...cardInfos];
     nextEvents.splice(selectedIndex, 1, updatedEvent);
 
-    setEvent(nextEvents);
+    setCardInfos(nextEvents);
     // updateEvent();
   };
   const updateEvent = async () => {
@@ -71,7 +70,7 @@ const DnDCalendar = (): JSX.Element => {
       timeslots={2}
       localizer={localizer}
       events={cardInfos}
-      onEventDrop={moveEvent}
+      onEventDrop={() => moveEvent}
       components={{
         toolbar: Toolbar,
         event: EventComponent,

@@ -3,17 +3,17 @@ import { Container, IconButton } from '@material-ui/core/';
 import useStyles from './useStyles';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
-import { useAuth } from '../../context/useAuthContext';
 import { Link } from 'react-router-dom';
 import { AdvancedImage } from '@cloudinary/react';
 import { Cloudinary } from '@cloudinary/base';
+import { useAuthBoard } from '../../context/useAuthBoardContext';
 
 export default function AccountButton() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const { logout } = useAuth();
-  const { loggedInUser } = useAuth();
+  const { logout } = useAuthBoard();
+  const { loggedInUserBoard } = useAuthBoard();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -34,7 +34,8 @@ export default function AccountButton() {
     },
   });
 
-  const myImage = cld.image('KanbanCloud/' + `${loggedInUser?.username}`);
+  console.log('test: ' + loggedInUserBoard!.user!.email);
+  const myImage = cld.image('KanbanCloud/' + `${loggedInUserBoard!.user!.email}`);
 
   return (
     <Container className={classes.root}>

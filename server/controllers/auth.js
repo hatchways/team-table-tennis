@@ -15,6 +15,8 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     res.status(400);
     throw new Error("A user with that email already exists");
   }
+
+
   const inProgress = new Column({ title: 'In Progress' });
   const completed = new Column({ title : 'Completed' }); 
   
