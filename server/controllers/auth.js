@@ -15,12 +15,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     res.status(400);
     throw new Error("A user with that email already exists");
   }
-  const usernameExists = await User.findOne({ username });
-
-  if (usernameExists) {
-    res.status(400);
-    throw new Error("A user with that username already exists");
-  }
 
 
   const inProgress = new Column({ title: 'In Progress' });
