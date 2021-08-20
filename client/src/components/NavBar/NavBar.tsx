@@ -231,8 +231,8 @@ export default function NavBar() {
         </List>
         <Divider />
         <List>
-          {userBoard?.user?.boards.map((text, index) => (
-            <ListItem button key={text}>
+          {boardTitles.titles.map((text, index) => (
+            <ListItem button key={index}>
               <ListItemIcon>
                 {index % 2 === 0 ? (
                   <LabelOutlinedIcon

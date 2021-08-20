@@ -20,7 +20,8 @@ const {
   moveCardToAnotherColumn,
   deleteColumn,
   createBoardWithUser,
-  editBoardTitle
+  editBoardTitle,
+  deleteBoard
 } = require('../controllers/boards.js');
 const protect = require("../middleware/auth.js");
 const {
@@ -41,6 +42,8 @@ router.route('/create/:userId').post(createBoardWithUser, validateCreateBoard);
 router.route('/:boardId').get(getBoard, validateGetBoard);
 router.route('/full/:boardId').get(getBoardFull);
 router.route('/editTitle').put(editBoardTitle);
+router.route('/').delete(deleteBoard);
+
 
 // Column
 router.route("/columns").post(createColumn, validateCreateColumn);

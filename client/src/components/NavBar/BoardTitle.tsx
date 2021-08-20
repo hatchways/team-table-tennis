@@ -4,7 +4,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { ClearOutlined, Delete, Done } from '@material-ui/icons';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
 import { useState } from 'react';
-import { editTitle } from '../../helpers/APICalls/board';
+import { deleteBoard, editTitle } from '../../helpers/APICalls/board';
 
 interface properties {
   selectedIndex: number;
@@ -14,7 +14,7 @@ interface properties {
 export default function BoardTitle(props: properties) {
   // props are needed so the board title will switch when the selected board is changed
 
-  const { loggedInUserBoard: userBoard } = useAuthBoard();
+  const { loggedInUserBoard: userBoard, changeBoard } = useAuthBoard();
   const classes = useStyles();
   const theme = useTheme();
   const [state, setState] = useState({
@@ -38,9 +38,15 @@ export default function BoardTitle(props: properties) {
   };
   const clearOrDeleteClick = () => {
     if (state.isEditing) {
-      setState({ ...state, text: userBoard!.board.title });
+      setState({ ...state, text: userBoard!.board.title, isEditing: !state.isEditing });
+    } else {
+      deleteBoard(userBoard!.user!._id, userBoard!.board._id).then(() => {
+        userBoard!.boardTitles.splice(userBoard!.selectedBoardIndex, 1);
+        userBoard!.selectedBoardIndex = 0;
+        changeBoard(0);
+        props.changeBoardTitles(userBoard!.boardTitles);
+      });
     }
-    setState({ ...state, isEditing: !state.isEditing });
   };
   const change = (value: string) => {
     setState({ ...state, text: value });

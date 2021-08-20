@@ -92,3 +92,16 @@ export const editTitle = async (title: string, boardId: string): Promise<any> =>
       error: { message: 'unable to connext to server' },
     }));
 };
+
+export const deleteBoard = async (userId: string, boardId: string): Promise<any> => {
+  return await fetch('/boards/', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    mode: 'cors',
+    body: JSON.stringify({ userId, boardId }),
+  })
+    .then((res) => res.json())
+    .catch((e) => ({
+      error: { message: 'unable to connext to server, ' + e },
+    }));
+};

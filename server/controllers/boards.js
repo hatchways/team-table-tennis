@@ -79,6 +79,34 @@ exports.getBoard = asyncHandler(async (req, res) => {
   }
 })
 
+exports.deleteBoard = asyncHandler(async (req, res) => {
+  const { boardId, userId } = req.body;
+
+  const user = await User.findById(userId);
+
+  if(user.boards.length === 1){
+
+    const error = new Error(`${userId} only has a single board left`);
+    res.status(405).json({
+      error
+    })
+  }
+  else{
+  user.boards.splice(user.boards.indexOf(boardId), 1);
+  await user.save();
+  const board = await Board.findById(boardId);
+  await deleteAllColumnsAndCardsInsideBoard(board);
+  await Board.findByIdAndDelete(boardId);
+  res.status(200).json({user});
+  }
+})
+
+deleteAllColumnsAndCardsInsideBoard = asyncHandler(async (board) => {
+   for(const columnId of board.columns){
+    await deleteAllCardsInsideColumn(columnId);
+  }  
+})
+
 exports.editBoardTitle = asyncHandler(async (req, res) => {
   const { title, boardId } = req.body;
   const board = await Board.findById(boardId);
