@@ -32,14 +32,10 @@ const DnDCalendar = (): JSX.Element => {
     };
     newArray.push(newObj);
   }
-
+  setCardInfos(newArray);
   useEffect(() => {
     initSocket();
   }, [initSocket]);
-  useEffect(() => {
-    console.log(cardInfos);
-    setCardInfos(newArray);
-  }, [cardInfos]);
 
   const moveEvent = ({ event, start, end }: Mevent): void => {
     const selectedIndex = cardInfos.indexOf(event);
