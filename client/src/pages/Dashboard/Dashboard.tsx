@@ -34,7 +34,7 @@ export default function Dashboard(): JSX.Element {
 
   return (
     <Grid container component="main" className={`${classes.root} ${classes.dashboard}`} direction="row">
-      <NavBar boardTitle={loggedInUser.board?.title} />
+      <NavBar />
       <Grid item className={classes.drawerWrapper}></Grid>
       <Grid item xs>
         <Board></Board>

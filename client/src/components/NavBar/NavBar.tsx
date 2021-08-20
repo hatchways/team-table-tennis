@@ -30,14 +30,17 @@ import StorageOutlinedIcon from '@material-ui/icons/StorageOutlined';
 import AppsIcon from '@material-ui/icons/Apps';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
 import { createBoard } from '../../helpers/APICalls/board';
+import BoardTitle from './BoardTitle';
 
 type Anchor = 'right';
 
-export default function NavBar(props: any) {
+export default function NavBar() {
   const { loggedInUserBoard: userBoard, changeBoard } = useAuthBoard();
   const classes = useStyles();
   const theme = useTheme();
+
   const [open, setOpen] = React.useState(false);
+  const [boardTitles, setBoardTitles] = React.useState({ titles: userBoard!.boardTitles });
   const [state, setState] = React.useState({
     right: false,
   });
@@ -45,6 +48,9 @@ export default function NavBar(props: any) {
     setOpen(true);
   };
 
+  const changeBoardTitles = (titles: string[]) => {
+    setBoardTitles({ titles: titles });
+  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -64,10 +70,10 @@ export default function NavBar(props: any) {
     if (userBoard?.board && userBoard.user) {
       const newBoardTitle = 'New Board';
       createBoard(newBoardTitle, userBoard.user._id).then((data) => {
-        console.log(data);
         userBoard.user = data.success.user;
+        userBoard.boardTitles.push(newBoardTitle);
+        setBoardTitles({ titles: userBoard.boardTitles });
       });
-      userBoard.boardTitles.push(newBoardTitle);
     }
   };
   const handleChangeBoard = (index: number) => {
@@ -187,9 +193,11 @@ export default function NavBar(props: any) {
       </Grid>
       <AppBar position="static" className={classes.appbarStyle}>
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            {props.boardTitle}
-          </Typography>
+          <BoardTitle
+            title={userBoard!.board.title}
+            selectedIndex={userBoard!.selectedBoardIndex}
+            changeBoardTitles={changeBoardTitles}
+          />
           <IconButton
             edge="end"
             color="inherit"
@@ -223,8 +231,8 @@ export default function NavBar(props: any) {
         </List>
         <Divider />
         <List>
-          {userBoard?.user?.boards.map((text, index) => (
-            <ListItem button key={text}>
+          {boardTitles.titles.map((text, index) => (
+            <ListItem button key={index}>
               <ListItemIcon>
                 {index % 2 === 0 ? (
                   <LabelOutlinedIcon
@@ -241,7 +249,7 @@ export default function NavBar(props: any) {
                 )}
               </ListItemIcon>
               <ListItemText
-                primary={userBoard.boardTitles[index]}
+                primary={boardTitles.titles[index]}
                 onClick={() => {
                   handleChangeBoard(index);
                 }}

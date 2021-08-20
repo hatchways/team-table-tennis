@@ -30,11 +30,9 @@ exports.createBoard = asyncHandler(async (req, res, next) => {
 })
 
 exports.createBoardWithUser = asyncHandler(async (req, res, next) => {  
-  console.log("inside");
   const { title } = req.body;
   const userId = req.params.userId;
-  console.log(userId);
-  console.log(title);
+
 
   const user = await User.findById(userId);
   if (title) {
@@ -48,8 +46,7 @@ exports.createBoardWithUser = asyncHandler(async (req, res, next) => {
 
     const board = new Board({ title, columns: [inProgress._id, completed._id]});
     await board.save();
-    console.log(board);
-    console.log(user);
+
 
     user.boards.push(board._id);
 
@@ -80,6 +77,49 @@ exports.getBoard = asyncHandler(async (req, res) => {
       error
     })
   }
+})
+
+exports.deleteBoard = asyncHandler(async (req, res) => {
+  const { boardId, userId } = req.body;
+
+  const user = await User.findById(userId);
+
+  if(user.boards.length === 1){
+
+    const error = new Error(`${userId} only has a single board left`);
+    res.status(405).json({
+      error
+    })
+  }
+  else{
+  user.boards.splice(user.boards.indexOf(boardId), 1);
+  await user.save();
+  const board = await Board.findById(boardId);
+  await deleteAllColumnsAndCardsInsideBoard(board);
+  await Board.findByIdAndDelete(boardId);
+  res.status(200).json({user});
+  }
+})
+
+deleteAllColumnsAndCardsInsideBoard = asyncHandler(async (board) => {
+   for(const columnId of board.columns){
+    await deleteAllCardsInsideColumn(columnId);
+  }  
+})
+
+exports.editBoardTitle = asyncHandler(async (req, res) => {
+  const { title, boardId } = req.body;
+  const board = await Board.findById(boardId);
+  board.title = title;
+  await board.save();
+  if (board) {
+    res.status(200).json({ board });
+
+  } else {
+    const error = new Error(`Could not find board ${boardId}`);
+    res.status(404).json({
+      error
+    })}
 })
 
 exports.getBoardFull = asyncHandler(async (req, res) => {
