@@ -82,6 +82,21 @@ exports.getBoard = asyncHandler(async (req, res) => {
   }
 })
 
+exports.editBoardTitle = asyncHandler(async (req, res) => {
+  const { title, boardId } = req.body;
+  const board = await Board.findById(boardId);
+  board.title = title;
+  await board.save();
+  if (board) {
+    res.status(200).json({ board });
+
+  } else {
+    const error = new Error(`Could not find board ${boardId}`);
+    res.status(404).json({
+      error
+    })}
+})
+
 exports.getBoardFull = asyncHandler(async (req, res) => {
   const boardId  = req.params.boardId;
   

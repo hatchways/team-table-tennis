@@ -30,13 +30,15 @@ import StorageOutlinedIcon from '@material-ui/icons/StorageOutlined';
 import AppsIcon from '@material-ui/icons/Apps';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
 import { createBoard } from '../../helpers/APICalls/board';
+import BoardTitle from './BoardTitle';
 
 type Anchor = 'right';
 
-export default function NavBar(props: any) {
+export default function NavBar() {
   const { loggedInUserBoard: userBoard, changeBoard } = useAuthBoard();
   const classes = useStyles();
   const theme = useTheme();
+
   const [open, setOpen] = React.useState(false);
   const [state, setState] = React.useState({
     right: false,
@@ -187,9 +189,7 @@ export default function NavBar(props: any) {
       </Grid>
       <AppBar position="static" className={classes.appbarStyle}>
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            {props.boardTitle}
-          </Typography>
+          <BoardTitle />
           <IconButton
             edge="end"
             color="inherit"
