@@ -6,10 +6,13 @@ import ClearIcon from '@material-ui/icons/Clear';
 
 export default function DescriptionItem() {
   const classes = useStyles();
-  const [content, setContent] = useState('');
+  const [description, setDescription] = useState('');
+  const saveDescription = () => {
+    console.log(description);
+  };
 
   return (
-    <Grid>
+    <Grid id="description">
       <Grid container className={classes.titleContainer}>
         <ImportContactsOutlinedIcon className={classes.iconColor} />
         <Grid className={classes.titleFont}>Description:</Grid>
@@ -21,13 +24,20 @@ export default function DescriptionItem() {
         rows={6}
         fullWidth
         multiline
-        onChange={(e) => setContent(e.target.value)}
+        value={description}
+        onChange={(e) => setDescription(e.target.value)}
       />
       <Grid className={classes.savebuttonPosition}>
-        <Button className={classes.buttonStyle} color="primary" variant="contained" size="large">
+        <Button
+          className={classes.buttonStyle}
+          color="primary"
+          variant="contained"
+          size="large"
+          onClick={() => saveDescription()}
+        >
           Save
         </Button>
-        <IconButton>
+        <IconButton onClick={() => setDescription('')}>
           <ClearIcon color="primary" />
         </IconButton>
       </Grid>

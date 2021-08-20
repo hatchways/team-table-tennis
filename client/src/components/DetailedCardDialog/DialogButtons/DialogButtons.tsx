@@ -4,6 +4,7 @@ import useStyles from './useStyles';
 type Props = {
   title: string;
 };
+
 export default function DialogButtons({ title }: Props) {
   const classes = useStyles();
 
