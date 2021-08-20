@@ -15,7 +15,6 @@ const register = async (email: string, password: string): Promise<AuthApiData> =
       error: { message: 'Unable to connect to server. Please try again' },
     }));
 };
-
 export const registerBoard = async (email: string, password: string): Promise<AuthBoardApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',

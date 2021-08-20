@@ -15,6 +15,7 @@ require("dotenv").config({ path: "./sample.env"});
 const authRouter = require("./routes/auth");
 const userRouter = require("./routes/user");
 const boardsRouter = require("./routes/boards");
+const calendarRouter = require('./routes/calendar')
 
 const agendaStart = require("./utils/agenda");
 let deadLineUsers;
@@ -77,8 +78,7 @@ app.use((req, res, next) => {
 app.use("/auth", authRouter);
 app.use("/users", userRouter);
 app.use("/boards", boardsRouter);
-
-
+app.use("/calendar", calendarRouter);
 
 agendaStart(deadLineUsers);
 
