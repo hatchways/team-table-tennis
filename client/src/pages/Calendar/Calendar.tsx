@@ -12,7 +12,6 @@ const Calendar = (): JSX.Element => {
   return (
     <Grid container component="main" className={`${classes.root} ${classes.dashboard}`} direction="row">
       {loggedInUser ? <NavBar /> : <></>}
-      <Grid item className={classes.drawerWrapper}></Grid>
       <Grid item xs>
         <DnDCalendar />;
       </Grid>
