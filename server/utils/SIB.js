@@ -10,15 +10,10 @@ var apiInstance = new SibApiV3Sdk.TransactionalEmailsApi();
 
 var sendSmtpEmail = new SibApiV3Sdk.SendSmtpEmail();
 
-<<<<<<< HEAD
 let userArray = [];
 
 sendSmtpEmail.templateId = 2;
 sendSmtpEmail.to = userArray;
-=======
-sendSmtpEmail.templateId = 2;
-sendSmtpEmail.to = [{ email: "wonsangalex@gmail.com", name: "Alex Yoon" }];
->>>>>>> f5c906a7649220bdf1223819fc054322f20224a8
 
 const sendMail = async() => {
   await apiInstance.sendTransacEmail(sendSmtpEmail).then(

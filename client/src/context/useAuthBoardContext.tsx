@@ -9,9 +9,17 @@ import { CompleteBoard } from '../interface/BoardApi';
 import IAuthBoardContext from '../interface/IAuthBoardContext';
 
 export const AuthBoardContext = createContext<IAuthBoardContext>({
-  loggedInUserBoard: { user: undefined, board: { _id: '-1', title: '', columns: [] }, columns: {}, cards: {} },
+  loggedInUserBoard: {
+    user: undefined,
+    board: { _id: '-1', title: '', columns: [] },
+    columns: {},
+    cards: {},
+    boardTitles: [],
+    selectedBoardIndex: 0,
+  },
   updateLoginContext: () => null,
   logout: () => null,
+  changeBoard: (boardIndex: number) => null,
 });
 
 export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element => {
@@ -21,24 +29,44 @@ export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element 
 
   const updateLoginContext = useCallback(
     (data: AuthBoardApiDataSuccess) => {
+      console.log(data);
       const userBoard: UserBoard = {
         user: undefined,
         board: { _id: '-1', title: '', columns: [] },
         columns: {},
         cards: {},
+        boardTitles: data.boardTitles,
+        selectedBoardIndex: 0,
       };
 
       userBoard.user = data.user;
-      GetAllBoard(userBoard.user.boards[0]).then((data: CompleteBoard) => {
+      GetAllBoard(userBoard.user.boards[userBoard.selectedBoardIndex]).then((data: CompleteBoard) => {
         userBoard.board = data.board;
         userBoard.cards = data.cards;
         userBoard.columns = data.columns;
         setLoggedInUserBoard(userBoard);
-
         history.push('/dashboard');
       });
     },
     [history],
+  );
+  const changeBoard = useCallback(
+    async (boardIndex: number) => {
+      if (loggedInUserBoard?.user) {
+        GetAllBoard(loggedInUserBoard?.user?.boards[boardIndex])
+          .then((data: CompleteBoard) => {
+            const userBoard = loggedInUserBoard;
+            userBoard.board = data.board;
+            userBoard.cards = data.cards;
+            userBoard.columns = data.columns;
+            userBoard.selectedBoardIndex = boardIndex;
+            setLoggedInUserBoard(userBoard);
+            history.push('/dashboard');
+          })
+          .catch((error) => console.error(error));
+      }
+    },
+    [history, loggedInUserBoard],
   );
 
   const logout = useCallback(async () => {
@@ -69,7 +97,9 @@ export const AuthBoardProvider: FunctionComponent = ({ children }): JSX.Element 
   }, [updateLoginContext, history]);
 
   return (
-    <AuthBoardContext.Provider value={{ loggedInUserBoard: loggedInUserBoard, updateLoginContext, logout }}>
+    <AuthBoardContext.Provider
+      value={{ loggedInUserBoard: loggedInUserBoard, updateLoginContext, logout, changeBoard }}
+    >
       {children}
     </AuthBoardContext.Provider>
   );

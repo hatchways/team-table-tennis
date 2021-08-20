@@ -245,7 +245,14 @@ const Board: React.FunctionComponent = () => {
   } else {
     return (
       <React.Fragment>
-        <Grid container direction="row" justify="flex-start" alignItems="stretch" alignContent="flex-start" spacing={0}>
+        <Grid
+          container
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="stretch"
+          alignContent="flex-start"
+          spacing={0}
+        >
           <Grid item xs={1} style={{ backgroundColor: 'grey', verticalAlign: 'center' }}>
             <Box
               display="flex"
@@ -262,7 +269,7 @@ const Board: React.FunctionComponent = () => {
             <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
               <Droppable droppableId="board" direction="horizontal" type="column">
                 {(provided) => (
-                  <Grid container direction="row" justify="flex-start" ref={provided.innerRef}>
+                  <Grid container direction="row" justifyContent="flex-start" ref={provided.innerRef}>
                     {state.mockData?.board.columns.map((Id, index) => (
                       <Column
                         Column={state.mockData?.columns[Id]}
