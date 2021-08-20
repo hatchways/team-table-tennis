@@ -16,11 +16,27 @@ const register = async (email: string, password: string): Promise<AuthApiData> =
     }));
 };
 
+<<<<<<< HEAD
 export const registerBoard = async (email: string, password: string): Promise<AuthBoardApiData> => {
   const fetchOptions: FetchOptions = {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ email, password }),
+=======
+<<<<<<< HEAD
+export const registerBoard = async (username: string, email: string, password: string): Promise<AuthBoardApiData> => {
+  const fetchOptions: FetchOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, email, password }),
+=======
+export const registerBoard = async (email: string, password: string): Promise<AuthBoardApiData> => {
+  const fetchOptions: FetchOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password }),
+>>>>>>> f5c906a7649220bdf1223819fc054322f20224a8
+>>>>>>> alex/BE_team
     credentials: 'include',
   };
   return await fetch(`/auth/register`, fetchOptions)
