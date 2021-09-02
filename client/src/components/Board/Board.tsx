@@ -3,8 +3,6 @@ import Column from './Column';
 import { Column as ColumnInterface } from '../../interface/ColumnApi';
 import { TaskPlaceHolder } from '../../interface/Task';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
-import { Board as BoardInterface } from '../../interface/BoardApi';
-import mockData from './MockData';
 import { DragDropContext, DropResult, Droppable, DragUpdate } from 'react-beautiful-dnd';
 import {
   Box,
@@ -21,11 +19,11 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import useStyles from './useStyles';
-import { useEffect } from 'react';
 import { Card as CardInterface, Cards } from '../../interface/CardApi';
 import { moveCardToAnotherColumn, moveColumn } from '../../helpers/APICalls/board';
 import { createCard } from '../../helpers/APICalls/cards';
 import { createColumn, deleteColumnApi } from '../../helpers/APICalls/columns';
+import { DetailedCardDialog } from '../DetailedCardDialog/DetailedCardDialog';
 const Board: React.FunctionComponent = () => {
   const { loggedInUserBoard: userBoard } = useAuthBoard();
 
@@ -37,13 +35,9 @@ const Board: React.FunctionComponent = () => {
     taskPlaceHolder: taskPlaceHolder,
     modalOpen: false,
     newColumnTitle: '',
+    isDetailedCardOpen: false,
+    openedCard: '',
   });
-
-  //BoardApi().then((data: any) => {
-  //  newBoard._id = data.board._id;
-  //  newBoard.columns = data.board.columns;
-  //  newBoard.title = data.board.title;
-  //});
 
   const onDragUpdate = (result: DragUpdate) => {
     const { draggableId } = result;
@@ -162,9 +156,7 @@ const Board: React.FunctionComponent = () => {
     createCard('Add title...', '', columnId).then((cardData) => {
       const card: CardInterface = {
         _id: cardData.card._id,
-        date: '',
         title: cardData.card.title,
-        description: 'test',
         cardDetails: cardData.card.cardDetails,
       };
       const mockData = state.mockData;
@@ -191,6 +183,7 @@ const Board: React.FunctionComponent = () => {
   const createNewColumn = () => {
     if (state.mockData) {
       createColumn(state.newColumnTitle, state.mockData?.board._id).then((columnData) => {
+        console.log(columnData);
         const column: ColumnInterface = {
           _id: columnData.column._id,
           title: columnData.column.title,
@@ -232,20 +225,34 @@ const Board: React.FunctionComponent = () => {
           [task._id]: {
             _id: task._id,
             title: task.title,
-            date: task.date,
             description: task.description,
             cardDetails: task.cardDetails,
           },
         };
     });
+
     return tasks;
   };
+  const handleDetailedCardClose = (value: string) => {
+    setState({ ...state, isDetailedCardOpen: false });
+  };
+  const openDetailedCard = (cardId: string) => {
+    setState({ ...state, isDetailedCardOpen: true, openedCard: cardId });
+  };
+
   if (state.mockData === undefined || state.mockData?.columns === undefined || state.mockData?.cards === undefined) {
     return <React.Fragment></React.Fragment>;
   } else {
     return (
       <React.Fragment>
-        <Grid container direction="row" justify="flex-start" alignItems="stretch" alignContent="flex-start" spacing={0}>
+        <Grid
+          container
+          direction="row"
+          justifyContent="flex-start"
+          alignItems="stretch"
+          alignContent="flex-start"
+          spacing={0}
+        >
           <Grid item xs={1} style={{ backgroundColor: 'grey', verticalAlign: 'center' }}>
             <Box
               display="flex"
@@ -262,7 +269,7 @@ const Board: React.FunctionComponent = () => {
             <DragDropContext onDragEnd={onDragEnd} onDragUpdate={onDragUpdate}>
               <Droppable droppableId="board" direction="horizontal" type="column">
                 {(provided) => (
-                  <Grid container direction="row" justify="flex-start" ref={provided.innerRef}>
+                  <Grid container direction="row" justifyContent="flex-start" ref={provided.innerRef}>
                     {state.mockData?.board.columns.map((Id, index) => (
                       <Column
                         Column={state.mockData?.columns[Id]}
@@ -273,6 +280,7 @@ const Board: React.FunctionComponent = () => {
                         addTask={addTask}
                         taskDialog={newColumn}
                         delete={deleteColumn}
+                        openDetailedCard={openDetailedCard}
                       ></Column>
                     ))}
                     {provided.placeholder}
@@ -320,6 +328,12 @@ const Board: React.FunctionComponent = () => {
             </CardActions>
           </Card>
         </Modal>
+        <DetailedCardDialog
+          open={state.isDetailedCardOpen}
+          onClose={handleDetailedCardClose}
+          selectedValue={'test'}
+          selectedCard={state.openedCard}
+        ></DetailedCardDialog>
       </React.Fragment>
     );
   }

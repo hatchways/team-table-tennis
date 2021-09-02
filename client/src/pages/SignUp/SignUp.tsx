@@ -21,7 +21,7 @@ export default function Register(): JSX.Element {
     { email, password }: { email: string; password: string },
     { setSubmitting }: FormikHelpers<{ email: string; password: string }>,
   ) => {
-    register(email, password).then((data) => {
+    registerBoard(email, password).then((data) => {
       console.log(data);
       if (data.error) {
         console.error({ error: data.error.message });

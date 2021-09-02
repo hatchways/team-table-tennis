@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Board = require('../models/Board');
 const Card = require('../models/Card');
 const Column = require('../models/Column');
+const User = require("../models/User");
 
 
 exports.createBoard = asyncHandler(async (req, res, next) => {  
@@ -28,6 +29,42 @@ exports.createBoard = asyncHandler(async (req, res, next) => {
   }
 })
 
+exports.createBoardWithUser = asyncHandler(async (req, res, next) => {  
+  const { title } = req.body;
+  const userId = req.params.userId;
+
+
+  const user = await User.findById(userId);
+  if (title) {
+
+    const inProgress = new Column({ title: 'In Progress' });
+    const completed = new Column({ title : 'Completed' }); 
+    
+    await inProgress.save();
+    await completed.save();
+
+
+    const board = new Board({ title, columns: [inProgress._id, completed._id]});
+    await board.save();
+
+
+    user.boards.push(board._id);
+
+    await user.save();
+
+    res.status(201).json({
+      success: {
+        board,
+        user
+      }
+    });
+  } else {
+    res.status(400).send({
+      message: 'Board title is empty'
+    });
+  }
+})
+
 exports.getBoard = asyncHandler(async (req, res) => {
   const boardId  = req.params.boardId;
 
@@ -40,6 +77,49 @@ exports.getBoard = asyncHandler(async (req, res) => {
       error
     })
   }
+})
+
+exports.deleteBoard = asyncHandler(async (req, res) => {
+  const { boardId, userId } = req.body;
+
+  const user = await User.findById(userId);
+
+  if(user.boards.length === 1){
+
+    const error = new Error(`${userId} only has a single board left`);
+    res.status(405).json({
+      error
+    })
+  }
+  else{
+  user.boards.splice(user.boards.indexOf(boardId), 1);
+  await user.save();
+  const board = await Board.findById(boardId);
+  await deleteAllColumnsAndCardsInsideBoard(board);
+  await Board.findByIdAndDelete(boardId);
+  res.status(200).json({user});
+  }
+})
+
+deleteAllColumnsAndCardsInsideBoard = asyncHandler(async (board) => {
+   for(const columnId of board.columns){
+    await deleteAllCardsInsideColumn(columnId);
+  }  
+})
+
+exports.editBoardTitle = asyncHandler(async (req, res) => {
+  const { title, boardId } = req.body;
+  const board = await Board.findById(boardId);
+  board.title = title;
+  await board.save();
+  if (board) {
+    res.status(200).json({ board });
+
+  } else {
+    const error = new Error(`Could not find board ${boardId}`);
+    res.status(404).json({
+      error
+    })}
 })
 
 exports.getBoardFull = asyncHandler(async (req, res) => {
@@ -67,7 +147,15 @@ exports.getBoardFull = asyncHandler(async (req, res) => {
   }
 })
 
-
+getBoardTitlesFromUser = asyncHandler(async (user)=> {
+  const boardTitles = [];
+  for(const boardId of user.boards){
+    const board = await Board.findById(boardId);
+    const boardTitle = board.title;
+    boardTitles.push(boardTitle);
+  }
+  return boardTitles;
+})
 
 
 
@@ -139,6 +227,7 @@ exports.createCard = asyncHandler(async (req, res) => {
      card
   })
 })
+
 
 exports.deleteColumn = asyncHandler(async ( req, res) => {
   const { columnId, boardId } = req.body;
@@ -221,6 +310,59 @@ exports.getCards = asyncHandler(async (req, res) => {
   }));
   res.status(200).json({
     cards
+  })
+})
+exports.editCardDescription = asyncHandler(async (req, res) => {
+  const { cardId, description } = req.body;
+  await Card.findByIdAndUpdate(
+    cardId,
+    {
+      description
+    }
+  )
+  .exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    }
+    else {
+      res.status(200).json(result);
+    }
+  })
+})
+
+exports.editCardComment = asyncHandler(async (req, res) => {
+  const { cardId, comment } = req.body;
+  await Card.findByIdAndUpdate(
+    cardId,
+    {
+      "cardDetails.comment" : comment
+    }
+  )
+  .exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    }
+    else {
+      res.status(200).json(result);
+    }
+  })
+})
+
+exports.editDeadLine = asyncHandler(async (req, res) => {
+  const { cardId, deadLine } = req.body;
+  await Card.findByIdAndUpdate(
+    cardId,
+    {
+      "cardDetails.deadLine": deadLine
+    }
+  )
+  .exec((err, result) => {
+    if (err) {
+      return res.status(422).json({ error: err });
+    }
+    else {
+      res.status(200).json(result);
+    }
   })
 })
 

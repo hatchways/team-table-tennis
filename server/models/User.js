@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
   boards: [{
     type: ObjectId,
     ref: "board"
-  }]
+  }],
 });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {

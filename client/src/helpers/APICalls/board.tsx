@@ -67,3 +67,41 @@ export const moveCardToAnotherColumn = async (
       error: { message: 'unable to connext to server' },
     }));
 };
+
+export const createBoard = async (title: string, userId: string): Promise<any> => {
+  return await fetch('/boards/create/' + userId, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    mode: 'cors',
+    body: JSON.stringify({ title }),
+  })
+    .then((res) => res.json())
+    .catch((e) => ({
+      error: { message: 'unable to connext to server' },
+    }));
+};
+export const editTitle = async (title: string, boardId: string): Promise<any> => {
+  return await fetch('/boards/editTitle', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    mode: 'cors',
+    body: JSON.stringify({ title, boardId }),
+  })
+    .then((res) => res.json())
+    .catch((e) => ({
+      error: { message: 'unable to connext to server' },
+    }));
+};
+
+export const deleteBoard = async (userId: string, boardId: string): Promise<any> => {
+  return await fetch('/boards/', {
+    method: 'DELETE',
+    headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+    mode: 'cors',
+    body: JSON.stringify({ userId, boardId }),
+  })
+    .then((res) => res.json())
+    .catch((e) => ({
+      error: { message: 'unable to connext to server, ' + e },
+    }));
+};

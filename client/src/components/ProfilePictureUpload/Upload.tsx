@@ -4,10 +4,11 @@ import useStyles from './useStyles';
 import PublishOutlinedIcon from '@material-ui/icons/PublishOutlined';
 import Dropzone, { DropzoneState } from 'react-dropzone';
 import { useAuth } from '../../context/useAuthContext';
+import { useAuthBoard } from '../../context/useAuthBoardContext';
 
 export default function Upload() {
   const classes = useStyles();
-  const { loggedInUser } = useAuth();
+  const { loggedInUserBoard } = useAuthBoard();
   const [previewSource, setPreviewSource] = useState('');
 
   const imageMaxSize = 100000000; //byte
@@ -32,9 +33,10 @@ export default function Upload() {
 
   const uploadImage = async (base64EncodedImage: string) => {
     try {
+      console.log('Id: ' + loggedInUserBoard!.user!._id);
       await fetch('/api/upload', {
         method: 'POST',
-        body: JSON.stringify({ data: base64EncodedImage, username: loggedInUser?.username }),
+        body: JSON.stringify({ data: base64EncodedImage, username: loggedInUserBoard!.user!.email }),
         headers: { 'Content-type': 'application/json' },
       });
     } catch (error) {
