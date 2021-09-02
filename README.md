@@ -1,6 +1,6 @@
 ## Project Name
 
-Kanban board is an application used in the agile environment that allows users to constatnly control and improve their flow of work. The application that we have developed allows users to signup and login by creating their own secured accounts. It also allows users to manage work flow through the dashboard and calendar page as well as allowing for personal profile picture to be added. 
+Kanban board is an application used in the agile environment that allows users to constantly control and improve their flow of work. The application that we have developed allows users to signup and login by creating their own secured accounts. It also allows users to manage work flow through the dashboard and calendar page as well as allowing for personal profile picture to be added. 
 
 **Tech Stack:** MongoDB, Express.js, React.js, Node.js, Typescript, JavaScript, Material UI
 
