@@ -3,14 +3,17 @@ import { Container, IconButton } from '@material-ui/core/';
 import useStyles from './useStyles';
 import MenuItem from '@material-ui/core/MenuItem';
 import Menu from '@material-ui/core/Menu';
+import { Link } from 'react-router-dom';
+import { AdvancedImage } from '@cloudinary/react';
+import { Cloudinary } from '@cloudinary/base';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
-import { AccountCircle } from '@material-ui/icons';
 
 export default function AccountButton() {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const { logout } = useAuthBoard();
+  const { loggedInUserBoard } = useAuthBoard();
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -25,6 +28,15 @@ export default function AccountButton() {
     logout();
   };
 
+  const cld = new Cloudinary({
+    cloud: {
+      cloudName: 'dmqrgfx4k',
+    },
+  });
+
+  console.log('test: ' + loggedInUserBoard!.user!.email);
+  const myImage = cld.image('KanbanCloud/' + `${loggedInUserBoard!.user!.email}`);
+
   return (
     <Container className={classes.root}>
       <div>
@@ -35,7 +47,7 @@ export default function AccountButton() {
           onClick={handleMenu}
           color="inherit"
         >
-          <AccountCircle />
+          <AdvancedImage className={classes.accBtn} cldImg={myImage} width="300" crop="scale" />
         </IconButton>
         <Menu
           id="menu-appbar"
@@ -52,7 +64,10 @@ export default function AccountButton() {
           open={open}
           onClose={handleClose}
         >
-          <MenuItem onClick={handleClose}>Go to profile</MenuItem>
+          <Link to="/profile" style={{ color: '#000', textDecoration: 'none' }}>
+            {' '}
+            <MenuItem>Go to profile</MenuItem>
+          </Link>
           <MenuItem onClick={handleLogout}>Logout</MenuItem>
         </Menu>
       </div>

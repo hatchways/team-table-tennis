@@ -8,4 +8,6 @@ export interface UserBoard {
   board: Board;
   columns: Columns;
   cards: Cards;
+  boardTitles: string[];
+  selectedBoardIndex: number;
 }

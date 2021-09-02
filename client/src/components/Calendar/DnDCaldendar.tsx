@@ -1,72 +1,70 @@
 import React, { useEffect, useState } from 'react';
 import { useSocket } from '../../context/useSocketContext';
-import { useHistory } from 'react-router-dom';
 import { FetchOptions } from '../../interface/FetchOptions';
 
 import { Mevent } from './interface';
-import { IUserSchedule, mockDatas } from './MockEvent';
+import { IUserSchedule } from './MockEvent';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './styles.css';
 
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import moment from 'moment';
 import { Toolbar, EventComponent } from './extension';
 import { useAuthBoard } from '../../context/useAuthBoardContext';
+import { Card } from '../../interface/CardApi';
 
 const localizer = momentLocalizer(moment);
 const DragAndDropCalendar = withDragAndDrop(Calendar as any);
+let newArray: IUserSchedule[] = [];
 
 const DnDCalendar = (): JSX.Element => {
-  const [events, setEvent] = useState<IUserSchedule[]>(mockDatas);
   const { loggedInUserBoard: loggedInUser } = useAuthBoard();
+  const [userCard, setUserCard] = useState(loggedInUser?.cards);
+  const [cardInfos, setCardInfos] = useState<IUserSchedule[]>([]);
   const { initSocket } = useSocket();
-  const history = useHistory();
+
+  for (const card in userCard) {
+    const newObj: IUserSchedule = {
+      title: userCard[card].title,
+      start: new Date(userCard[card].cardDetails.deadLine),
+      end: new Date(userCard[card].cardDetails.deadLine),
+      resource: userCard[card].cardDetails.color,
+      cardId: userCard[card]._id,
+    };
+    newArray.push(newObj);
+  }
 
   useEffect(() => {
     initSocket();
   }, [initSocket]);
-
-  if (loggedInUser === undefined) return <CircularProgress />;
-  if (!loggedInUser) {
-    history.push('/login');
-    // loading for a split seconds until history.push works
-    return <CircularProgress />;
-  }
+  useEffect(() => {
+    newArray = [];
+    setCardInfos(newArray);
+  }, [cardInfos]);
 
   const moveEvent = ({ event, start, end }: Mevent): void => {
-    const selectedIndex = events.indexOf(event);
+    const selectedIndex = cardInfos.findIndex((item) => item.cardId === event.cardId);
+
     const updatedEvent = { ...event, start, end };
 
-    const nextEvents = [...events];
+    const nextEvents = [...cardInfos];
     nextEvents.splice(selectedIndex, 1, updatedEvent);
 
-    setEvent(nextEvents);
-    // updateEvent();
+    setCardInfos(nextEvents);
+    updateEvent(start, event.cardId);
   };
-
-  const getEvent = async () => {
+  const updateEvent = async (date: Date, eventId: string) => {
     const fetchOptions: FetchOptions = {
-      method: 'GET',
+      method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        date: date,
+        cardId: eventId,
+      }),
       credentials: 'include',
     };
-    return await fetch(`/`, fetchOptions)
-      .then((res) => res.json())
-      .catch(() => ({
-        error: { message: 'Unable to connect to server. Please try again' },
-      }));
-  };
-
-  const updateEvent = async () => {
-    const fetchOptions: FetchOptions = {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({}),
-      credentials: 'include',
-    };
-    return await fetch(`/`, fetchOptions)
+    return await fetch(`/calendar/updateCalendar`, fetchOptions)
       .then((res) => res.json())
       .catch(() => ({
         error: { message: 'Unable to connect to server. Please try again' },
@@ -77,7 +75,7 @@ const DnDCalendar = (): JSX.Element => {
       selectable
       timeslots={2}
       localizer={localizer}
-      events={events}
+      events={cardInfos}
       onEventDrop={moveEvent}
       components={{
         toolbar: Toolbar,
@@ -86,7 +84,7 @@ const DnDCalendar = (): JSX.Element => {
       popup={true}
       defaultView={'month'}
       defaultDate={new Date(2021, 7, 1)}
-      style={{ minHeight: '800px' }}
+      style={{ height: '900px' }}
     />
   );
 };

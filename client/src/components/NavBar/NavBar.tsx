@@ -28,13 +28,19 @@ import ListItem from '@material-ui/core/ListItem';
 import LabelOutlinedIcon from '@material-ui/icons/LabelOutlined';
 import StorageOutlinedIcon from '@material-ui/icons/StorageOutlined';
 import AppsIcon from '@material-ui/icons/Apps';
+import { useAuthBoard } from '../../context/useAuthBoardContext';
+import { createBoard } from '../../helpers/APICalls/board';
+import BoardTitle from './BoardTitle';
 
 type Anchor = 'right';
 
 export default function NavBar() {
+  const { loggedInUserBoard: userBoard, changeBoard } = useAuthBoard();
   const classes = useStyles();
   const theme = useTheme();
+
   const [open, setOpen] = React.useState(false);
+  const [boardTitles, setBoardTitles] = React.useState({ titles: userBoard!.boardTitles });
   const [state, setState] = React.useState({
     right: false,
   });
@@ -42,6 +48,9 @@ export default function NavBar() {
     setOpen(true);
   };
 
+  const changeBoardTitles = (titles: string[]) => {
+    setBoardTitles({ titles: titles });
+  };
   const handleDrawerClose = () => {
     setOpen(false);
   };
@@ -55,6 +64,20 @@ export default function NavBar() {
     }
 
     setState({ ...state, [anchor]: open });
+  };
+
+  const handleCreateBoard = () => {
+    if (userBoard?.board && userBoard.user) {
+      const newBoardTitle = 'New Board';
+      createBoard(newBoardTitle, userBoard.user._id).then((data) => {
+        userBoard.user = data.success.user;
+        userBoard.boardTitles.push(newBoardTitle);
+        setBoardTitles({ titles: userBoard.boardTitles });
+      });
+    }
+  };
+  const handleChangeBoard = (index: number) => {
+    changeBoard(index);
   };
 
   const list = (anchor: Anchor) => (
@@ -99,21 +122,21 @@ export default function NavBar() {
 
   return (
     <Container className={classes.root}>
-      <Grid container direction="row" alignItems="center" justify="center" className={classes.topnavBar}>
+      <Grid container direction="row" alignItems="center" justifyContent="center" className={classes.topnavBar}>
         <Grid item xs={3}>
           <Grid
             container
             spacing={1}
             direction="row"
             alignItems="center"
-            justify="flex-start"
+            justify-content="flex-start"
             className={classes.kanLogo}
           >
             <img src={logo} alt="logo" />
           </Grid>
         </Grid>
         <Grid item xs={8} className={classes.mainhamburgerMenu}>
-          <Grid container alignItems="center" justify="flex-end">
+          <Grid container alignItems="center" justifyContent="flex-end">
             {(['right'] as Anchor[]).map((anchor) => (
               <React.Fragment key={anchor}>
                 <Button onClick={toggleDrawer(anchor, true)}>
@@ -127,7 +150,7 @@ export default function NavBar() {
           </Grid>
         </Grid>
         <Grid item xs>
-          <Grid container alignItems="center" justify="flex-end">
+          <Grid container alignItems="center" justifyContent="flex-end">
             <Grid item className={classes.dashboardButton}>
               <Link to="/dashboard" style={{ textDecoration: 'none' }}>
                 <Button size="large" startIcon={<DashboardOutlined />} className={classes.buttonFonts}>
@@ -145,7 +168,7 @@ export default function NavBar() {
           </Grid>
         </Grid>
         <Grid item xs>
-          <Grid container alignItems="center" justify="flex-end">
+          <Grid container alignItems="center" justifyContent="flex-end">
             <Grid>
               <Button
                 variant="contained"
@@ -153,6 +176,7 @@ export default function NavBar() {
                 size="large"
                 className={classes.createboardButton}
                 startIcon={<AddIcon />}
+                onClick={handleCreateBoard}
               >
                 Create board
               </Button>
@@ -160,7 +184,7 @@ export default function NavBar() {
           </Grid>
         </Grid>
         <Grid item xs={1}>
-          <Grid container alignItems="center" justify="flex-end" className={classes.accountButton}>
+          <Grid container alignItems="center" justifyContent="flex-end" className={classes.accountButton}>
             <Grid>
               <AccountButton />
             </Grid>
@@ -169,9 +193,11 @@ export default function NavBar() {
       </Grid>
       <AppBar position="static" className={classes.appbarStyle}>
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            My School Board
-          </Typography>
+          <BoardTitle
+            title={userBoard!.board.title}
+            selectedIndex={userBoard!.selectedBoardIndex}
+            changeBoardTitles={changeBoardTitles}
+          />
           <IconButton
             edge="end"
             color="inherit"
@@ -205,10 +231,29 @@ export default function NavBar() {
         </List>
         <Divider />
         <List>
-          {['Board 1', 'Board 2'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <LabelOutlinedIcon /> : <LabelOutlinedIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+          {boardTitles.titles.map((text, index) => (
+            <ListItem button key={index}>
+              <ListItemIcon>
+                {index % 2 === 0 ? (
+                  <LabelOutlinedIcon
+                    onClick={() => {
+                      handleChangeBoard(index);
+                    }}
+                  />
+                ) : (
+                  <LabelOutlinedIcon
+                    onClick={() => {
+                      handleChangeBoard(index);
+                    }}
+                  />
+                )}
+              </ListItemIcon>
+              <ListItemText
+                primary={boardTitles.titles[index]}
+                onClick={() => {
+                  handleChangeBoard(index);
+                }}
+              />
             </ListItem>
           ))}
         </List>

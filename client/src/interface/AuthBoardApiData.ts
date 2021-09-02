@@ -6,6 +6,7 @@ export interface AuthBoardApiDataSuccess {
   user: User;
   token: string;
   board: Board;
+  boardTitles: string[];
 }
 
 export interface AuthBoardApiData {

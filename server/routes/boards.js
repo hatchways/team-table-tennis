@@ -18,7 +18,13 @@ const {
   getCard,
   getDetails,
   moveCardToAnotherColumn,
-  deleteColumn
+  deleteColumn,
+  createBoardWithUser,
+  editBoardTitle,
+  deleteBoard,
+  editCardDescription,
+  editDeadLine,
+  editCardComment
 } = require('../controllers/boards.js');
 const protect = require("../middleware/auth.js");
 const {
@@ -35,8 +41,12 @@ const {
 
 // Board
 router.route('/').post(createBoard, validateCreateBoard);
+router.route('/create/:userId').post(createBoardWithUser, validateCreateBoard);
 router.route('/:boardId').get(getBoard, validateGetBoard);
 router.route('/full/:boardId').get(getBoardFull);
+router.route('/editTitle').put(editBoardTitle);
+router.route('/').delete(deleteBoard);
+
 
 // Column
 router.route("/columns").post(createColumn, validateCreateColumn);
@@ -56,5 +66,9 @@ router.route("/cards/quickUpdate").put(quickUpdateCard);
 router.route("/cards/getDetail/:cardId").get(protect, getDetails);
 router.route("/cards/detail").put(protect, createDetails);
 router.route("/cards/updateDetails").put(protect, updateDetails);
+router.route("/cards/editDescription").put(editCardDescription);
+router.route("/cards/editComment").put(editCardComment);
+router.route("/cards/editDeadLine").put(editDeadLine);
+
 
 module.exports = router;

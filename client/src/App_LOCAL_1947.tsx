@@ -9,7 +9,6 @@ import { SnackBarProvider } from './context/useSnackbarContext';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
 import './App.css';
 import Calendar from './pages/Calendar/Calendar';
-import Profile from './pages/Profile/Profile';
 import { AuthBoardProvider } from './context/useAuthBoardContext';
 
 function App(): JSX.Element {
@@ -23,12 +22,11 @@ function App(): JSX.Element {
                 <Route exact path="/login" component={Login} />
                 <Route exact path="/signup" component={Signup} />
                 <ProtectedRoute exact path="/dashboard" component={Dashboard} />
-                <ProtectedRoute exact path="/profile" component={Profile} />
-                <Route exact path="/calendar">
-                  <Calendar />
-                </Route>
                 <Route path="*">
                   <Redirect to="/login" />
+                </Route>
+                <Route exact path="/calendar">
+                  <Calendar />
                 </Route>
               </Switch>
             </SocketProvider>

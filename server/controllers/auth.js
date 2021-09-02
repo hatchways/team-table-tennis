@@ -15,12 +15,6 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
     res.status(400);
     throw new Error("A user with that email already exists");
   }
-  const usernameExists = await User.findOne({ username });
-
-  if (usernameExists) {
-    res.status(400);
-    throw new Error("A user with that username already exists");
-  }
 
 
   const inProgress = new Column({ title: 'In Progress' });
@@ -43,14 +37,15 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
       httpOnly: true,
       maxAge: secondsInWeek * 1000
     });
-
+    const boardTitles = await getBoardTitlesFromUser(user);
     res.status(201).json({
       success: {
         user: {
-          id: user._id,
+          _id: user._id,
           email: user.email,
           boards: user.boards
-        }
+        },
+        boardTitles: boardTitles
       }
     });
   } else {
@@ -73,13 +68,16 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
       httpOnly: true,
       maxAge: secondsInWeek * 1000
     });
+    const boardTitles = await getBoardTitlesFromUser(user);
+
     res.status(200).json({
       success: {
         user: {
-          id: user._id,
+          _id: user._id,
           email: user.email,
           boards: user.boards
-        }
+        },
+        boardTitles: boardTitles
       }
     });
 
@@ -99,14 +97,16 @@ exports.loadUser = asyncHandler(async (req, res, next) => {
     res.status(401);
     throw new Error("Not authorized");
   }
+  const boardTitles = await getBoardTitlesFromUser(user);
 
   res.status(200).json({
     success: {
       user: {
-        id: user._id,
+        _id: user._id,
         email: user.email,
         boards: user.boards
-      }
+      },
+      boardTitles: boardTitles
     }
   });
 });
